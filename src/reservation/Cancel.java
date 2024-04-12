@@ -11,22 +11,9 @@ public class Cancel {
 	private FileManager fileManager;
 	Scanner scanner = new Scanner(System.in);
 
-<<<<<<< HEAD
 	public Cancel(FileManager fileManager) {
 		this.fileManager = fileManager;
 	}
-=======
-    public Cancel(FileManager fileManager) {
-        this.fileManager = fileManager;
-    }
-    public void run() {
-
-        System.out.println("[예매 취소]");
-        System.out.print("예매 번호 입력: ");
-        Scanner scanner = new Scanner(System.in);
-        String input_reservationId = scanner.nextLine();
-        Ticket ticket = getTicket(input_reservationId);
->>>>>>> b0083966f60b87d74e377ea7edde000190f8ddfb
 
 	public void run() {
 		System.out.println("[예매 취소]");
@@ -46,14 +33,14 @@ public class Cancel {
 						System.out.println("예매 취소가 완료되었습니다.");
 					}
 					case 2 -> { return; }
-					default -> System.out.println(Prompt.BAD_INPUT.getPrompot());
+					default -> System.out.println(Prompt.BAD_INPUT.getPrompt());
 				}
 			}
 			else
 				System.out.println("비밀번호가 틀립니다.");
 		}
 		else
-			System.out.println(Prompt.NOT_EXIST_RESERVATION.getPrompot());
+			System.out.println(Prompt.NOT_EXIST_RESERVATION.getPrompt());
 		scanner.close();
 	}
 
@@ -98,7 +85,6 @@ public class Cancel {
 		System.out.println();
 	}
 
-<<<<<<< HEAD
 	// 최종 승인
 	public int finalCheck() {
 		System.out.println("[예매를 취소하시겠습니까?]");
@@ -121,10 +107,5 @@ public class Cancel {
 	public static void main(String[] args) {
 
 	}
-=======
-    public static void main(String[] args) {
-
-    }
->>>>>>> b0083966f60b87d74e377ea7edde000190f8ddfb
 }
 
