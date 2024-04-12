@@ -3,6 +3,8 @@ package file;
 import entity.*;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -197,6 +199,13 @@ public class FileCheck {
                 }
             }
         } catch (FileNotFoundException e) {
+            try {
+                // 디렉토리가 없는 경우 디렉토리를 생성합니다.
+                Files.createDirectories(Paths.get(movieDetailListDirectoryName));
+            } catch (IOException e2) {
+                e2.printStackTrace();
+                return false;
+            }
             // 파일이 없을 때 파일 생성하는 부분.
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(movieDetailListDirectoryName + "/" + FileManager.todayDate))) {
                 System.out.println("Seat info file created");
