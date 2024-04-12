@@ -2,6 +2,7 @@ package reservation;
 
 import entity.*;
 import etc.Prompt;
+import etc.RE;
 import file.FileManager;
 
 import java.io.File;
@@ -18,14 +19,19 @@ public class Reservation {
     public Reservation(FileManager fileManager) {
         this.fileManager = fileManager;
     }
-    public void run() {
+    public void run() throws Exception {
+        // 1.영화선택
         movieChoice();
+        // 2.좌석선택
         List<String> selectedSeats = seatChoice();
+        // 3.패스워드 입력
         password();
-        List<Ticket> tickets = createAndAddTickets(selectedSeats); // 티켓 리스트 반환
-        reservationInfo(tickets); // 티켓 리스트를 넘겨 정보 출력
+        // 4.티켓 추가
+        List<Ticket> tickets = createAndAddTickets(selectedSeats);
+        // 5.티켓 정보 출력
+        reservationInfo(tickets);
     }
-    public void movieChoice() {
+    public void movieChoice() throws Exception {
         // 임시 데이터 추가
         FileManager.movieDetailList.add(new MovieDetail(1,"겨울연가","송혜교 주연의 멜로 영화","01", MovieTime.Time1, new int[10][10]));
         FileManager.movieDetailList.add(new MovieDetail(2,"기생충","송강호 주연의 드라마","02", MovieTime.Time2, new int[10][10]));
@@ -33,7 +39,6 @@ public class Reservation {
         // 이 부분 movieDetail의 메소드로 바꿔야함.
         for (MovieDetail movieDetail:FileManager.movieDetailList){
             System.out.println(movieDetail.getDetailId() +" "+ movieDetail.getName() + " " + movieDetail.getTheaterNum());
-
         }
 
         System.out.println("[영화선택]");
@@ -41,16 +46,20 @@ public class Reservation {
 
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine().trim();
+        if (!input.matches(RE.MOVIE_ORDER.getValue())) {
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
+            throw new Exception("잘못된 입력입니다. 숫자만 입력하세요.");
+        }
         try {
             movieNumber = Integer.parseInt(input);
             // 영화번호에 대한 예외처리
             if (movieNumber < 1 || movieNumber > FileManager.movieDetailList.size()) {
-                System.out.println(Prompt.BAD_INPUT);
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
             } else {
                 movieInfo();
             }
         } catch (NumberFormatException e) {
-            System.out.println(Prompt.BAD_INPUT);
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
         }
     }
 
@@ -72,12 +81,12 @@ public class Reservation {
                 case 2:
                     break;
                 default:
-                    System.out.println(Prompt.BAD_INPUT);
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
                     movieInfo();
                     break;
             }
         } catch (NumberFormatException e) {
-            System.out.println(Prompt.BAD_INPUT);
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
             // 예외 입력시 다시 사용자의 키 입력을 받음
             movieInfo();
         }
@@ -89,7 +98,7 @@ public class Reservation {
         try {
             peopleCount = Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            System.out.println(Prompt.BAD_INPUT);
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
             countingPeople();
         }
 
