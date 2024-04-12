@@ -13,6 +13,7 @@ public class Cancel {
         this.fileManager = fileManager;
     }
     public void run() {
+
         System.out.println("[예매 취소]");
         System.out.print("예매 번호 입력: ");
         Scanner scanner = new Scanner(System.in);
