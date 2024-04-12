@@ -21,7 +21,7 @@ public class ManagerMain {
 
         System.out.print("관리자 비밀번호 입력: ");
         String inputPw = sc.nextLine();
-        if(!inputPw.equals()){
+        if(!inputPw.equals("1234")){
             System.out.println("관리자 비밀번호가 틀렸습니다.");
         }
 
@@ -43,7 +43,7 @@ public class ManagerMain {
                 addMovie(sc);
                 break;
             case 3:
-                deleteMovie();
+                deleteMovie(sc);
                 break;
             case 4:
                 // 홈 프롬프트 돌아갑니다..
@@ -56,8 +56,9 @@ public class ManagerMain {
 
     }
 
-    private static void deleteMovie() {
+    private static void deleteMovie(Scanner sc) {
         System.out.println("[영화 삭제]");
+
     }
 
     private static void addMovie(Scanner sc) {
@@ -66,7 +67,7 @@ public class ManagerMain {
         String movieName = sc.nextLine();
     }
 
-    private void movieListPrint() {
+    public void movieListPrint() {
         System.out.println("[영화 목록 출력]");
         System.out.println("영화 제목\t\t상영관\t\t상영시간");
         for (Movie movie : movieList) {
