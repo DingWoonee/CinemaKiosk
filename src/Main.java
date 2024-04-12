@@ -1,8 +1,8 @@
 import file.FileCheck;
 import file.FileManager;
 import manager.ManagerMain;
-import reservation.interfaces.Cancel;
-import reservation.interfaces.Reservation;
+import reservation.Cancel;
+import reservation.Reservation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
