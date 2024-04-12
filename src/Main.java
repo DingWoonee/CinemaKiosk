@@ -65,9 +65,6 @@ public class Main {
             catch (Exception e){
                 Prompt.BAD_INPUT.getPrompt();
             }
-
-
-
         }
     }
 }
