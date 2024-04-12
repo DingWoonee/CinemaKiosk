@@ -24,7 +24,7 @@ public enum Prompt {
         this.prompt = prompt;
     }
 
-    public String getPrompot() {
+    public String getPrompt() {
         return prompt;
     }
 }
