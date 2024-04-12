@@ -72,22 +72,4 @@ public class MovieDetail {
         this.seatArray = seatArray;
     }
 
-    public static void movieListPrint() {
-        List<Movie> movieList =  FileManager.movieList;
-        System.out.println("[영화 목록 출력]");
-        System.out.println("영화 제목\t\t상영관\t\t상영시간");
-        for (Movie movie : movieList) {
-            StringBuilder sumNum = new StringBuilder();
-            for (String num : movie.getTheaterNumList()) {
-                sumNum.append(num);
-                sumNum.append(",");
-            }
-            // 마지막 쉼표 제거
-            if (!sumNum.isEmpty()) {
-                sumNum.deleteCharAt(sumNum.length() - 1);
-            }
-
-            System.out.printf("%s\t\t%s\t\t%s", movie.getName(), sumNum, movie.getTime());
-        }
-    }
 }
