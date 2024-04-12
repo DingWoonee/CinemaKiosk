@@ -27,6 +27,7 @@ public class ManagerMain {
 
     public void run() {
         Scanner sc = new Scanner(System.in);
+        boolean isGoHome = false;
 
         System.out.print("관리자 비밀번호 입력: ");
         String inputPw = sc.nextLine();
@@ -49,18 +50,22 @@ public class ManagerMain {
                     movieListPrint();
                     break;
                 case 2:
-                    addMovie(sc);
+                    addMovie();
                     break;
                 case 3:
                     deleteMovie(sc);
                     break;
                 case 4:
                     // 홈 프롬프트 돌아갑니다..
+                    isGoHome = true;
                     break;
 
                 default:
                     System.out.println("올바르지 않은 입력입니다.");
-
+            }
+            if(isGoHome){
+                isGoHome = false;
+                break;
             }
         }
 
@@ -131,7 +136,8 @@ public class ManagerMain {
         }
     }
 
-    private void addMovie(Scanner sc) {
+    private void addMovie() {
+        Scanner sc = new Scanner(System.in);
         Movie newMoive = new Movie();
 
         // 1단계
@@ -161,6 +167,7 @@ public class ManagerMain {
                     }
                 }
             }else{
+                sc = new Scanner(System.in);
                 movieDescription = sc.nextLine().trim();
             }
 
@@ -252,7 +259,6 @@ public class ManagerMain {
     }
 
     private boolean checkTitle(String movieTitle) {
-
         if(movieTitle.matches(RE.MOVIE_NAME.getValue())){
             return false;
         }
