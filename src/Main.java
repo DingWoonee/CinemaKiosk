@@ -14,9 +14,9 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         FileCheck fileCheck = new FileCheck();
-//        if (fileCheck.checkAll()) {
-//            exit(1);
-//        }
+        if (!fileCheck.checkAll()) {
+            exit(1);
+        }
 
         FileManager fileManager = new FileManager();
 
