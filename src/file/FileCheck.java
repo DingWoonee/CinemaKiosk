@@ -22,10 +22,15 @@ public class FileCheck {
         }
     }
 
+    // MovieList의 한 줄 한 줄을 검사하는 함수
+    public boolean checkMovieDataLine() {
+        return true;
+    }
     private boolean checkMovieList() {
         try (BufferedReader br = new BufferedReader(new FileReader(movieListFileName))) {
             // 여기서 파일 내용 한줄 한줄 검사하고 FileManager.movieList에 데이터 하나씩 추가.
-            // 한줄 한줄 검사하는데, 형식에 안 맞는게 한 줄이라도 있으면 바로 return false하면됨.
+            // 위의 checkMovieDataLine함수를 이용해서 한 줄 한 줄 검사하는데,
+            // 형식에 안 맞는게 한 줄이라도 있으면 바로 return false하면됨.
             // 아래는 일단 테스트로 파일 내용 출력하는 코드임.
             String line;
             while ((line = br.readLine()) != null) {
@@ -45,18 +50,37 @@ public class FileCheck {
         return true;
     }
 
+    // SeatInfo의 한 줄 한 줄을 검사하는 함수
+    public boolean checkSeatDataLine() {
+        return true;
+    }
     private boolean checkSeatInfo() {
         return true;
     }
 
+
+    // MovieDetail의 한 줄 한 줄을 검사하는 함수
+    public boolean checkDetailDataLine() {
+        return true;
+    }
     private boolean checkMovieDetail() {
         return true;
     }
 
+
+    // TicketInfo의 한 줄 한 줄을 검사하는 함수
+    public boolean checkTicketDataLine() {
+        return true;
+    }
     private boolean checkTicketInfo() {
         return true;
     }
 
+
+    // ManagerInfo의 한 줄 한 줄을 검사하는 함수
+    public boolean checkManagerDataLine() {
+        return true;
+    }
     private boolean checkManagerInfo() {
         return true;
     }
