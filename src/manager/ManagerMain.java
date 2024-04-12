@@ -37,35 +37,13 @@ public class ManagerMain {
 
         switch(choice){
             case 1:
-
-                System.out.println("[영화 목록 출력]");
-                System.out.println("영화 제목\t\t상영관\t\t상영시간");
-                for (Movie movie : movieList) {
-                    StringBuilder sumNum = new StringBuilder();
-                    for (String num : movie.getTheaterNumList()) {
-                        sumNum.append(num);
-                        sumNum.append(",");
-                    }
-                    // 마지막 쉼표 제거
-                    if (!sumNum.isEmpty()) {
-                        sumNum.deleteCharAt(sumNum.length() - 1);
-                    }
-
-                    System.out.printf("%s\t\t%s\t\t%s", movie.getName(), sumNum, movie.getTime());
-                }
-
-
-
-
-
+                movieListPrint();
                 break;
             case 2:
-                System.out.println("[영화 추가]");
-
+                addMovie(sc);
                 break;
             case 3:
-                System.out.println("[영화 삭제]");
-
+                deleteMovie();
                 break;
             case 4:
                 // 홈 프롬프트 돌아갑니다..
@@ -76,5 +54,33 @@ public class ManagerMain {
 
         }
 
+    }
+
+    private static void deleteMovie() {
+        System.out.println("[영화 삭제]");
+    }
+
+    private static void addMovie(Scanner sc) {
+        System.out.println("[영화 추가]");
+        System.out.println("영화 제목 입력: ");
+        String movieName = sc.nextLine();
+    }
+
+    private void movieListPrint() {
+        System.out.println("[영화 목록 출력]");
+        System.out.println("영화 제목\t\t상영관\t\t상영시간");
+        for (Movie movie : movieList) {
+            StringBuilder sumNum = new StringBuilder();
+            for (String num : movie.getTheaterNumList()) {
+                sumNum.append(num);
+                sumNum.append(",");
+            }
+            // 마지막 쉼표 제거
+            if (!sumNum.isEmpty()) {
+                sumNum.deleteCharAt(sumNum.length() - 1);
+            }
+
+            System.out.printf("%s\t\t%s\t\t%s", movie.getName(), sumNum, movie.getTime());
+        }
     }
 }
