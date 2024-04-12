@@ -21,7 +21,7 @@ public class ManagerMain {
 
         System.out.print("관리자 비밀번호 입력: ");
         String inputPw = sc.nextLine();
-        if(!inputPw.equals()){
+        if(!inputPw.equals("1234")){
             System.out.println("관리자 비밀번호가 틀렸습니다.");
         }
 

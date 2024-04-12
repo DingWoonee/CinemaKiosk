@@ -27,7 +27,12 @@ public class Reservation {
     }
     public void movieChoice() {
         FileManager.movieDetailList.add(new MovieDetail(1,"겨울연가","송혜교 주연의 멜로 영화","A09", MovieTime.Time1, new int[10][10]));
-        System.out.println(FileManager.movieList);
+        // 이 부분 movieDetail의 메소드로 바꿔야함.
+        for (MovieDetail movieDetail:FileManager.movieDetailList){
+            System.out.println(movieDetail.getDetailId() +" "+ movieDetail.getName() + " " + movieDetail.getTheaterNum());
+
+        }
+
         System.out.println("[영화선택]");
         System.out.print("번호입력(숫자만입력):");
 
