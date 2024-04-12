@@ -1,13 +1,11 @@
 package reservation;
 
-import entity.Movie;
-import entity.MovieDetail;
-import entity.MovieTime;
-import entity.Seat;
+import entity.*;
 import etc.Prompt;
 import file.FileManager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -15,21 +13,23 @@ import java.util.Scanner;
 public class Reservation {
     FileManager fileManager;
     int movieNumber;
-
     int peopleCount;
-
+    String reservationPassword;
     public Reservation(FileManager fileManager) {
         this.fileManager = fileManager;
     }
     public void run() {
         movieChoice();
-        seatChoice();
+        List<String> selectedSeats = seatChoice();
         password();
-        reservationInfo();
+        List<Ticket> tickets = createAndAddTickets(selectedSeats); // 티켓 리스트 반환
+        reservationInfo(tickets); // 티켓 리스트를 넘겨 정보 출력
     }
     public void movieChoice() {
         // 임시 데이터 추가
         FileManager.movieDetailList.add(new MovieDetail(1,"겨울연가","송혜교 주연의 멜로 영화","01", MovieTime.Time1, new int[10][10]));
+        FileManager.movieDetailList.add(new MovieDetail(2,"기생충","송강호 주연의 드라마","02", MovieTime.Time2, new int[10][10]));
+
         // 이 부분 movieDetail의 메소드로 바꿔야함.
         for (MovieDetail movieDetail:FileManager.movieDetailList){
             System.out.println(movieDetail.getDetailId() +" "+ movieDetail.getName() + " " + movieDetail.getTheaterNum());
@@ -43,6 +43,7 @@ public class Reservation {
         String input = scanner.nextLine().trim();
         try {
             movieNumber = Integer.parseInt(input);
+            // 영화번호에 대한 예외처리
             if (movieNumber < 1 || movieNumber > FileManager.movieDetailList.size()) {
                 System.out.println(Prompt.BAD_INPUT);
             } else {
@@ -77,6 +78,7 @@ public class Reservation {
             }
         } catch (NumberFormatException e) {
             System.out.println(Prompt.BAD_INPUT);
+            // 예외 입력시 다시 사용자의 키 입력을 받음
             movieInfo();
         }
     }
@@ -92,8 +94,8 @@ public class Reservation {
         }
 
     }
-    public void seatChoice() {
-        // 좌석배열 데이터 임시로 생성
+    public List<String> seatChoice() {
+        // 좌석배열 임시데이터 생성
         int rows = 12; // A부터 L까지 총 12줄
         int cols = 8;  // 1부터 8까지 총 8좌석
         int[][] tempSeats = new int[rows][cols];
@@ -103,68 +105,104 @@ public class Reservation {
                 tempSeats[i][j] = 0;
             }
         }
+        // 임시데이터 공석과 예매좌석 추가
         tempSeats[3][3] = -1;
         tempSeats[4][5] = 1;
         // FileManager의 seatList에 새로운 Seat 객체를 추가합니다.
-        // 여기서 'A09'는 상영관 번호를 의미하며, 실제 시스템에서는 영화 상영관 번호에 맞게 조정될 것입니다.
         FileManager.seatList.add(new Seat("01", tempSeats));
+        FileManager.seatList.add(new Seat("02",tempSeats));
 
-
-        // 파일 매니저로부터 영화의 상영관 번호를 가져옴
-        String rawTheaterNum = FileManager.movieDetailList.get(movieNumber - 1).getTheaterNum();
-        // 상영관 번호가 한 자리 숫자일 경우, 예를 들어 '1'이면 '01'로 표기하기 위한 조건문
-        int theaterIndex = Integer.parseInt(rawTheaterNum) - 1;
-        // 상영관 번호에 해당하는 좌석 배열을 가져옴
+        List<String> selectedSeats = new ArrayList<>();
+        String theaterNum = FileManager.movieDetailList.get(movieNumber - 1).getTheaterNum();
+        int theaterIndex = Integer.parseInt(theaterNum) - 1;
         int[][] seats = FileManager.seatList.get(theaterIndex).getSeatArray();
+
         System.out.println("■ : 선택 불가");
         System.out.println("좌석 선택 (입력 예시: A02 A03)");
-        FileManager.seatList.get(theaterIndex).printSeatArray(); // 좌석을 출력하는 메소드 호출 (아래에 정의 필요)
-
+        FileManager.seatList.get(theaterIndex).printSeatArray(); // 좌석을 출력하는 메소드 호출
+        System.out.print("입력:");
         Scanner scanner = new Scanner(System.in);
-        while (true) {
-            String input = scanner.nextLine().trim().toUpperCase();
-            if (input.length() < 2) {
-                System.out.println(Prompt.BAD_INPUT);
+        String input = scanner.nextLine().trim().toUpperCase();
+        String[] seatCodes = input.split(" "); // 공백을 기준으로 좌석 코드를 분리
+
+        for (String seatCode : seatCodes) {
+            if (seatCode.length() != 3) {
+                System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 잘못된 좌석 형식입니다.");
                 continue;
             }
-            int row = input.charAt(0) - '1';
-            int col = input.charAt(1) - 'A';
+            int row = seatCode.charAt(0) - 'A';
+            int col = Integer.parseInt(seatCode.substring(1)) - 1;
 
-            // 배열의 index bounds 체크
-            if (row >= 0 && row < seats.length && col >= 0 && col < seats[row].length) {
-                if (seats[row][col] == 0) {
-                    seats[row][col] = 1; // 좌석 예약 표시
-                    break;
-                } else {
-                    System.out.println("이미 예약되었거나 존재하지 않는 좌석입니다. 다시 선택해주세요.");
-                }
+            if (row >= 0 && row < seats.length && col >= 0 && col < seats[row].length && seats[row][col] == 0) {
+                seats[row][col] = 1; // 좌석 예약 표시
+                selectedSeats.add(seatCode); // 선택된 좌석 코드를 리스트에 추가
             } else {
-                System.out.println("존재하지 않는 좌석입니다. 다시 선택해주세요.");
+                System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 이미 예약되었거나 존재하지 않는 좌석입니다: " + seatCode);
             }
         }
+
+        if (selectedSeats.isEmpty()) {
+            System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 선택한 유효한 좌석이 없습니다. 다시 시도하세요.");
+            return seatChoice(); // 재귀적으로 다시 좌석 선택을 요청
+        }
+        return selectedSeats; // 선택된 좌석 코드 리스트 반환
     }
 
 
     public void password() {
-        System.out.println("예매를 위한 비밀번호를 입력하세요:");
+        System.out.print("예매를 위한 비밀번호를 입력하세요:");
         Scanner scanner = new Scanner(System.in);
-        String reservationPassword = scanner.nextLine().trim();
-        // 비밀번호를 저장하거나 처리하는 로직이 필요합니다.
-        // 현재 예제에서는 출력만 합니다.
-        System.out.println("입력된 비밀번호: " + reservationPassword);
+        reservationPassword = scanner.nextLine().trim();
+
     }
 
-    public void reservationInfo() {
-        MovieDetail selectedMovie = FileManager.movieDetailList.get(movieNumber - 1);
-        System.out.println("예매 정보를 확인하세요:");
-        System.out.println("영화: " + selectedMovie.getName());
-        System.out.println("시간: " + selectedMovie.getTime());
-        System.out.println("인원 수: " + peopleCount);
-        // 선택한 좌석 정보도 출력해야 합니다.
-        // 좌석 선택 로직이 완성되면 해당 정보를 여기에 추가합니다.
+    public List<Ticket> createAndAddTickets(List<String> seatCodes) {
+        List<Ticket> tickets = new ArrayList<>();
+        MovieDetail movieDetail = FileManager.movieDetailList.get(movieNumber - 1);
+        String theaterNum = movieDetail.getTheaterNum();
+        MovieTime movieTime = movieDetail.getTime();
 
-        // 이 정보를 예약 정보와 함께 파일에 저장하거나 데이터베이스에 저장하는 로직을 구현할 수 있습니다.
-        // 현재 예제에서는 출력만 합니다.
+        for (String seatCode : seatCodes) {
+            String reservationId = generateReservationId(seatCode, theaterNum, movieTime);
+            Ticket ticket = new Ticket(reservationId, this.reservationPassword, this.movieNumber, seatCode);
+            FileManager.ticketInfoList.add(ticket);
+            tickets.add(ticket);
+        }
+        return tickets;
+    }
+
+    // 예매 번호를 생성하는 메소드입니다.
+    private String generateReservationId(String seatCode, String theaterNum, MovieTime movieTime) {
+        // 상영 시간에 따른 번호 할당
+        String timeCode = switch (movieTime) {
+            case Time1 -> // "조조" 상영 시간
+                    "01";
+            case Time2 -> // "미들" 상영 시간
+                    "02";
+            case Time3 -> // "심야" 상영 시간
+                    "03";
+            default -> "00"; // 기본값 혹은 잘못된 입력에 대한 처리
+        };
+
+        // 예매 번호 생성
+        return seatCode.charAt(0) +
+                seatCode.substring(1) +
+                theaterNum +
+                timeCode;
+    }
+
+    public void reservationInfo(List<Ticket> tickets) {
+        System.out.println("예매가 완료되었습니다!!");
+        System.out.println("[예매정보]");
+
+        for (Ticket ticket : tickets) {
+            MovieDetail movieDetail = FileManager.movieDetailList.get(movieNumber - 1);
+            System.out.println("예매번호: " + ticket.getReservationId());
+            System.out.println("영화 제목: " + movieDetail.getName());
+            System.out.println("상영관: " + movieDetail.getTheaterNum());
+            System.out.println("상영 시간: " + movieDetail.getTime().getTime());
+            System.out.println();
+        }
     }
 
 }
