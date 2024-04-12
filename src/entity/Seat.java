@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 public class Seat {
     private String theaterNum;
@@ -11,6 +12,22 @@ public class Seat {
     }
 
     private int[][] seatArray;
+
+    public static String seatToString(int[][] seatArray) {
+        char startCh = 65;
+        String result = "";
+        for (int i = 0; i < seatArray.length; i++) {
+            StringJoiner joiner = new StringJoiner(":");
+            for (int num : seatArray[i]) {
+                joiner.add(String.valueOf(num));
+            }
+            result += (startCh + i) + ":" + joiner;
+            if (i != seatArray.length - 1) {
+                result += "|";
+            }
+        }
+        return result;
+    }
 
     public String getTheaterNum() {
         return theaterNum;
