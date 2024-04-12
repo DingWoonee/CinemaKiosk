@@ -33,14 +33,14 @@ public class Cancel {
 						System.out.println("예매 취소가 완료되었습니다.");
 					}
 					case 2 -> { return; }
-					default -> System.out.println(Prompt.BAD_INPUT.getValue());
+					default -> System.out.println(Prompt.BAD_INPUT.getPrompot());
 				}
 			}
 			else
 				System.out.println("비밀번호가 틀립니다.");
 		}
 		else
-			System.out.println(Prompt.NOT_EXIST_RESERVATION.getValue());
+			System.out.println(Prompt.NOT_EXIST_RESERVATION.getPrompot());
 		scanner.close();
 	}
 
