@@ -15,8 +15,15 @@ public class FileManager {
     public static void saveMovie() {
         String fileContent = "";
         for (Movie movie : movieList) {
-            String newLine = "";
-            
+            String newLine = movie.getName() + "$" + movie.getInfo() + "$";
+            for (int i = 0; i < movie.getTheaterNumList().size(); i++) {
+                String theater = movie.getTheaterNumList().get(i);
+                if (i == movie.getTheaterNumList().size() - 1) {
+                    newLine += (theater);
+                } else {
+                    newLine += (theater + "|");
+                }
+            }
         }
     }
 
