@@ -12,6 +12,7 @@ import static java.lang.System.exit;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+
         FileCheck fileCheck = new FileCheck();
         if (!fileCheck.checkAll()) {
             exit(1);
@@ -22,6 +23,11 @@ public class Main {
         while (true) {
             // home
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("1. 영화예매");
+            System.out.println("2. 예매취소");
+            System.out.println("3. 관리자");
+            System.out.println("0. 종료");
+            System.out.print("번호입력(숫자만입력):");
             switch (Integer.parseInt(br.readLine())) {
                 // 영화 예매
                 case 1 -> {

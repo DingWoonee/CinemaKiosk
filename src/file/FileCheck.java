@@ -85,6 +85,7 @@ public class FileCheck {
         return true;
     }
 
+
     public static void main(String[] args) {
         // 테스트를 위한 임시 테스트 main함수
         FileCheck fileCheck = new FileCheck();
