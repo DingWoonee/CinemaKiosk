@@ -1,5 +1,7 @@
 package file;
 
+import entity.Movie;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -29,12 +31,15 @@ public class FileCheck {
     public boolean checkMovieDataLine(String line) {
         String[] elements = line.split("\\$"); //영화이름, 영화정보, 상영관, 상영시간
         if (elements.length == 4) {
-            if (!Pattern.matches(String.valueOf(MOVIE_NAME), elements[0]) ||
-                    !Pattern.matches(String.valueOf(MOVIE_INFO), elements[1]) ||
-                    !Pattern.matches(String.valueOf(ROOM_NUMBER), elements[2]) ||
-                    !Pattern.matches(String.valueOf(MOVIE_TIME), elements[3])) {
+            if (!Pattern.matches(MOVIE_NAME.getValue(), elements[0]) ||
+                    !Pattern.matches(MOVIE_INFO.getValue(), elements[1]) ||
+                    !Pattern.matches(ROOM_NUMBERS.getValue(), elements[2]) ||
+                    !Pattern.matches(MOVIE_TIME.getValue(), elements[3])) {
                 System.out.println("Movie list file content format does not match");
                 return false;
+            } else {
+                /*Movie newMovie = new Movie(elements[0], elements[1], elements[], elements[3]);
+                FileManager.movieList.add(newMovie)*/
             }
         } else {
             System.out.println("Movie list file content format does not match");
