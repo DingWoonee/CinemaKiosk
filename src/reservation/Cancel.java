@@ -65,7 +65,7 @@ public class Cancel {
         MovieDetail movieDetail = null;
 
         // ticket의 detailId를 통해서 detailList<MovieDetail>의 정보를 얻어옴
-        for (MovieDetail md : fileManager.detailList) {
+        for (MovieDetail md : FileManager.movieDetailList) {
             if (detailId == md.getDetailId()) {
                 movieDetail = md;
             }
@@ -78,6 +78,10 @@ public class Cancel {
         System.out.println("상영관 : " + movieDetail.getTheaterNum());
         System.out.println("상영 시간: " + movieDetail.getTime());
         System.out.println();
+    }
+
+    public static void main(String[] args) {
+        
     }
 }
 
