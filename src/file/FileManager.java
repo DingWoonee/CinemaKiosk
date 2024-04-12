@@ -99,7 +99,5 @@ public class FileManager {
 
         FileManager.inputDate();
         System.out.println(todayDate);
-
-        System.out.println(Prompt.BAD_INPUT);
     }
 }
