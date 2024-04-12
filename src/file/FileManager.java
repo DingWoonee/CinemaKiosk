@@ -13,7 +13,11 @@ public class FileManager {
     public static Manager manager = new Manager("1234");
 
     public static void saveMovie() {
-        
+        String fileContent = "";
+        for (Movie movie : movieList) {
+            String newLine = "";
+            
+        }
     }
 
     public static void saveTicketInfo() {
