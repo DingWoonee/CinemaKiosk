@@ -1,5 +1,8 @@
 package reservation;
 
+import entity.Movie;
+import entity.MovieDetail;
+import entity.MovieTime;
 import etc.Prompt;
 import file.FileManager;
 
@@ -23,6 +26,7 @@ public class Reservation {
         reservationInfo();
     }
     public void movieChoice() {
+        FileManager.movieDetailList.add(new MovieDetail(1,"겨울연가","송혜교 주연의 멜로 영화","A09", MovieTime.Time1, new int[10][10]));
         System.out.println(FileManager.movieList);
         System.out.println("[영화선택]");
         System.out.print("번호입력(숫자만입력):");
@@ -31,7 +35,7 @@ public class Reservation {
         String input = scanner.nextLine().trim();
         try {
             movieNumber = Integer.parseInt(input);
-            if (movieNumber < 1 || movieNumber > FileManager.movieList.size()) {
+            if (movieNumber < 1 || movieNumber > FileManager.movieDetailList.size()) {
                 System.out.println(Prompt.BAD_INPUT);
             } else {
                 movieInfo();
@@ -42,7 +46,7 @@ public class Reservation {
     }
 
     public void movieInfo() {
-        System.out.println(FileManager.movieList.get(movieNumber - 1).getInfo());
+        System.out.println(FileManager.movieDetailList.get(movieNumber - 1).getInfo());
         System.out.println("1. 예매하기");
         System.out.println("2. 홈으로");
         System.out.print("번호입력(숫자만 입력): ");
