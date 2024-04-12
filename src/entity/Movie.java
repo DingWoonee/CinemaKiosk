@@ -13,6 +13,13 @@ public class Movie {
         this.theaterNumList = new ArrayList<>();
     }
 
+    public Movie(String name, String info, List<String> theaterNumList, MovieTime time) {
+        this.name = name;
+        this.info = info;
+        this.theaterNumList = theaterNumList;
+        this.time = time;
+    }
+
     public String getName() {
         return name;
     }

@@ -6,6 +6,16 @@ public class MovieDetail {
     private String info;
     private String theaterNum;
     private MovieTime time;
+
+    public MovieDetail(int detailId, String name, String info, String theaterNum, MovieTime time, int[][] seatArray) {
+        this.detailId = detailId;
+        this.name = name;
+        this.info = info;
+        this.theaterNum = theaterNum;
+        this.time = time;
+        this.seatArray = seatArray;
+    }
+
     private int[][] seatArray;
 
     public int getDetailId() {

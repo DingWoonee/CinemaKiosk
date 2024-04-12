@@ -10,7 +10,5 @@ public class FileManager {
     public static List<Seat> seatList = new ArrayList<>();
     public static List<MovieDetail> detailList = new ArrayList<>();
     public static List<Ticket> ticketInfoList = new ArrayList<>();
-    public static Manager manager = new Manager();
-
-    public
+    public static Manager manager = new Manager("1234");
 }
