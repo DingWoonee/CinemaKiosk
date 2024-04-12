@@ -247,6 +247,8 @@ public class ManagerMain {
 
             movieList.add(newMoive);
         }
+
+        FileManager.saveMovie();
     }
 
     private boolean checkTitle(String movieTitle) {
