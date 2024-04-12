@@ -1,6 +1,6 @@
 package file;
 
-import entity.Movie;
+import entity.*;
 
 import java.io.*;
 import java.util.*;
@@ -18,9 +18,9 @@ public class FileCheck {
     public boolean checkAll() {
         if (checkMovieList()
                 && checkSeatInfo()
-                && checkMovieDetail()
                 && checkTicketInfo()
-                && checkManagerInfo()) {
+                && checkManagerInfo()
+                && checkMovieDetail()) {
             return true;
         } else {
             return false;
@@ -38,8 +38,10 @@ public class FileCheck {
                 System.out.println("Movie list file content format does not match");
                 return false;
             } else {
-                /*Movie newMovie = new Movie(elements[0], elements[1], elements[], elements[3]);
-                FileManager.movieList.add(newMovie)*/
+                String[] theaters = elements[2].split("\\|");
+                List<String> theaterNumList = new ArrayList<>(Arrays.asList(theaters));
+                Movie newMovie = new Movie(elements[0], elements[1], theaterNumList, MovieTime.getMovieTime(elements[3]));
+                FileManager.movieList.add(newMovie);
             }
         } else {
             System.out.println("Movie list file content format does not match");
@@ -49,14 +51,11 @@ public class FileCheck {
     }
     private boolean checkMovieList() {
         try (BufferedReader br = new BufferedReader(new FileReader(movieListFileName))) {
-            // 여기서 파일 내용 한줄 한줄 검사하고 FileManager.movieList에 데이터 하나씩 추가.
-            // 위의 checkMovieDataLine함수를 이용해서 한 줄 한 줄 검사하는데,
-            // 형식에 안 맞는게 한 줄이라도 있으면 바로 return false하면됨.
-            // 아래는 일단 테스트로 파일 내용 출력하는 코드임.
             String line;
             while ((line = br.readLine()) != null) {
-                if (checkMovieDataLine(line)) return true;
-                //System.out.println(line); // 파일 내용을 한 줄씩 읽어서 출력
+                if (!checkMovieDataLine(line)) {
+                    return false;
+                }
             }
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
@@ -76,14 +75,26 @@ public class FileCheck {
     // SeatInfo의 한 줄 한 줄을 검사하는 함수
     public boolean checkSeatDataLine(String line) {
         String[] elements = line.split("\\$"); //상영관, 좌석배열
-        if (elements.length == 4) {
-            if (!Pattern.matches(String.valueOf(ROOM_NUMBER), elements[0]) ||
-                    !Pattern.matches(String.valueOf(SEAT_CHART), elements[1])) {
+        if (elements.length == 2) {
+            if (!Pattern.matches(ROOM_NUMBER.getValue(), elements[0]) ||
+                    !Pattern.matches(SEAT_CHART.getValue(), elements[1])) {
                 System.out.println("Seat info file content format does not match");
                 return false;
+            } else {
+                String[] rows = elements[1].split("\\|");
+                String[] colForCount = rows[0].split(":");
+                int[][] seatArray = new int[rows.length][colForCount.length - 1];
+                for (int i = 0; i < rows.length; i++) {
+                    String[] cols = rows[i].split(":");
+                    for (int j = 1; j < cols.length; j++) {
+                        seatArray[i][j - 1] = Integer.parseInt(cols[j]);
+                    }
+                }
+                Seat seat = new Seat(elements[0], seatArray);
+
+                FileManager.seatList.add(seat);
             }
         } else {
-            System.out.println("Seat info file content format does not match");
             return false;
         }
         return true;
@@ -93,7 +104,9 @@ public class FileCheck {
         try (BufferedReader br = new BufferedReader(new FileReader(seatInfoFileName))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (checkSeatDataLine(line)) return true;
+                if (!checkSeatDataLine(line)) {
+                    return false;
+                }
             }
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
@@ -115,12 +128,12 @@ public class FileCheck {
     public boolean checkDetailDataLine(String line) {
         String[] elements = line.split("\\$"); //상영순서, 영화이름, 영화정보, 상영관, 상영시간, 좌석배열
         if (elements.length == 6) {
-            if (!Pattern.matches(String.valueOf(MOVIE_ORDER), elements[0]) ||
-                    !Pattern.matches(String.valueOf(MOVIE_NAME), elements[1]) ||
-                    !Pattern.matches(String.valueOf(MOVIE_INFO), elements[2]) ||
-                    !Pattern.matches(String.valueOf(ROOM_NUMBER), elements[3]) ||
-                    !Pattern.matches(String.valueOf(MOVIE_TIME), elements[4]) ||
-                    !Pattern.matches(String.valueOf(SEAT_CHART), elements[5])) {
+            if (!Pattern.matches(MOVIE_ORDER.getValue(), elements[0]) ||
+                    !Pattern.matches(MOVIE_NAME.getValue(), elements[1]) ||
+                    !Pattern.matches(MOVIE_INFO.getValue(), elements[2]) ||
+                    !Pattern.matches(ROOM_NUMBER.getValue(), elements[3]) ||
+                    !Pattern.matches(MOVIE_TIME.getValue(), elements[4]) ||
+                    !Pattern.matches(SEAT_CHART.getValue(), elements[5])) {
                 System.out.println("Movie detail file content format does not match");
                 return false;
             }
@@ -130,60 +143,54 @@ public class FileCheck {
         }
         return true;
     }
-    public void writeMovieDetailListContents(BufferedWriter bw) {
-        try (BufferedReader br = new BufferedReader(new FileReader(movieListFileName))) {
-            int i;
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] elements = line.split("\\$");
-                String movieName = elements[0];
-                String movieInfo = elements[1];
-                List<String> roomNumbers = new ArrayList<>();
-                roomNumbers.addAll(Arrays.asList(elements[2].split("\\|")));
-                String movieTime = elements[3];
-                try (BufferedReader br2 = new BufferedReader(new FileReader(seatInfoFileName))) {
-                    String[] seatInfo; //상영관 $ 좌석배열
-                    List<String> roomArrays = new ArrayList<>();
-                    String line2;
-                    while ((line2 = br2.readLine()) != null) {
-                        seatInfo = line2.split("\\$");
-                        for (i = 0; i < roomNumbers.size(); i++) { //상영관[] 순서에 따른 좌석 배열[]
-                            if (seatInfo[0].equals(roomNumbers.get(i))) {
-                                roomArrays.add(seatInfo[1]);
-                            }
-                        }
+    public boolean writeMovieDetailListContents(BufferedWriter bw) {
+        for (Movie movie : FileManager.movieList) {
+            for (String theaterNum : movie.getTheaterNumList()) {
+                Seat seat = null;
+                for (Seat seat1 : FileManager.seatList) {
+                    if (seat1.getTheaterNum().equals(theaterNum)) {
+                        seat = seat1;
                     }
                 }
-
-                for (i = 0; i < roomNumbers.size(); i++) {
-                    bw.write(movieOrder + "$");
-                    bw.write(movieName + "$");
-                    bw.write(movieInfo + "$");
-                    bw.write(roomNumbers.get(i) + "$");
-                    bw.write(movieTime + "$");
-                    bw.write("\n");
+                // 해당 상영관이 FileManager.seatList에 없을 경우 종료
+                if (seat == null) {
+                    return false;
                 }
+                // 이미 동시에 중복되는 상영관과 상영시간이 있을 경우 종료
+                for (MovieDetail movieDetail : FileManager.movieDetailList) {
+                    if (movieDetail.getTime().equals(movie.getTime()) && movieDetail.getTheaterNum().equals(theaterNum)) {
+                        return false;
+                    }
+                }
+                MovieDetail newMovieDetail = new MovieDetail(
+                        0,
+                        movie.getName(),
+                        movie.getInfo(),
+                        theaterNum,
+                        movie.getTime(),
+                        Arrays.copyOf(seat.getSeatArray(), seat.getSeatArray().length)
+                );
+                FileManager.movieDetailList.add(newMovieDetail);
             }
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
-    }
-    public void writeSeatInfoFileContents(BufferedWriter bw) {
-
+        return true;
     }
     //무비 디테일 디렉토리 안에 날짜에 맞는 파일이 있는지 확인하고 있으면 내용확인 없으면 내용 담은 파일 생성
     private boolean checkMovieDetail() {
         try (BufferedReader br = new BufferedReader(new FileReader(movieDetailListDirectoryName + "/" + FileManager.todayDate))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (checkSeatDataLine(line)) return true;
+                if (!checkDetailDataLine(line)) {
+                    return false;
+                }
             }
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(seatInfoFileName))) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(movieDetailListDirectoryName + "/" + FileManager.todayDate))) {
                 System.out.println("Seat info file created");
-                writeMovieDetailListContents(bw);
+                if (!writeMovieDetailListContents(bw)) {
+                    return false;
+                }
             } catch (IOException e2) {
                 e2.printStackTrace();
                 return false;
@@ -199,12 +206,16 @@ public class FileCheck {
     // TicketInfo의 한 줄 한 줄을 검사하는 함수
     public boolean checkTicketDataLine(String line) {
         String[] elements = line.split("\\$"); //예매번호, 예매비밀번호, 좌석번호
-        if (elements.length == 3) {
-            if (!Pattern.matches(String.valueOf(TICKET_NUMBER), elements[0]) ||
-                    !Pattern.matches(String.valueOf(TICKET_PASSWORD), elements[1]) ||
-                    !Pattern.matches(String.valueOf(SEAT_NUMBER), elements[2])) {
+        if (elements.length == 4) {
+            if (!Pattern.matches(TICKET_NUMBER.getValue(), elements[0]) ||
+                    !Pattern.matches(TICKET_PASSWORD.getValue(), elements[1]) ||
+                    !Pattern.matches(MOVIE_ORDER.getValue(), elements[2]) ||
+                    !Pattern.matches(SEAT_NUMBER.getValue(), elements[3])) {
                 System.out.println("Ticket info file content format does not match");
                 return false;
+            } else {
+                Ticket newTicket = new Ticket(elements[0], elements[1], Integer.parseInt(elements[2]), elements[3]);
+                FileManager.ticketInfoList.add(newTicket);
             }
         } else {
             System.out.println("Ticket info file content format does not match");
@@ -216,7 +227,9 @@ public class FileCheck {
         try (BufferedReader br = new BufferedReader(new FileReader(ticketInfoFileName))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (checkTicketDataLine(line)) return true;
+                if (!checkTicketDataLine(line)) {
+                    return false;
+                }
             }
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
@@ -237,9 +250,11 @@ public class FileCheck {
     // ManagerInfo의 한 줄 한 줄을 검사하는 함수
     public boolean checkManagerDataLine(String line) {
         if (line != null) {
-            if (!Pattern.matches(String.valueOf(ADMIN_PASSWORD), line)) {
+            if (!Pattern.matches(ADMIN_PASSWORD.getValue(), line)) {
                 System.out.println("Manager info file content format does not match");
                 return false;
+            } else {
+                FileManager.manager.setManagerPw(line);
             }
         } else {
             System.out.println("Manager info file content format does not match");
@@ -251,7 +266,9 @@ public class FileCheck {
         try (BufferedReader br = new BufferedReader(new FileReader(managerInfoFileName))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (checkManagerDataLine(line)) return true;
+                if (!checkManagerDataLine(line)) {
+                    return false;
+                }
             }
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
