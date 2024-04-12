@@ -4,6 +4,14 @@ public class Ticket {
     private String reservationId;
     private String reservationPw;
     private int detailId;
+
+    public Ticket(String reservationId, String reservationPw, int detailId, String seatCode) {
+        this.reservationId = reservationId;
+        this.reservationPw = reservationPw;
+        this.detailId = detailId;
+        this.seatCode = seatCode;
+    }
+
     private String seatCode;
 
     public String getReservationId() {
