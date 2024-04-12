@@ -12,10 +12,17 @@ import static java.lang.System.exit;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+<<<<<<< HEAD
         FileCheck fileCheck = null;
 //        if (fileCheck.checkAll()) {
 //            exit(1);
 //        }
+=======
+        FileCheck fileCheck = new FileCheck();
+        if (fileCheck.checkAll()) {
+            exit(1);
+        }
+>>>>>>> 5c9b8a564c4468dd00111a5d453e87ff539c3f26
 
         FileManager fileManager = new FileManager();
 
