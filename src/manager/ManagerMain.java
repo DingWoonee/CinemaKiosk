@@ -2,6 +2,7 @@ package manager;
 
 import entity.Manager;
 import entity.Movie;
+import entity.MovieDetail;
 import file.FileManager;
 
 import java.util.ArrayList;
@@ -10,7 +11,8 @@ import java.util.Scanner;
 
 public class ManagerMain {
     private FileManager fileManager;
-    List<Movie> movieList =  FileManager.movieList;
+    //List<Movie> movieList =  FileManager.movieList;
+    static List<Movie> movieList;
 
     public ManagerMain(FileManager fileManager) {
         this.fileManager = fileManager;
@@ -67,7 +69,8 @@ public class ManagerMain {
         String movieName = sc.nextLine();
     }
 
-    public void movieListPrint() {
+    public static void movieListPrint() {
+        movieList = FileManager.movieList;
         System.out.println("[영화 목록 출력]");
         System.out.println("영화 제목\t\t상영관\t\t상영시간");
         for (Movie movie : movieList) {
@@ -84,4 +87,5 @@ public class ManagerMain {
             System.out.printf("%s\t\t%s\t\t%s", movie.getName(), sumNum, movie.getTime());
         }
     }
+
 }

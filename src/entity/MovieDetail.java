@@ -1,11 +1,16 @@
 package entity;
 
+import file.FileManager;
+
+import java.util.List;
+
 public class MovieDetail {
     private int detailId;
     private String name;
     private String info;
     private String theaterNum;
     private MovieTime time;
+
 
     public MovieDetail(int detailId, String name, String info, String theaterNum, MovieTime time, int[][] seatArray) {
         this.detailId = detailId;
@@ -66,4 +71,5 @@ public class MovieDetail {
     public void setSeatArray(int[][] seatArray) {
         this.seatArray = seatArray;
     }
+
 }
