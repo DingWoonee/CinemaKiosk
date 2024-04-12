@@ -1,8 +1,8 @@
-import file.interfaces.FileCheck;
-import file.interfaces.FileManager;
-import manager.interfaces.ManagerMain;
-import reservation.interfaces.Cancel;
-import reservation.interfaces.Reservation;
+import file.FileCheck;
+import file.FileManager;
+import manager.ManagerMain;
+import reservation.Cancel;
+import reservation.Reservation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,9 +13,11 @@ import static java.lang.System.exit;
 public class Main {
     public static void main(String[] args) throws IOException {
         FileCheck fileCheck = null;
-        fileCheck.checkAll();
+        if (fileCheck.checkAll()) {
+            exit(1);
+        }
 
-        FileManager fileManager = null;
+        FileManager fileManager = new FileManager();
 
         while (true) {
             // home
@@ -23,17 +25,17 @@ public class Main {
             switch (Integer.parseInt(br.readLine())) {
                 // 영화 예매
                 case 1 -> {
-                    Reservation res = null;
+                    Reservation res = new Reservation(fileManager);
                     res.run();
                 }
                 // 예매 취소
                 case 2 -> {
-                    Cancel cancel = null;
+                    Cancel cancel = new Cancel(fileManager);
                     cancel.run();
                 }
                 // 관리자 모드
                 case 3 -> {
-                    ManagerMain mm = null;
+                    ManagerMain mm = new ManagerMain(fileManager);
                     mm.run();
                 }
                 // 종료
