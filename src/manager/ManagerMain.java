@@ -3,6 +3,7 @@ package manager;
 import entity.Manager;
 import entity.Movie;
 import entity.MovieDetail;
+import etc.Prompt;
 import file.FileManager;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class ManagerMain {
 
         System.out.print("관리자 비밀번호 입력: ");
         String inputPw = sc.nextLine();
-        if(!inputPw.equals("1234")){
+        if (!inputPw.equals("1234")) {
             System.out.println("관리자 비밀번호가 틀렸습니다.");
         }
 
@@ -37,7 +38,7 @@ public class ManagerMain {
         System.out.print("번호 입력(숫자만 입력): ");
         int choice = sc.nextInt();
 
-        switch(choice){
+        switch (choice) {
             case 1:
                 movieListPrint();
                 break;
@@ -59,8 +60,63 @@ public class ManagerMain {
     }
 
     private static void deleteMovie(Scanner sc) {
-        System.out.println("[영화 삭제]");
+        while (true) {
+            System.out.println("[영화 삭제]");
+            System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간");
+            int i = 0;
+            for (Movie movie : movieList) {
+                StringBuilder sumNum = new StringBuilder();
+                for (String num : movie.getTheaterNumList()) {
+                    sumNum.append(num).append(",");
+                }
+                // 마지막 쉼표 제거
+                if (sumNum.length() > 0) {
+                    sumNum.deleteCharAt(sumNum.length() - 1);
+                }
+                System.out.printf("%d\t\t%s\t\t%s\t\t%s\n", ++i, movie.getName(), sumNum, movie.getTime());
+            }
 
+            System.out.print("번호 입력(숫자만 입력): ");
+            String input = sc.nextLine().trim();
+
+            int choice;
+            try {
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println(Prompt.BAD_INPUT.getPrompot());
+                continue;
+            }
+
+            if (choice < 1 || choice > movieList.size()) {
+                System.out.println(Prompt.BAD_INPUT.getPrompot());
+                continue;
+            }
+
+            System.out.println("[정말 삭제하시겠습니까?]");
+            System.out.println("1. 삭제");
+            System.out.println("2. 취소");
+            System.out.print("번호 입력(숫자만 입력): ");
+
+            input = sc.nextLine().trim();
+            int choice2;
+            try {
+                choice2 = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println(Prompt.BAD_INPUT.getPrompot());
+                continue;
+            }
+
+            if (choice2 == 1) {
+                movieList.remove(choice - 1);
+                System.out.println("삭제가 완료되었습니다.");
+                break;
+            } else if (choice2 == 2) {
+                System.out.println("삭제가 취소되었습니다.");
+                break;
+            } else {
+                System.out.println(Prompt.BAD_INPUT.getPrompot());
+            }
+        }
     }
 
     private static void addMovie(Scanner sc) {
