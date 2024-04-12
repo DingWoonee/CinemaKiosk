@@ -85,9 +85,14 @@ public class FileCheck {
         return true;
     }
 
+<<<<<<< HEAD
+    public boolean checkAll() {
+        return true;
+=======
     public static void main(String[] args) {
         // 테스트를 위한 임시 테스트 main함수
         FileCheck fileCheck = new FileCheck();
         fileCheck.checkMovieList();
+>>>>>>> 5c9b8a564c4468dd00111a5d453e87ff539c3f26
     }
 }
