@@ -64,10 +64,68 @@ public class ManagerMain {
     }
 
     private static void addMovie(Scanner sc) {
+        Movie newMoive = new Movie();
         System.out.println("[영화 추가]");
-        System.out.println("영화 제목 입력: ");
-        String movieName = sc.nextLine();
+        System.out.print("영화 제목 입력: ");
+        String movieName = sc.nextLine().trim();
+
+        if(!checkTitle(movieName)){
+            System.out.println("올바르지 않은 입력입니다.");
+            // 후 처리
+        }
+        newMoive.setName(movieName);
+
+        System.out.print("영화 설명 입력(10자 이상):\t");
+        String movieDescription = sc.nextLine().trim();
+        if(!checkDescription()){
+            System.out.println("10자 이상 입력해주세요.");
+            // 후 처리
+        }
+        newMoive.setInfo(movieDescription);
+
+        System.out.print("상영관 입력(\\'\\|\\'로 구분해서 여러개 입력 가능): ");
+        String theaterNums = sc.nextLine().trim();
+        if(!checkTheaterNums()){
+            System.out.println("올바르지 않은 입력입니다.");
+            // 후 처리
+        }
+        newMoive.setTheaterNumList();
+
+        System.out.println("상영 시간 입력(\\'\\|\\'로 구분해서 여러개 입력 가능):");
+        String movieTimes = sc.nextLine();
+        if(!checkMovieTimes()){
+            System.out.println("올바르지 않은 입력입니다.");
+            // 후 처리
+        }
+        newMoive.setTime();
+
     }
+
+    private static boolean checkTitle(String movieTitle) {
+        if (!movieTitle.isEmpty() && movieTitle.length() < 15){ // 길이 1이상 15이하 체크
+            return false;
+        }
+        if(movieTitle.contains("$")){ // 문자열 안에 $가 있는지 체크
+            return false;
+        }
+
+        return true;
+    }
+    private static boolean checkDescription() {
+        return true;
+    }
+
+    private static boolean checkMovieTimes() {
+        return true;
+    }
+
+    private static boolean checkTheaterNums() {
+        return true;
+    }
+
+
+
+
 
     public static void movieListPrint() {
         movieList = FileManager.movieList;
