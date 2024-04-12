@@ -1,12 +1,14 @@
 package file;
 
 import entity.*;
+import etc.Prompt;
+import etc.RE;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FileManager {
     public static String todayDate = "";
@@ -20,7 +22,24 @@ public class FileManager {
     private final static String ticketInfoFileName = "ticket_info.txt";
 
     public static void inputDate() {
-
+        Pattern pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT.getValue()));
+        String input;
+        Matcher matcher;
+        while (true) {
+            System.out.print("오늘 날짜 입력:");
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                input = br.readLine();
+                matcher = pattern.matcher(input);
+                if (matcher.matches()) {
+                    break;
+                } else {
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
+                }
+            } catch (IOException ignored) {
+            }
+        }
+        todayDate = input;
     }
 
     // 영화 리스트 저장.
@@ -76,5 +95,11 @@ public class FileManager {
             movieList.add(movie);
         }
         //saveMovie();
+        System.out.println(RE.DATE_EIGHT.getValue());
+
+        FileManager.inputDate();
+        System.out.println(todayDate);
+
+        System.out.println(Prompt.BAD_INPUT);
     }
 }
