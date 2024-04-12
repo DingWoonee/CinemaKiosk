@@ -14,13 +14,15 @@ public class Reservation {
     FileManager fileManager;
     int movieNumber;
 
+    int peopleCount;
+
     public Reservation(FileManager fileManager) {
         this.fileManager = fileManager;
     }
     public void run() {
         movieChoice();
         movieInfo();
-        peopleCount();
+        countingPeople();
         seatChoice();
         password();
         reservationInfo();
@@ -63,7 +65,7 @@ public class Reservation {
             menuNumber = Integer.parseInt(input);
             switch (menuNumber) {
                 case 1:
-                    peopleCount();
+                    countingPeople();
                     break;
                 case 2:
                     break;
@@ -77,7 +79,17 @@ public class Reservation {
             movieInfo();
         }
     }
-    public void peopleCount(){
+    public void countingPeople(){
+        System.out.println("인원 수 입력(숫자만 입력):");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine().trim();
+        try {
+            peopleCount = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            System.out.println(Prompt.BAD_INPUT);
+            countingPeople();
+        }
+        
 
     }
     public void seatChoice(){
