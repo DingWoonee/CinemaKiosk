@@ -28,6 +28,8 @@ public class Reservation {
     public void movieChoice() {
         // 임시 데이터 추가
         FileManager.movieDetailList.add(new MovieDetail(1,"겨울연가","송혜교 주연의 멜로 영화","01", MovieTime.Time1, new int[10][10]));
+        FileManager.movieDetailList.add(new MovieDetail(2,"기생충","송강호 주연의 드라마","02", MovieTime.Time2, new int[10][10]));
+
         // 이 부분 movieDetail의 메소드로 바꿔야함.
         for (MovieDetail movieDetail:FileManager.movieDetailList){
             System.out.println(movieDetail.getDetailId() +" "+ movieDetail.getName() + " " + movieDetail.getTheaterNum());
@@ -107,9 +109,8 @@ public class Reservation {
         tempSeats[3][3] = -1;
         tempSeats[4][5] = 1;
         // FileManager의 seatList에 새로운 Seat 객체를 추가합니다.
-        // 여기서 'A09'는 상영관 번호를 의미하며, 실제 시스템에서는 영화 상영관 번호에 맞게 조정될 것입니다.
         FileManager.seatList.add(new Seat("01", tempSeats));
-
+        FileManager.seatList.add(new Seat("02",tempSeats));
 
         List<String> selectedSeats = new ArrayList<>();
         String theaterNum = FileManager.movieDetailList.get(movieNumber - 1).getTheaterNum();
