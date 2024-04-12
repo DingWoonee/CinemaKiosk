@@ -1,6 +1,7 @@
 package file;
 
 import java.io.*;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import static etc.RE.*;
@@ -31,11 +32,11 @@ public class FileCheck {
                     !Pattern.matches(String.valueOf(MOVIE_INFO), elements[1]) ||
                     !Pattern.matches(String.valueOf(ROOM_NUMBER), elements[2]) ||
                     !Pattern.matches(String.valueOf(MOVIE_TIME), elements[3])) {
-                System.out.println("File content format does not match");
+                System.out.println("Movie list file content format does not match");
                 return false;
             }
         } else {
-            System.out.println("File content format does not match");
+            System.out.println("Movie list file content format does not match");
             return false;
         }
         return true;
@@ -54,16 +55,7 @@ public class FileCheck {
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(movieListFileName))) {
-                File file = new File(movieListFileName);
-                try {
-                    if (file.createNewFile()) {
-                        System.out.println("Movie list file created");
-                    } else {
-                        System.out.println("Movie list file already exists");
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                System.out.println("Movie list file created");
             } catch (IOException e2) {
                 e2.printStackTrace();
                 return false;
@@ -76,43 +68,167 @@ public class FileCheck {
     }
 
     // SeatInfo의 한 줄 한 줄을 검사하는 함수
-    public boolean checkSeatDataLine() {
+    public boolean checkSeatDataLine(String line) {
+        String[] elements = line.split("\\$"); //영화이름, 상영관, 상영시간, 좌석배열
+        if (elements.length == 4) {
+            if (!Pattern.matches(String.valueOf(MOVIE_NAME), elements[0]) ||
+                    !Pattern.matches(String.valueOf(ROOM_NUMBER), elements[1]) ||
+                    !Pattern.matches(String.valueOf(MOVIE_TIME), elements[2]) ||
+                    !Pattern.matches(String.valueOf(SEAT_CHART), elements[3])) {
+                System.out.println("Seat info file content format does not match");
+                return false;
+            }
+        } else {
+            System.out.println("Seat info file content format does not match");
+            return false;
+        }
         return true;
     }
+
     private boolean checkSeatInfo() {
+        try (BufferedReader br = new BufferedReader(new FileReader(seatInfoFileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (checkSeatDataLine(line)) return true;
+            }
+        } catch (FileNotFoundException e) {
+            // 파일이 없을 때 파일 생성하는 부분.
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(seatInfoFileName))) {
+                System.out.println("Seat info file created");
+            } catch (IOException e2) {
+                e2.printStackTrace();
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
 
     // MovieDetail의 한 줄 한 줄을 검사하는 함수
-    public boolean checkDetailDataLine() {
+    public boolean checkDetailDataLine(String line) {
+        String[] elements = line.split("\\$"); //상영순서, 영화이름, 영화정보, 상영관, 상영시간, 좌석배열
+        if (elements.length == 6) {
+            if (!Pattern.matches(String.valueOf(MOVIE_ORDER), elements[0]) ||
+                    !Pattern.matches(String.valueOf(MOVIE_NAME), elements[1]) ||
+                    !Pattern.matches(String.valueOf(MOVIE_INFO), elements[2]) ||
+                    !Pattern.matches(String.valueOf(ROOM_NUMBER), elements[3]) ||
+                    !Pattern.matches(String.valueOf(MOVIE_TIME), elements[4]) ||
+                    !Pattern.matches(String.valueOf(SEAT_CHART), elements[5])) {
+                System.out.println("Movie detail file content format does not match");
+                return false;
+            }
+        } else {
+            System.out.println("Movie detail file content format does not match");
+            return false;
+        }
         return true;
     }
     private boolean checkMovieDetail() {
+        try (BufferedReader br = new BufferedReader(new FileReader(movieDetailListDirectoryName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (checkSeatDataLine(line)) return true;
+            }
+        } catch (FileNotFoundException e) {
+            // 파일이 없을 때 파일 생성하는 부분.
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(seatInfoFileName))) {
+                System.out.println("Seat info file created");
+            } catch (IOException e2) {
+                e2.printStackTrace();
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
 
     // TicketInfo의 한 줄 한 줄을 검사하는 함수
-    public boolean checkTicketDataLine() {
+    public boolean checkTicketDataLine(String line) {
+        String[] elements = line.split("\\$"); //예매번호, 예매비밀번호, 좌석번호
+        if (elements.length == 3) {
+            if (!Pattern.matches(String.valueOf(TICKET_NUMBER), elements[0]) ||
+                    !Pattern.matches(String.valueOf(TICKET_PASSWORD), elements[1]) ||
+                    !Pattern.matches(String.valueOf(SEAT_NUMBER), elements[2])) {
+                System.out.println("Ticket info file content format does not match");
+                return false;
+            }
+        } else {
+            System.out.println("Ticket info file content format does not match");
+            return false;
+        }
         return true;
     }
     private boolean checkTicketInfo() {
+        try (BufferedReader br = new BufferedReader(new FileReader(ticketInfoFileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (checkTicketDataLine(line)) return true;
+            }
+        } catch (FileNotFoundException e) {
+            // 파일이 없을 때 파일 생성하는 부분.
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(ticketInfoFileName))) {
+                System.out.println("Ticket info file created");
+            } catch (IOException e2) {
+                e2.printStackTrace();
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
 
     // ManagerInfo의 한 줄 한 줄을 검사하는 함수
-    public boolean checkManagerDataLine() {
+    public boolean checkManagerDataLine(String line) {
+        if (line != null) {
+            if (!Pattern.matches(String.valueOf(ADMIN_PASSWORD), line)) {
+                System.out.println("Manager info file content format does not match");
+                return false;
+            }
+        } else {
+            System.out.println("Manager info file content format does not match");
+            return false;
+        }
         return true;
     }
     private boolean checkManagerInfo() {
+        try (BufferedReader br = new BufferedReader(new FileReader(managerInfoFileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (checkManagerDataLine(line)) return true;
+            }
+        } catch (FileNotFoundException e) {
+            // 파일이 없을 때 파일 생성하는 부분.
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(managerInfoFileName))) {
+                System.out.println("Manager info file created");
+                //관리자 정보 파일 생성 후 초기 비밀번호 입력 받기
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Enter admin password: ");
+                String password = scanner.nextLine();
+                bw.write(password);
+                System.out.println("Save");
+            } catch (IOException e2) {
+                e2.printStackTrace();
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
     public static void main(String[] args) {
         // 테스트를 위한 임시 테스트 main함수
         FileCheck fileCheck = new FileCheck();
-        fileCheck.checkMovieList();
+        fileCheck.checkManagerInfo();
     }
 }
