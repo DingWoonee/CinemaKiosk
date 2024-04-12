@@ -1,5 +1,7 @@
 package entity;
 
+import etc.Prompt;
+
 public class Ticket {
     private String reservationId;
     private String reservationPw;
