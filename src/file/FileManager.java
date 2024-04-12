@@ -12,5 +12,7 @@ public class FileManager {
     public static List<Ticket> ticketInfoList = new ArrayList<>();
     public static Manager manager = new Manager("1234");
 
+    public static void addMovie(Movie movie) {
 
+    }
 }
