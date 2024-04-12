@@ -27,10 +27,10 @@ public class Reservation {
         System.out.println("번호입력(숫자만입력):");
         Scanner scanner = new Scanner(System.in);
         int movieNumber = 0;
+        String input = scanner.nextLine().trim();
         try {
-            movieNumber = scanner.nextInt();
-
-        } catch (InputMismatchException e) {
+            movieNumber = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
             System.out.println(Prompt.BAD_INPUT);
         }
         return movieNumber;
