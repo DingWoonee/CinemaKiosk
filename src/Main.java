@@ -3,6 +3,7 @@ import file.FileCheck;
 import file.FileManager;
 import manager.ManagerMain;
 import reservation.Cancel;
+import reservation.InvalidInputException;
 import reservation.Reservation;
 
 import java.io.BufferedReader;
@@ -57,7 +58,11 @@ public class Main {
 
                     }
                 }
-            }catch (Exception e){
+            }
+            catch (InvalidInputException e){
+                Prompt.BAD_INPUT.getPrompt();
+            }
+            catch (Exception e){
                 Prompt.BAD_INPUT.getPrompt();
             }
 
