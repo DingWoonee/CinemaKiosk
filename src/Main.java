@@ -1,6 +1,6 @@
-import file.interfaces.FileCheck;
-import file.interfaces.FileManager;
-import manager.interfaces.ManagerMain;
+import file.FileCheck;
+import file.FileManager;
+import manager.ManagerMain;
 import reservation.interfaces.Cancel;
 import reservation.interfaces.Reservation;
 
@@ -13,7 +13,9 @@ import static java.lang.System.exit;
 public class Main {
     public static void main(String[] args) throws IOException {
         FileCheck fileCheck = null;
-        fileCheck.checkAll();
+        if (fileCheck.checkAll()) {
+            exit(1);
+        }
 
         FileManager fileManager = null;
 
