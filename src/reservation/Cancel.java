@@ -41,7 +41,6 @@ public class Cancel {
 		}
 		else
 			System.out.println(Prompt.NOT_EXIST_RESERVATION.getPrompt());
-		scanner.close();
 	}
 
 	// 입력받은 예매 번호가 존재하면 해당하는 Ticket 객체를 반환, 존재하지 않는 경우 null 반환
