@@ -12,6 +12,8 @@ import static java.lang.System.exit;
 
 public class Main {
     public static void main(String[] args) throws IOException {
+        // 날짜 입력 받기
+        FileManager.inputDate();
 
         FileCheck fileCheck = new FileCheck();
         if (!fileCheck.checkAll()) {

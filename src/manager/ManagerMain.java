@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class ManagerMain {
     private FileManager fileManager;
     //List<Movie> movieList =  FileManager.movieList;
-    MovieDetail movieDetail;
+    static List<Movie> movieList;
 
     public ManagerMain(FileManager fileManager) {
         this.fileManager = fileManager;
@@ -23,7 +23,7 @@ public class ManagerMain {
 
         System.out.print("관리자 비밀번호 입력: ");
         String inputPw = sc.nextLine();
-        if(!inputPw.equals("1234")){
+        if (!inputPw.equals("1234")) {
             System.out.println("관리자 비밀번호가 틀렸습니다.");
         }
 
@@ -37,9 +37,9 @@ public class ManagerMain {
         System.out.print("번호 입력(숫자만 입력): ");
         int choice = sc.nextInt();
 
-        switch(choice){
+        switch (choice) {
             case 1:
-                MovieDetail.movieListPrint();
+                movieListPrint();
                 break;
             case 2:
                 addMovie(sc);
@@ -60,6 +60,38 @@ public class ManagerMain {
 
     private static void deleteMovie(Scanner sc) {
         System.out.println("[영화 삭제]");
+        System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간");
+        int i = 0;
+        for (Movie movie : movieList) {
+            StringBuilder sumNum = new StringBuilder();
+            for (String num : movie.getTheaterNumList()) {
+                sumNum.append(num);
+                sumNum.append(",");
+            }
+            // 마지막 쉼표 제거
+            if (!sumNum.isEmpty()) {
+                sumNum.deleteCharAt(sumNum.length() - 1);
+            }
+            System.out.printf("%d\t\t%s\t\t%s\t\t%s", ++i, movie.getName(), sumNum, movie.getTime());
+
+        }
+        System.out.print("번호 입력(숫자만 입력): ");
+        String input = (sc.nextLine()).trim();
+        int choice;
+        try {
+            choice = Integer.valueOf(input);
+
+
+        } catch (Exception e) {
+            System.out.println("올바르지 않은 입력입니다.");
+            return;
+        }
+        try {
+            FileManager.movieList.remove(choice - 1);
+
+        } catch (Exception e) {
+            System.out.println("올바르지 않은 입력입니다.");
+        }
 
     }
 
@@ -69,5 +101,23 @@ public class ManagerMain {
         String movieName = sc.nextLine();
     }
 
+    public static void movieListPrint() {
+        movieList = FileManager.movieList;
+        System.out.println("[영화 목록 출력]");
+        System.out.println("영화 제목\t\t상영관\t\t상영시간");
+        for (Movie movie : movieList) {
+            StringBuilder sumNum = new StringBuilder();
+            for (String num : movie.getTheaterNumList()) {
+                sumNum.append(num);
+                sumNum.append(",");
+            }
+            // 마지막 쉼표 제거
+            if (!sumNum.isEmpty()) {
+                sumNum.deleteCharAt(sumNum.length() - 1);
+            }
+
+            System.out.printf("%s\t\t%s\t\t%s", movie.getName(), sumNum, movie.getTime());
+        }
+    }
 
 }
