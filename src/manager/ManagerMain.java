@@ -70,6 +70,7 @@ public class ManagerMain {
                     sumNum.append(num).append(",");
                 }
                 // 마지막 쉼표 제거
+
                 if (sumNum.length() > 0) {
                     sumNum.deleteCharAt(sumNum.length() - 1);
                 }
@@ -83,12 +84,14 @@ public class ManagerMain {
             try {
                 choice = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println(Prompt.BAD_INPUT.getPrompot());
+                System.out.println("올바르지 않은 입력입니다.");
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
                 continue;
             }
 
             if (choice < 1 || choice > movieList.size()) {
-                System.out.println(Prompt.BAD_INPUT.getPrompot());
+                System.out.println("올바르지 않은 입력입니다.");
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
                 continue;
             }
 
@@ -102,7 +105,8 @@ public class ManagerMain {
             try {
                 choice2 = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println(Prompt.BAD_INPUT.getPrompot());
+                System.out.println("올바르지 않은 입력입니다.");
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
                 continue;
             }
 
@@ -114,7 +118,8 @@ public class ManagerMain {
                 System.out.println("삭제가 취소되었습니다.");
                 break;
             } else {
-                System.out.println(Prompt.BAD_INPUT.getPrompot());
+                System.out.println("올바르지 않은 입력입니다.");
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
             }
         }
     }
