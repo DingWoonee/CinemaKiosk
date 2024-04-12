@@ -143,7 +143,7 @@ public class FileCheck {
         }
         return true;
     }
-    public boolean writeMovieDetailListContents(BufferedWriter bw) {
+    public boolean writeMovieDetailListContents(BufferedWriter bw) throws IOException {
         for (Movie movie : FileManager.movieList) {
             for (String theaterNum : movie.getTheaterNumList()) {
                 Seat seat = null;
@@ -171,6 +171,18 @@ public class FileCheck {
                         Arrays.copyOf(seat.getSeatArray(), seat.getSeatArray().length)
                 );
                 FileManager.movieDetailList.add(newMovieDetail);
+                String[] timeList = {"조조", "미들", "심야"};
+                FileManager.movieDetailList.sort((a, b) -> {
+                    return Arrays.binarySearch(timeList, a.getTime().getTime()) - Arrays.binarySearch(timeList, b.getTime().getTime());
+                });
+                for (int i = 0; i < FileManager.movieDetailList.size(); i++) {
+                    FileManager.movieDetailList.get(i).setDetailId(i);
+                }
+                String newLine = "";
+                for (MovieDetail movieDetail : FileManager.movieDetailList) {
+                    newLine += movieDetail.getDetailId() + "$" + movieDetail.getName() + "$" + movieDetail.getInfo() + "$" + movieDetail.getTheaterNum() + "$" + movieDetail.getTime().getTime() + "$" + movieDetail + "$" + Seat.seatToString(movieDetail.getSeatArray()) + "\n";
+                }
+                bw.write(newLine);
             }
         }
         return true;
