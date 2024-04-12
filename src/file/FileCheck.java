@@ -33,11 +33,16 @@ public class FileCheck {
     public boolean checkMovieDataLine(String line) {
         String[] elements = line.split("\\$"); //영화이름, 영화정보, 상영관, 상영시간
         if (elements.length == 4) {
-            if (!Pattern.matches(MOVIE_NAME.getValue(), elements[0]) ||
-                    !Pattern.matches(MOVIE_INFO.getValue(), elements[1]) ||
-                    !Pattern.matches(ROOM_NUMBERS.getValue(), elements[2]) ||
-                    !Pattern.matches(MOVIE_TIME.getValue(), elements[3])) {
-                System.out.println("Movie list file content format does not match");
+            Boolean check1 = !Pattern.matches(MOVIE_NAME.getValue(), elements[0]);
+            Boolean check2 = !Pattern.matches(MOVIE_INFO.getValue(), elements[1]);
+            Boolean check3 = !Pattern.matches(ROOM_NUMBERS.getValue(), elements[2]);
+            Boolean check4 = !Pattern.matches(MOVIE_TIME.getValue(), elements[3]);
+            System.out.println(check1.toString() + check2 + check3 + check4);
+            if (check1 ||
+                    check2 ||
+                    check3 ||
+                    check4 ) {
+                System.out.println("Movie list file content format does not match1");
                 return false;
             } else {
                 String[] theaters = elements[2].split("\\|");
@@ -46,7 +51,7 @@ public class FileCheck {
                 FileManager.movieList.add(newMovie);
             }
         } else {
-            System.out.println("Movie list file content format does not match");
+            System.out.println("Movie list file content format does not match2");
             return false;
         }
         return true;
@@ -177,16 +182,16 @@ public class FileCheck {
                 FileManager.movieDetailList.sort((a, b) -> {
                     return Arrays.binarySearch(timeList, a.getTime().getTime()) - Arrays.binarySearch(timeList, b.getTime().getTime());
                 });
-                for (int i = 0; i < FileManager.movieDetailList.size(); i++) {
-                    FileManager.movieDetailList.get(i).setDetailId(i);
-                }
-                String newLine = "";
-                for (MovieDetail movieDetail : FileManager.movieDetailList) {
-                    newLine += movieDetail.getDetailId() + "$" + movieDetail.getName() + "$" + movieDetail.getInfo() + "$" + movieDetail.getTheaterNum() + "$" + movieDetail.getTime().getTime() + "$" + movieDetail + "$" + Seat.seatToString(movieDetail.getSeatArray()) + "\n";
-                }
-                bw.write(newLine);
             }
         }
+        for (int i = 0; i < FileManager.movieDetailList.size(); i++) {
+            FileManager.movieDetailList.get(i).setDetailId(i);
+        }
+        String newLine = "";
+        for (MovieDetail movieDetail : FileManager.movieDetailList) {
+            newLine += movieDetail.getDetailId() + "$" + movieDetail.getName() + "$" + movieDetail.getInfo() + "$" + movieDetail.getTheaterNum() + "$" + movieDetail.getTime().getTime() + "$" + Seat.seatToString(movieDetail.getSeatArray()) + "\n";
+        }
+        bw.write(newLine);
         return true;
     }
     //무비 디테일 디렉토리 안에 날짜에 맞는 파일이 있는지 확인하고 있으면 내용확인 없으면 내용 담은 파일 생성

@@ -151,6 +151,7 @@ public class ManagerMain {
         }
         newMoive.setName(movieName);
 
+
         // 2단계
         String movieDescription = null;
         while(true) {
@@ -259,15 +260,20 @@ public class ManagerMain {
     }
 
     private boolean checkTitle(String movieTitle) {
-        if(movieTitle.matches(RE.MOVIE_NAME.getValue())){
+        if(!movieTitle.matches(RE.MOVIE_NAME.getValue())){
+            System.out.println("0");
             return false;
         }
 
+        System.out.println("1");
+        // 여기까지 됨
         for (Movie movie : movieList) {
+            System.out.println("2");
             if (movie.getName().equals(movieTitle)){
                 isDuplicateTitle = true;
             }
         }
+        System.out.println("hi");
 
         return true;
     }

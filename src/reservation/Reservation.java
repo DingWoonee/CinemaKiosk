@@ -54,7 +54,9 @@ public class Reservation {
         password();
         // 4.티켓 추가
         List<Ticket> tickets = createAndAddTickets(selectedSeats);
-        // 5.티켓 정보 출력
+        // 5. 티켓 저장
+        FileManager.saveTicketInfo();
+        // 6. 티켓 정보 출력
         reservationInfo(tickets);
     }
     
@@ -87,6 +89,7 @@ public class Reservation {
             }
         } catch (NumberFormatException e) {
             System.out.println(Prompt.BAD_INPUT.getPrompt());
+
         }
     }
     // 예매하기와 홈을 선택할 수 있는 메소드
