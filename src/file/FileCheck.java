@@ -54,4 +54,8 @@ public class FileCheck {
     private boolean checkManagerInfo() {
         return true;
     }
+
+    public boolean checkAll() {
+        return true;
+    }
 }
