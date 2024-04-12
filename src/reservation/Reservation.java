@@ -22,8 +22,7 @@ public class Reservation {
         this.fileManager = fileManager;
     }
 
-
-    public void run() throws InvalidInputException {
+    public void tempDataCreate(){
         //영화 임시 데이터 생성
         FileManager.movieDetailList.add(new MovieDetail(1,"겨울연가","송혜교 주연의 멜로 영화","01", MovieTime.Time1, new int[10][10]));
         FileManager.movieDetailList.add(new MovieDetail(2,"기생충","송강호 주연의 드라마","02", MovieTime.Time2, new int[10][10]));
@@ -43,8 +42,10 @@ public class Reservation {
         // FileManager의 seatList에 새로운 Seat 객체를 추가합니다.
         FileManager.seatList.add(new Seat("01", tempSeats));
         FileManager.seatList.add(new Seat("02",tempSeats));
-
-
+    }
+    public void run() throws InvalidInputException {
+        // 0. 임시데이터 생성
+        tempDataCreate();
         // 1.영화선택
         movieChoice();
         // 2.좌석선택
@@ -59,8 +60,6 @@ public class Reservation {
     
     // 영화를 선택하는 메소드
     public void movieChoice() throws InvalidInputException {
-        // 임시 데이터 추가
-
 
         // 이 부분 movieDetail의 메소드로 바꿔야함.
         for (MovieDetail movieDetail:FileManager.movieDetailList){
