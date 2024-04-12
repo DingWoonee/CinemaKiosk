@@ -1,6 +1,7 @@
 package file;
 
 import java.io.*;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import static etc.RE.*;
@@ -54,16 +55,7 @@ public class FileCheck {
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(movieListFileName))) {
-                File file = new File(movieListFileName);
-                try {
-                    if (file.createNewFile()) {
-                        System.out.println("Movie list file created");
-                    } else {
-                        System.out.println("Movie list file already exists");
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                System.out.println("Movie list file created");
             } catch (IOException e2) {
                 e2.printStackTrace();
                 return false;
@@ -102,16 +94,7 @@ public class FileCheck {
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(seatInfoFileName))) {
-                File file = new File(seatInfoFileName);
-                try {
-                    if (file.createNewFile()) {
-                        System.out.println("Seat info file created");
-                    } else {
-                        System.out.println("Seat Info file already exists");
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                System.out.println("Seat info file created");
             } catch (IOException e2) {
                 e2.printStackTrace();
                 return false;
@@ -152,16 +135,7 @@ public class FileCheck {
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(seatInfoFileName))) {
-                File file = new File(seatInfoFileName);
-                try {
-                    if (file.createNewFile()) {
-                        System.out.println("Seat info file created");
-                    } else {
-                        System.out.println("Seat Info file already exists");
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                System.out.println("Seat info file created");
             } catch (IOException e2) {
                 e2.printStackTrace();
                 return false;
@@ -199,16 +173,7 @@ public class FileCheck {
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(ticketInfoFileName))) {
-                File file = new File(ticketInfoFileName);
-                try {
-                    if (file.createNewFile()) {
-                        System.out.println("Ticket info file created");
-                    } else {
-                        System.out.println("Ticket Info file already exists");
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                System.out.println("Ticket info file created");
             } catch (IOException e2) {
                 e2.printStackTrace();
                 return false;
@@ -223,7 +188,6 @@ public class FileCheck {
 
     // ManagerInfo의 한 줄 한 줄을 검사하는 함수
     public boolean checkManagerDataLine(String line) {
-        //String[] elements = line.split("\\$");
         if (line != null) {
             if (!Pattern.matches(String.valueOf(ADMIN_PASSWORD), line)) {
                 System.out.println("Manager info file content format does not match");
@@ -239,21 +203,18 @@ public class FileCheck {
         try (BufferedReader br = new BufferedReader(new FileReader(managerInfoFileName))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (checkSeatDataLine(line)) return true;
+                if (checkManagerDataLine(line)) return true;
             }
         } catch (FileNotFoundException e) {
             // 파일이 없을 때 파일 생성하는 부분.
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(managerInfoFileName))) {
-                File file = new File(managerInfoFileName);
-                try {
-                    if (file.createNewFile()) {
-                        System.out.println("Manager info file created");
-                    } else {
-                        System.out.println("Manager Info file already exists");
-                    }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                System.out.println("Manager info file created");
+                //관리자 정보 파일 생성 후 초기 비밀번호 입력 받기
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Enter admin password: ");
+                String password = scanner.nextLine();
+                bw.write(password);
+                System.out.println("Save");
             } catch (IOException e2) {
                 e2.printStackTrace();
                 return false;
@@ -268,6 +229,6 @@ public class FileCheck {
     public static void main(String[] args) {
         // 테스트를 위한 임시 테스트 main함수
         FileCheck fileCheck = new FileCheck();
-        fileCheck.checkMovieList();
+        fileCheck.checkManagerInfo();
     }
 }
