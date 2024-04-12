@@ -10,7 +10,7 @@ public class FileCheck {
     private final String movieDetailListDirectoryName = "movie_detail_list";
     private final String ticketInfoFileName = "ticket_info.txt";
     private final String managerInfoFileName = "manager_info.txt";
-    public boolean ckeckAll() {
+    public boolean checkAll() {
         if (checkMovieList()
                 && checkSeatInfo()
                 && checkMovieDetail()

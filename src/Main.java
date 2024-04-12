@@ -12,7 +12,7 @@ import static java.lang.System.exit;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        FileCheck fileCheck = null;
+        FileCheck fileCheck = new FileCheck();
         if (fileCheck.checkAll()) {
             exit(1);
         }
