@@ -147,7 +147,7 @@ public class Reservation {
                 continue;
             }
 
-            boolean allSeatsValid = true;
+            boolean allSeatsValid = true; // 모든 좌석이 유효한지 검사하는 flag
             for (String seatCode : seatCodes) {
                 if (!seatCode.matches(RE.SEAT_NUMBER.getValue())) {
                     System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 잘못된 좌석 번호 형식입니다: " + seatCode);
@@ -161,6 +161,7 @@ public class Reservation {
             }
 
             selectedSeats.clear(); // 이전에 선택된 좌석 초기화
+            // 좌석 예매
             for (String seatCode : seatCodes) {
                 int row = seatCode.charAt(0) - 'A';
                 int col = Integer.parseInt(seatCode.substring(1)) - 1;
