@@ -145,6 +145,7 @@ public class Reservation {
         System.out.println("좌석 선택 (입력 예시: A02 A03)");
         FileManager.seatList.get(theaterIndex).printSeatArray(); // 좌석을 출력하는 메소드 호출
         System.out.print("입력:");
+        // to do : 좌석번호를 인원수에 맞게 받지 않으면 예외를 출력해야함
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine().trim().toUpperCase();
         String[] seatCodes = input.split(" "); // 공백을 기준으로 좌석 코드를 분리
