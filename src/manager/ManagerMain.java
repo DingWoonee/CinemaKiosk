@@ -147,7 +147,7 @@ public class ManagerMain {
         System.out.print("영화 제목 입력: ");
         String movieName = sc.nextLine().trim();
 
-        if (!checkTitle(movieName)) {
+        if (!checkTitle(movieName)) { // 문법 맞는지 체크
             System.out.println(Prompt.BAD_INPUT.getPrompt());
             return; // 관리자 프롬프트로 이동
         }
@@ -156,14 +156,11 @@ public class ManagerMain {
 
         // 2단계
         String movieDescription = null;
-
         while(true) {
             if(isDuplicateTitle){
                 for (Movie movie : movies) {
-                    System.out.println("tempMovie = " + tempMovie.getName());
-                    System.out.println(" movie.getName() = " +  movie.getName());
                     if(tempMovie.getName().equals(movie.getName())){
-                        movieDescription = movie.getInfo();
+                        tempMovie.setInfo(movie.getInfo());
                         break;
                     }
                 }
@@ -228,7 +225,6 @@ public class ManagerMain {
         }
 
         String[] movieTime = movieTimes.split("\\s*\\|\\s*");
-        //boolean isSameNumAndTime = false;
         // 상영관하고 상영시간 겹치는 경우
         for (String newTheaterNum : newTheaterNumList) { // 상영관 입력한 것
 
@@ -277,12 +273,11 @@ public class ManagerMain {
     }
 
     private boolean checkTitle(String movieTitle) {
-        if(!movieTitle.matches(RE.MOVIE_NAME.getValue())){
-            System.out.println("--영화 중복--");
+        if(!movieTitle.matches(RE.MOVIE_NAME.getValue())){ // 잘못된 형식
             return false;
         }
 
-        if(movieList != null) {
+        if(movieList != null) { // 중복체크
             for (Movie movie : movieList) {
                 if (movie.getName().equals(movieTitle)) {
                     isDuplicateTitle = true;
