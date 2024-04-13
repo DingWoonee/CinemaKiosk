@@ -132,44 +132,53 @@ public class Reservation {
 
         Scanner scanner = new Scanner(System.in);
         boolean validInput = false;
+
         System.out.println("■ : 선택 불가");
         System.out.println("좌석 선택 (입력 예시: A02 A03)");
         FileManager.seatList.get(theaterIndex).printSeatArray(); // 좌석을 출력하는 메소드 호출
-        while(!validInput){
 
+        while (!validInput) {
             System.out.print("입력:");
             String input = scanner.nextLine().trim().toUpperCase();
-            String[] seatCodes = input.split(" "); // 공백을 기준으로 좌석 코드를 분리
-            if(seatCodes.length != peopleCount){
-                System.out.println(Prompt.BAD_INPUT.getPrompt());
+            String[] seatCodes = input.split(" ");
+
+            if (seatCodes.length != peopleCount) {
+                System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 인원 수에 맞는 좌석 수를 입력해주세요.");
                 continue;
             }
-            // 문법 규칙 확인
-            for (String seatCode : seatCodes) {
-                // 좌석번호 잘못 입력시 예외처리
-                if (!seatCode.matches(RE.SEAT_NUMBER.getValue())) {
-                    System.out.println(Prompt.BAD_INPUT.getPrompt());
-                    validInput=false;
-                    break;
-                }}
 
-            
+            boolean allSeatsValid = true;
+            for (String seatCode : seatCodes) {
+                if (!seatCode.matches(RE.SEAT_NUMBER.getValue())) {
+                    System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 잘못된 좌석 번호 형식입니다: " + seatCode);
+                    allSeatsValid = false;
+                    break;
+                }
+            }
+
+            if (!allSeatsValid) {
+                continue; // 좌석이 하나라도 유효하지 않다면 다시 입력 받습니다.
+            }
+
+            selectedSeats.clear(); // 이전에 선택된 좌석 초기화
             for (String seatCode : seatCodes) {
                 int row = seatCode.charAt(0) - 'A';
                 int col = Integer.parseInt(seatCode.substring(1)) - 1;
 
                 if (row >= 0 && row < seats.length && col >= 0 && col < seats[row].length && seats[row][col] == 0) {
                     seats[row][col] = 1; // 좌석 예약 표시
-                    selectedSeats.add(seatCode); // 선택된 좌석 코드를 리스트에 추가
-                    validInput = true;
+                    selectedSeats.add(seatCode);
                 } else {
                     System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 이미 예약되었거나 존재하지 않는 좌석입니다: " + seatCode);
+                    selectedSeats.clear(); // 에러가 발생하면 이미 추가된 좌석을 클리어
+                    break;
                 }
             }
 
-            if (selectedSeats.isEmpty()) {
+            if (!selectedSeats.isEmpty()) {
+                validInput = true; // 모든 좌석이 유효하면 루프 종료
+            } else {
                 System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 선택한 유효한 좌석이 없습니다. 다시 시도하세요.");
-                validInput= false;
             }
         }
 
