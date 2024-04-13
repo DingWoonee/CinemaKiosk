@@ -55,9 +55,7 @@ public class Reservation {
     public void movieChoice() throws GoHomePromptException {
 
         // 이 부분 movieDetail의 메소드로 바꿔야함.
-        for (MovieDetail movieDetail:FileManager.movieDetailList){
-            System.out.println(movieDetail.getDetailId() +" "+ movieDetail.getName() + " " + movieDetail.getTheaterNum());
-        }
+        MovieDetail.printMovieDetail(FileManager.movieDetailList);
 
         System.out.println("[영화선택]");
         System.out.print("번호입력(숫자만입력):");
@@ -132,36 +130,49 @@ public class Reservation {
         int theaterIndex = Integer.parseInt(theaterNum) - 1;
         int[][] seats = FileManager.seatList.get(theaterIndex).getSeatArray();
 
+        Scanner scanner = new Scanner(System.in);
+        boolean validInput = false;
         System.out.println("■ : 선택 불가");
         System.out.println("좌석 선택 (입력 예시: A02 A03)");
         FileManager.seatList.get(theaterIndex).printSeatArray(); // 좌석을 출력하는 메소드 호출
-        System.out.print("입력:");
-        // to do : 좌석번호를 인원수에 맞게 받지 않으면 예외를 출력해야함
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine().trim().toUpperCase();
-        String[] seatCodes = input.split(" "); // 공백을 기준으로 좌석 코드를 분리
+        while(!validInput){
 
-        for (String seatCode : seatCodes) {
-            // 좌석번호 잘못 입력시 예외처리
-            if (!seatCode.matches(RE.SEAT_NUMBER.getValue())) {
+            System.out.print("입력:");
+            String input = scanner.nextLine().trim().toUpperCase();
+            String[] seatCodes = input.split(" "); // 공백을 기준으로 좌석 코드를 분리
+            if(seatCodes.length != peopleCount){
                 System.out.println(Prompt.BAD_INPUT.getPrompt());
                 continue;
             }
-            int row = seatCode.charAt(0) - 'A';
-            int col = Integer.parseInt(seatCode.substring(1)) - 1;
+            // 문법 규칙 확인
+            for (String seatCode : seatCodes) {
+                // 좌석번호 잘못 입력시 예외처리
+                if (!seatCode.matches(RE.SEAT_NUMBER.getValue())) {
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
+                    validInput=false;
+                    break;
+                }}
 
-            if (row >= 0 && row < seats.length && col >= 0 && col < seats[row].length && seats[row][col] == 0) {
-                seats[row][col] = 1; // 좌석 예약 표시
-                selectedSeats.add(seatCode); // 선택된 좌석 코드를 리스트에 추가
-            } else {
-                System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 이미 예약되었거나 존재하지 않는 좌석입니다: " + seatCode);
+            
+            for (String seatCode : seatCodes) {
+                int row = seatCode.charAt(0) - 'A';
+                int col = Integer.parseInt(seatCode.substring(1)) - 1;
+
+                if (row >= 0 && row < seats.length && col >= 0 && col < seats[row].length && seats[row][col] == 0) {
+                    seats[row][col] = 1; // 좌석 예약 표시
+                    selectedSeats.add(seatCode); // 선택된 좌석 코드를 리스트에 추가
+                    validInput = true;
+                } else {
+                    System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 이미 예약되었거나 존재하지 않는 좌석입니다: " + seatCode);
+                }
+            }
+
+            if (selectedSeats.isEmpty()) {
+                System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 선택한 유효한 좌석이 없습니다. 다시 시도하세요.");
+                validInput= false;
             }
         }
 
-        if (selectedSeats.isEmpty()) {
-            System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 선택한 유효한 좌석이 없습니다. 다시 시도하세요.");
-            return seatChoice(); // 재귀적으로 다시 좌석 선택을 요청
-        }
         return selectedSeats; // 선택된 좌석 코드 리스트 반환
     }
 

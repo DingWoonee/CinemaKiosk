@@ -1,7 +1,6 @@
 package entity;
 
-import file.FileManager;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDetail {
@@ -71,5 +70,10 @@ public class MovieDetail {
     public void setSeatArray(int[][] seatArray) {
         this.seatArray = seatArray;
     }
-
+    public static void printMovieDetail(List<MovieDetail> movieDetailList){
+        System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간");
+        for (int i=0;i<movieDetailList.size(); i++) {
+            System.out.printf("%d\t\t\t%s\t\t%s\t\t    %s\n", i+1,movieDetailList.get(i).name, movieDetailList.get(i).theaterNum, movieDetailList.get(i).time);
+        }
+    }
 }
