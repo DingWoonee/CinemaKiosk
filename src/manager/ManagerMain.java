@@ -15,13 +15,14 @@ import java.util.Scanner;
 
 public class ManagerMain {
     private FileManager fileManager;
-    static List<Movie> movieList;
+    static List<Movie> movieList = new ArrayList<>();
 
     boolean isDuplicateTitle = false;
     boolean isDuplicateTime;
 
     public ManagerMain(FileManager fileManager) {
         this.fileManager = fileManager;
+        this.movieList = FileManager.movieList;
     }
 
     public void run() {
@@ -62,7 +63,7 @@ public class ManagerMain {
                 default:
                     System.out.println("올바르지 않은 입력입니다.");
             }
-            if(isGoHome){
+            if (isGoHome) {
                 isGoHome = false;
                 break;
             }
@@ -70,7 +71,8 @@ public class ManagerMain {
 
     }
 
-    private static void deleteMovie(Scanner sc) {
+    private void deleteMovie(Scanner sc) {
+        movieList = FileManager.movieList;
         while (true) {
             System.out.println("[영화 삭제]");
             System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간");
@@ -80,56 +82,48 @@ public class ManagerMain {
                 for (String num : movie.getTheaterNumList()) {
                     sumNum.append(num).append(",");
                 }
-                // 마지막 쉼표 제거
-
                 if (sumNum.length() > 0) {
                     sumNum.deleteCharAt(sumNum.length() - 1);
                 }
-                System.out.printf("%d\t\t%s\t\t%s\t\t%s\n", ++i, movie.getName(), sumNum, movie.getTime());
+                System.out.printf("%d\t\t%s\t\t%s\t\t%s\n", ++i, movie.getName(), sumNum, movie.getTime().getTime());
             }
 
             System.out.print("번호 입력(숫자만 입력): ");
             String input = sc.nextLine().trim();
-
             int choice;
             try {
                 choice = Integer.parseInt(input);
+                if (choice < 1 || choice > movieList.size()) {
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
+                    continue;
+                }
             } catch (NumberFormatException e) {
-                System.out.println("올바르지 않은 입력입니다.");
                 System.out.println(Prompt.BAD_INPUT.getPrompt());
                 continue;
             }
 
-            if (choice < 1 || choice > movieList.size()) {
-                System.out.println("올바르지 않은 입력입니다.");
-                System.out.println(Prompt.BAD_INPUT.getPrompt());
-                continue;
-            }
+
 
             System.out.println("[정말 삭제하시겠습니까?]");
             System.out.println("1. 삭제");
             System.out.println("2. 취소");
             System.out.print("번호 입력(숫자만 입력): ");
-
             input = sc.nextLine().trim();
-            int choice2;
-            try {
-                choice2 = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.println("올바르지 않은 입력입니다.");
-                System.out.println(Prompt.BAD_INPUT.getPrompt());
-                continue;
-            }
 
-            if (choice2 == 1) {
-                movieList.remove(choice - 1);
-                System.out.println("삭제가 완료되었습니다.");
-                break;
-            } else if (choice2 == 2) {
-                System.out.println("삭제가 취소되었습니다.");
-                break;
-            } else {
-                System.out.println("올바르지 않은 입력입니다.");
+            try {
+                int confirmChoice = Integer.parseInt(input);
+                if (confirmChoice == 1) {
+                    movieList.remove(choice - 1);
+                    fileManager.saveMovie(); // 변경사항을 파일에 저장합니다.
+                    System.out.println("삭제가 완료되었습니다.");
+                    break;
+                } else if (confirmChoice == 2) {
+                    System.out.println("삭제를 취소합니다.");
+                    break;
+                } else {
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
+                }
+            } catch (NumberFormatException e) {
                 System.out.println(Prompt.BAD_INPUT.getPrompt());
             }
         }
@@ -156,10 +150,10 @@ public class ManagerMain {
 
         // 2단계
         String movieDescription = null;
-        while(true) {
-            if(isDuplicateTitle){
+        while (true) {
+            if (isDuplicateTitle) {
                 for (Movie movie : movies) {
-                    if(tempMovie.getName().equals(movie.getName())){
+                    if (tempMovie.getName().equals(movie.getName())) {
                         tempMovie.setInfo(movie.getInfo());
                         break;
                     }
@@ -167,7 +161,7 @@ public class ManagerMain {
                 isDuplicateTitle = false;
                 break;
             }
-            if(movieDescription == null){
+            if (movieDescription == null) {
                 System.out.println("[영화 추가]");
                 System.out.print("영화 제목:\t");
                 System.out.println(tempMovie.getName());
@@ -190,7 +184,7 @@ public class ManagerMain {
         System.out.println(tempMovie.getInfo());
         System.out.print("상영관 입력(' | '로 구분해서 여러개 입력 가능): ");
         String theaterNums = sc.nextLine().trim();
-        if(!checkTheaterNums(theaterNums)){
+        if (!checkTheaterNums(theaterNums)) {
             System.out.println(Prompt.BAD_INPUT.getPrompt());
             return; // 관리자 프롬프트로 이동
         }
@@ -200,7 +194,6 @@ public class ManagerMain {
             newTheaterNumList.add(token);
         }
         tempMovie.setTheaterNumList(newTheaterNumList);
-
 
 
         System.out.print("영화 제목:\t");
@@ -219,7 +212,7 @@ public class ManagerMain {
         System.out.println(theaterNum);
         System.out.println("상영 시간 입력(' | '로 구분해서 여러개 입력 가능):");
         String movieTimes = sc.nextLine().trim();
-        if(!checkMovieTimes(movieTimes)){
+        if (!checkMovieTimes(movieTimes)) {
             System.out.println(Prompt.BAD_INPUT.getPrompt());
             return;
         }
@@ -228,15 +221,15 @@ public class ManagerMain {
         // 상영관하고 상영시간 겹치는 경우
         for (String newTheaterNum : newTheaterNumList) { // 상영관 입력한 것
 
-            if(movies == null || movies.isEmpty()) break;
+            if (movies == null || movies.isEmpty()) break;
 
             for (Movie movie : movies) {  // 저장된 영화들
                 List<String> theaterNumList = movie.getTheaterNumList();
 
                 for (String theaterNum_ : theaterNumList) { // 상영관 등록된 것
-                    if(newTheaterNum.equals(theaterNum_)){ // 상영관 같으면
+                    if (newTheaterNum.equals(theaterNum_)) { // 상영관 같으면
                         for (String time : movieTime) { // 시간 같은지 확인
-                            if(time.equals(movie.getTime().getTime())){
+                            if (time.equals(movie.getTime().getTime())) {
                                 System.out.println(Prompt.BAD_INPUT.getPrompt());
                                 return;
                             }
@@ -254,13 +247,11 @@ public class ManagerMain {
             newMovie.setInfo(tempMovie.getInfo());
             newMovie.setTheaterNumList(tempMovie.getTheaterNumList());
 
-            if(time.equals(MovieTime.Time1.getTime())) {
+            if (time.equals(MovieTime.Time1.getTime())) {
                 newMovie.setTime(MovieTime.Time1);
-            }
-            else if(time.equals(MovieTime.Time2.getTime())) {
+            } else if (time.equals(MovieTime.Time2.getTime())) {
                 newMovie.setTime(MovieTime.Time2);
-            }
-            else if(time.equals(MovieTime.Time3.getTime())) {
+            } else if (time.equals(MovieTime.Time3.getTime())) {
                 newMovie.setTime(MovieTime.Time3);
             }
 
@@ -273,11 +264,11 @@ public class ManagerMain {
     }
 
     private boolean checkTitle(String movieTitle) {
-        if(!movieTitle.matches(RE.MOVIE_NAME.getValue())){ // 잘못된 형식
+        if (!movieTitle.matches(RE.MOVIE_NAME.getValue())) { // 잘못된 형식
             return false;
         }
 
-        if(movieList != null) { // 중복체크
+        if (movieList != null) { // 중복체크
             for (Movie movie : movieList) {
                 if (movie.getName().equals(movieTitle)) {
                     isDuplicateTitle = true;
@@ -287,11 +278,11 @@ public class ManagerMain {
 
         return true;
     }
+
     private boolean checkDescription(String movieDescription) {
 
         return !movieDescription.matches(RE.MOVIE_INFO.getValue());
     }
-
 
 
     private static boolean checkTheaterNums(String theaterNums) {
@@ -303,7 +294,7 @@ public class ManagerMain {
 
         for (String s : token) {
             System.out.println(s);
-            if(!s.matches("^(0?[1-9]|[1-9][0-9]?)$")){
+            if (!s.matches("^(0?[1-9]|[1-9][0-9]?)$")) {
                 return false;
             }
         }
@@ -315,15 +306,12 @@ public class ManagerMain {
         String[] movieTimes = newMovieTimes.split("\\s*\\|\\s*");
         for (String movieTime : movieTimes) {
             // 상영시간 문법 규칙
-            if(!movieTime.matches(RE.MOVIE_TIME.getValue())){
+            if (!movieTime.matches(RE.MOVIE_TIME.getValue())) {
                 return false;
             }
         }
         return true;
     }
-
-
-
 
 
     public static void movieListPrint() {
