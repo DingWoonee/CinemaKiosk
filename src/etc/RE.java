@@ -10,6 +10,7 @@ public enum RE {
     SEAT_NUMBER("^[A-Z](0[1-9]|[1-9][0-9])$"),
     SEAT_CHART("^([A-Z](:(-1|0|1))+)(\\|[A-Z](:(-1|0|1))+)*$"),
     MOVIE_ORDER("^[0-9]+$"),
+    PEOPLE_COUNT("^[0-9]+$"),
     TICKET_NUMBER("^[A-Z][0-9]{6}$"),
     TICKET_PASSWORD("^[0-9]{4}$"),
     ADMIN_PASSWORD("^[A-Za-z0-9]{6,15}$"),

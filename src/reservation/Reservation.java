@@ -22,7 +22,7 @@ public class Reservation {
 
 
     public void run() throws GoHomePromptException {
-        tempDataCreate(); // 0. 임시데이터 생성
+//        tempDataCreate(); // 0. 임시데이터 생성
         movieChoice(); // 1.영화선택
         List<String> selectedSeats = seatChoice(); // 2.좌석선택
         password(); // 3.패스워드 입력
@@ -53,9 +53,7 @@ public class Reservation {
     }
     // 1. 영화 선택
     public void movieChoice() throws GoHomePromptException {
-
-        // 이 부분 movieDetail의 메소드로 바꿔야함.
-        MovieDetail.printMovieDetail(FileManager.movieDetailList);
+        MovieDetail.printMovieDetail(FileManager.movieDetailList); // 영화 목록 출력
 
         System.out.println("[영화선택]");
         System.out.print("번호입력(숫자만입력):");
@@ -114,10 +112,15 @@ public class Reservation {
     public void countingPeople(){
         System.out.print("인원 수 입력(숫자만 입력):");
         Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine().trim();
+        String tempPeopleCount = scanner.nextLine().trim();
         try {
-            peopleCount = Integer.parseInt(input);
-        } catch (NumberFormatException e) {
+            if (!tempPeopleCount.matches(RE.MOVIE_ORDER.getValue())) {
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
+                throw new Exception();
+            }
+            peopleCount = Integer.parseInt(tempPeopleCount);
+
+        } catch (Exception e) {
             System.out.println(Prompt.BAD_INPUT.getPrompt());
             countingPeople();
         }
@@ -131,13 +134,13 @@ public class Reservation {
         int[][] seats = FileManager.seatList.get(theaterIndex).getSeatArray();
 
         Scanner scanner = new Scanner(System.in);
-        boolean validInput = false;
+        boolean isValidInput = false;
 
         System.out.println("■ : 선택 불가");
         System.out.println("좌석 선택 (입력 예시: A02 A03)");
         FileManager.seatList.get(theaterIndex).printSeatArray(); // 좌석을 출력하는 메소드 호출
 
-        while (!validInput) {
+        while (!isValidInput) {
             System.out.print("입력:");
             String input = scanner.nextLine().trim().toUpperCase();
             String[] seatCodes = input.split(" ");
@@ -147,16 +150,16 @@ public class Reservation {
                 continue;
             }
 
-            boolean allSeatsValid = true; // 모든 좌석이 유효한지 검사하는 flag
+            boolean isAllSeatsValid = true; // 모든 좌석이 유효한지 검사하는 flag
             for (String seatCode : seatCodes) {
                 if (!seatCode.matches(RE.SEAT_NUMBER.getValue())) {
                     System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 잘못된 좌석 번호 형식입니다: " + seatCode);
-                    allSeatsValid = false;
+                    isAllSeatsValid = false;
                     break;
                 }
             }
 
-            if (!allSeatsValid) {
+            if (!isAllSeatsValid) {
                 continue; // 좌석이 하나라도 유효하지 않다면 다시 입력 받습니다.
             }
 
@@ -177,7 +180,7 @@ public class Reservation {
             }
 
             if (!selectedSeats.isEmpty()) {
-                validInput = true; // 모든 좌석이 유효하면 루프 종료
+                isValidInput = true; // 모든 좌석이 유효하면 루프 종료
             } else {
                 System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 선택한 유효한 좌석이 없습니다. 다시 시도하세요.");
             }
