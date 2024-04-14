@@ -152,9 +152,8 @@ public class ManagerMain {
 
 
         // 영화 설명 입력
-        String movieDescription = null;
-
         while(true) {
+            String movieDescription = null;
             if(isDuplicateTitle){ // 영화 이름 중복 시 설명 넣어주기
 
                 for (Movie movie : movies) {
@@ -165,8 +164,7 @@ public class ManagerMain {
                 }
                 break;
             }
-
-            if(movieDescription == null){ // 중복 아니면 직접 입력 받음
+            else{ // 중복 아니면 직접 입력 받음
                 System.out.println("[영화 추가]");
                 System.out.print("영화 제목:\t");
                 System.out.println(tempMovie.getName());
@@ -299,16 +297,6 @@ public class ManagerMain {
         }
 
 
-
-        //movieDetailList에 넣기
-//        MovieDetail movieDetail = null;
-//        for (Movie movie : movies != null ? movies : null) {
-//            for (String movieTheaterNum : movie.getTheaterNumList()) {
-//                movieDetail = new MovieDetail(++movieDetailId, movie.getName(), movie.getInfo(), theaterNums, movie.getTime(), );
-//            }
-//            FileManager.movieDetailList.add(movieDetail);
-//        }
-
         // movieList에 넣기
         FileManager.movieList = movies;
         FileManager.saveMovie();
@@ -333,7 +321,7 @@ public class ManagerMain {
 
     private boolean checkDescription(String movieDescription) {
 
-        return !movieDescription.matches(RE.MOVIE_INFO.getValue());
+        return movieDescription.matches(RE.MOVIE_INFO.getValue());
     }
 
 
@@ -374,7 +362,7 @@ public class ManagerMain {
     public static void movieListPrint() {
         movieList = FileManager.movieList;
         System.out.println("[영화 목록 출력]");
-        System.out.println("영화 제목\t\t상영관\t\t상영시간");
+        System.out.printf("%-12s\t%-5s\t%-3s\n", "영화 제목", "상영관", "상영 시간");
         for (Movie movie : movieList) {
             StringBuilder sumNum = new StringBuilder();
             for (String num : movie.getTheaterNumList()) {
@@ -386,7 +374,7 @@ public class ManagerMain {
                 sumNum.deleteCharAt(sumNum.length() - 1);
             }
 
-            System.out.printf("%s\t\t%s\t\t%s\n", movie.getName(), sumNum, movie.getTime().getTime());
+            System.out.printf("%-12s\t%-5s\t%-3s\n", movie.getName(), sumNum, movie.getTime().getTime());
         }
     }
 
