@@ -3,6 +3,7 @@ package file;
 import entity.*;
 import etc.Prompt;
 import etc.RE;
+import reservation.InputRetryException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -85,6 +86,15 @@ public class FileManager {
             return false;
         }
     }
+
+    // 정규 표현식과 input을 비교하는 메소드
+    public static void validateInputWithRE(String input, String regexExpression) throws InputRetryException {
+        if (!input.matches(regexExpression)) {
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
+            throw new InputRetryException("잘못된 입력입니다. 다시 입력하세요.");
+        }
+    }
+
 
     public static void main(String[] args) {
         for (int i = 0; i < 10; i++) {
