@@ -28,6 +28,18 @@ public class Seat {
         }
         return result;
     }
+    public static int[][] stringToArray(String str) {
+        String[] rows = str.split("\\|");
+        String[] colForCount = rows[0].split(":");
+        int[][] seatArray = new int[rows.length][colForCount.length - 1];
+        for (int i = 0; i < rows.length; i++) {
+            String[] cols = rows[i].split(":");
+            for (int j = 1; j < cols.length; j++) {
+                seatArray[i][j - 1] = Integer.parseInt(cols[j]);
+            }
+        }
+        return seatArray;
+    }
 
     public String getTheaterNum() {
         return theaterNum;

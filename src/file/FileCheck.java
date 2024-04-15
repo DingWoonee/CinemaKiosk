@@ -143,6 +143,10 @@ public class FileCheck {
                     !Pattern.matches(SEAT_CHART.getValue(), elements[5])) {
                 System.out.println("Movie detail file content format does not match");
                 return false;
+            } else {
+                MovieTime time = MovieTime.getMovieTime(elements[4]);
+                MovieDetail movieDetail = new MovieDetail(Integer.parseInt(elements[0]), elements[1], elements[2], elements[3], time, Seat.stringToArray(elements[5]));
+                FileManager.movieDetailList.add(movieDetail);
             }
         } else {
             System.out.println("Movie detail file content format does not match");
