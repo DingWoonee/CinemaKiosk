@@ -3,7 +3,7 @@ import file.FileCheck;
 import file.FileManager;
 import manager.ManagerMain;
 import reservation.Cancel;
-import reservation.InvalidInputException;
+import reservation.GoHomePromptException;
 import reservation.Reservation;
 
 import java.io.BufferedReader;
@@ -26,7 +26,6 @@ public class Main {
 
         while (true) {
             try {
-                // 홈 프롬프트
                 System.out.println("1. 영화예매");
                 System.out.println("2. 예매취소");
                 System.out.println("3. 관리자");
@@ -59,12 +58,10 @@ public class Main {
                     }
                 }
             }
-            catch (InvalidInputException e){
+            catch (GoHomePromptException e){
                 Prompt.BAD_INPUT.getPrompt();
             }
-            catch (Exception e){
-                Prompt.BAD_INPUT.getPrompt();
-            }
+
 
 
 

@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class Cancel {
 	private FileManager fileManager;
-	Scanner scanner = new Scanner(System.in);
 
 	public Cancel(FileManager fileManager) {
 		this.fileManager = fileManager;
@@ -18,6 +17,8 @@ public class Cancel {
 	public void run() {
 		System.out.println("[예매 취소]");
 		System.out.print("예매 번호 입력: ");
+		Scanner scanner = new Scanner(System.in);
+
 		Ticket ticket = getTicket(scanner.nextLine().trim());
 
 		// 사용자가 입력한 예매 번호가 ticketInfoList<Ticket>에 존재하는 경우
@@ -41,7 +42,6 @@ public class Cancel {
 		}
 		else
 			System.out.println(Prompt.NOT_EXIST_RESERVATION.getPrompt());
-		scanner.close();
 	}
 
 	// 입력받은 예매 번호가 존재하면 해당하는 Ticket 객체를 반환, 존재하지 않는 경우 null 반환
@@ -55,6 +55,8 @@ public class Cancel {
 	// 비밀번호 확인 (일치하면 true, 불일치하면 false 반환)
 	public boolean checkPw(Ticket ticket) {
 		System.out.print("예매 비밀번호 입력: ");
+		Scanner scanner = new Scanner(System.in);
+
 		String input_reservationPw = scanner.nextLine().trim();
 		if (input_reservationPw.equals(ticket.getReservationPw()))
 			return true;
@@ -91,6 +93,8 @@ public class Cancel {
 		System.out.println("1. 예매 취소");
 		System.out.println("2. 홈으로");
 		System.out.print("번호 입력(숫자만 입력): ");
+		Scanner scanner = new Scanner(System.in);
+
 		String input = scanner.nextLine().trim();
 		if (input.equals("1"))
 			return 1;
