@@ -22,7 +22,6 @@ public class Reservation {
 
 
     public void run() throws GoHomePromptException {
-//        tempDataCreate(); // 0. 임시데이터 생성
         movieChoice(); // 1.영화선택
         List<String> selectedSeats = seatChoice(); // 2.좌석선택
         password(); // 3.패스워드 입력
@@ -31,27 +30,6 @@ public class Reservation {
         reservationInfo(tickets); // 5. 티켓 정보 출력
     }
 
-    // 0. 임시 데이터 생성
-    public void tempDataCreate() {
-        FileManager.movieDetailList.add(new MovieDetail(1, "겨울연가", "송혜교 주연의 멜로 영화", "01", MovieTime.Time1, new int[10][10]));
-        FileManager.movieDetailList.add(new MovieDetail(2, "기생충", "송강호 주연의 드라마", "02", MovieTime.Time2, new int[10][10]));
-        // 좌석배열 임시데이터 생성
-        int rows = 12; // A부터 L까지 총 12줄
-        int cols = 8;  // 1부터 8까지 총 8좌석
-        int[][] tempSeats = new int[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-
-                tempSeats[i][j] = 0;
-            }
-        }
-        // 임시데이터 공석과 예매좌석 추가
-        tempSeats[3][3] = -1;
-        tempSeats[4][5] = 1;
-        // FileManager의 seatList에 새로운 Seat 객체를 추가합니다.
-        FileManager.seatList.add(new Seat("01", tempSeats));
-        FileManager.seatList.add(new Seat("02", tempSeats));
-    }
 
     // 1. 영화 선택
     public void movieChoice() throws GoHomePromptException {
@@ -104,7 +82,6 @@ public class Reservation {
                     throw new GoHomePromptException("홈으로");
             }
         } catch (InputRetryException e) {
-            System.out.println(Prompt.BAD_INPUT.getPrompt());
             // 예외 입력시 다시 사용자의 키 입력을 받음
             movieInfo();
         }
@@ -120,7 +97,6 @@ public class Reservation {
             peopleCount = Integer.parseInt(tempPeopleCount);
 
         } catch (InputRetryException e) {
-            System.out.println(Prompt.BAD_INPUT.getPrompt());
             countingPeople();
         }
 
@@ -129,21 +105,24 @@ public class Reservation {
     // 2. 좌석 선택
     public List<String> seatChoice() throws GoHomePromptException {
         List<String> selectedSeats = new ArrayList<>();
-        String theaterNum = FileManager.movieDetailList.get(movieNumber - 1).getTheaterNum();
-        int theaterIndex = Integer.parseInt(theaterNum) - 1;
-        int[][] seats = FileManager.seatList.get(theaterIndex).getSeatArray();
+        MovieDetail movieDetail = FileManager.movieDetailList.get(movieNumber - 1);
+        int[][] seats = movieDetail.getSeatArray();
 
         Scanner scanner = new Scanner(System.in);
         boolean isValidInput = false;
 
         System.out.println("■ : 선택 불가");
         System.out.println("좌석 선택 (입력 예시: A02 A03)");
-        FileManager.seatList.get(theaterIndex).printSeatArray();
+        movieDetail.printSeatArray();
 
         while (!isValidInput) {
             System.out.print("입력:");
             String input = scanner.nextLine().trim().toUpperCase();
             String[] seatCodes = input.split(" ");
+            if(seatCodes.length!=peopleCount){
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
+                continue;
+            }
             try {
                 for (String seatCode : seatCodes) {
                     FileManager.validateInputWithRE(seatCode, RE.SEAT_NUMBER.getValue());
@@ -161,7 +140,6 @@ public class Reservation {
                 }
                 isValidInput = true; // 모든 좌석이 유효하면 루프 종료
             } catch (InputRetryException e) {
-                System.out.println(Prompt.BAD_INPUT.getPrompt());
             }
         }
         return selectedSeats;
@@ -175,7 +153,6 @@ public class Reservation {
         try {
             FileManager.validateInputWithRE(reservationPassword, RE.TICKET_PASSWORD.getValue());
         } catch (InputRetryException e) {
-            System.out.println(Prompt.BAD_INPUT.getPrompt());
             password();
         }
 
@@ -190,7 +167,7 @@ public class Reservation {
 
         for (String seatCode : seatCodes) {
             String reservationId = generateReservationId(seatCode, theaterNum, movieTime);
-            Ticket ticket = new Ticket(reservationId, this.reservationPassword, this.movieNumber, seatCode);
+            Ticket ticket = new Ticket(reservationId, this.reservationPassword,movieDetail.getDetailId(), seatCode);
             FileManager.ticketInfoList.add(ticket);
             tickets.add(ticket);
         }
