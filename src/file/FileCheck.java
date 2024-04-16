@@ -1,6 +1,7 @@
 package file;
 
 import entity.*;
+import etc.RE;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -285,7 +286,6 @@ public class FileCheck {
                 return false;
             } else {
                 FileManager.manager.setManagerPw(line);
-                System.out.println("eee"+line+"eee");
             }
         } else {
             System.out.println("Manager info file content format does not match");
@@ -302,13 +302,16 @@ public class FileCheck {
                 }
             }
         } catch (FileNotFoundException e) {
+            //관리자 정보 파일 생성 후 초기 비밀번호 입력 받기
+            Scanner scanner = new Scanner(System.in);
+            String password;
+            do {
+                System.out.print("관리자 비밀번호 설정: ");
+                password = scanner.nextLine();
+            } while (!FileManager.validateInputReturnBoolWithRE(password, ADMIN_PASSWORD.getValue()));
             // 파일이 없을 때 파일 생성하는 부분.
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(managerInfoFileName))) {
                 System.out.println("Manager info file created");
-                //관리자 정보 파일 생성 후 초기 비밀번호 입력 받기
-                Scanner scanner = new Scanner(System.in);
-                System.out.println("Enter admin password: ");
-                String password = scanner.nextLine();
                 bw.write(password);
                 System.out.println("Save");
                 FileManager.manager.setManagerPw(password);

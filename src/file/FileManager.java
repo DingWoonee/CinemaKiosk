@@ -27,7 +27,7 @@ public class FileManager {
         String input;
         Matcher matcher;
         while (true) {
-            System.out.print("오늘 날짜 입력:");
+            System.out.print("오늘 날짜 입력: ");
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 input = br.readLine();
@@ -92,6 +92,14 @@ public class FileManager {
         if (!input.matches(regexExpression)) {
             System.out.println(Prompt.BAD_INPUT.getPrompt());
             throw new InputRetryException("잘못된 입력입니다. 다시 입력하세요.");
+        }
+    }
+    public static boolean validateInputReturnBoolWithRE(String input, String regexExpression) throws InputRetryException {
+        if (!input.matches(regexExpression)) {
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
+            return false;
+        } else {
+            return true;
         }
     }
 
