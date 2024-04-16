@@ -3,6 +3,7 @@ package file;
 import entity.*;
 import etc.Prompt;
 import etc.RE;
+import reservation.InputRetryException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,17 +17,27 @@ public class FileManager {
     public static List<Seat> seatList = new ArrayList<>();
     public static List<MovieDetail> movieDetailList = new ArrayList<>();
     public static List<Ticket> ticketInfoList = new ArrayList<>();
-    public static Manager manager = new Manager("1234");
+    public static Manager manager = new Manager();
 
     private final static String movieListFileName = "movie_list.txt";
     private final static String ticketInfoFileName = "ticket_info.txt";
+
+    public static boolean isTheaterNumExist(String num) {
+        for (Seat seat : seatList) {
+            if (seat.getTheaterNum().equals(num)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public static void inputDate() {
         Pattern pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT.getValue()));
         String input;
         Matcher matcher;
         while (true) {
-            System.out.print("오늘 날짜 입력:");
+            System.out.print("오늘 날짜 입력: ");
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 input = br.readLine();
@@ -56,7 +67,7 @@ public class FileManager {
                     newLine += (theater + "|");
                 }
             }
-            newLine += "$" + movie.getTime() + "\n";
+            newLine += "$" + movie.getTime().getTime() + "\n";
             fileContent += newLine;
         }
         // fileContent 변수의 내용을 movie_list.txt에 덮어씀
@@ -85,6 +96,23 @@ public class FileManager {
             return false;
         }
     }
+
+    // 정규 표현식과 input을 비교하는 메소드
+    public static void validateInputWithRE(String input, String regexExpression) throws InputRetryException {
+        if (!input.matches(regexExpression)) {
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
+            throw new InputRetryException("잘못된 입력입니다. 다시 입력하세요.");
+        }
+    }
+    public static boolean validateInputReturnBoolWithRE(String input, String regexExpression) throws InputRetryException {
+        if (!input.matches(regexExpression)) {
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
     public static void main(String[] args) {
         for (int i = 0; i < 10; i++) {

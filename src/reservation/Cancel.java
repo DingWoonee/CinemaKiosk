@@ -16,6 +16,7 @@ public class Cancel {
 	}
 
 	public void run() {
+		System.out.println(Prompt.NEW_MENU_START.getPrompt());
 		System.out.println("[예매 취소]");
 		System.out.print("예매 번호 입력: ");
 		Scanner scanner = new Scanner(System.in);
@@ -42,7 +43,7 @@ public class Cancel {
 				}
 			}
 			else
-				System.out.println("비밀번호가 틀립니다.");
+				System.out.println("\n비밀번호가 틀립니다.");
 		}
 		else
 			System.out.println(Prompt.NOT_EXIST_RESERVATION.getPrompt());
@@ -58,7 +59,7 @@ public class Cancel {
 
 	// 비밀번호 확인 (일치하면 true, 불일치하면 false 반환)
 	public boolean checkPw(Ticket ticket) {
-		System.out.print("예매 비밀번호 입력: ");
+		System.out.print("\n예매 비밀번호 입력: ");
 		Scanner scanner = new Scanner(System.in);
 
 		String input_reservationPw = scanner.nextLine().trim();
@@ -78,6 +79,7 @@ public class Cancel {
 				movieDetail = md;
 			}
 		}
+		System.out.println(Prompt.NEW_MENU_START.getPrompt());
 		System.out.println("[예매 정보 확인]");
 		System.out.println("예매 번호: " + ticket.getReservationId());
 		// 아래 3개의 경우 detailList에 해당 detailId가 존재하지 않는 경우 예외 발생(아직 처리하지 않음)
@@ -93,7 +95,7 @@ public class Cancel {
 
 	// 최종 승인
 	public int finalCheck() {
-		System.out.println("[예매를 취소하시겠습니까?]");
+		System.out.println("\n[예매를 취소하시겠습니까?]");
 		System.out.println("1. 예매 취소");
 		System.out.println("2. 홈으로");
 		System.out.print("번호 입력(숫자만 입력): ");

@@ -1,6 +1,7 @@
 package file;
 
 import entity.*;
+import etc.RE;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -37,7 +38,6 @@ public class FileCheck {
             Boolean check2 = !Pattern.matches(MOVIE_INFO.getValue(), elements[1]);
             Boolean check3 = !Pattern.matches(ROOM_NUMBERS.getValue(), elements[2]);
             Boolean check4 = !Pattern.matches(MOVIE_TIME.getValue(), elements[3]);
-            System.out.println(check1.toString() + check2 + check3 + check4);
             if (check1 ||
                     check2 ||
                     check3 ||
@@ -143,6 +143,10 @@ public class FileCheck {
                     !Pattern.matches(SEAT_CHART.getValue(), elements[5])) {
                 System.out.println("Movie detail file content format does not match");
                 return false;
+            } else {
+                MovieTime time = MovieTime.getMovieTime(elements[4]);
+                MovieDetail movieDetail = new MovieDetail(Integer.parseInt(elements[0]), elements[1], elements[2], elements[3], time, Seat.stringToArray(elements[5]));
+                FileManager.movieDetailList.add(movieDetail);
             }
         } else {
             System.out.println("Movie detail file content format does not match");
@@ -297,15 +301,19 @@ public class FileCheck {
                 }
             }
         } catch (FileNotFoundException e) {
+            //관리자 정보 파일 생성 후 초기 비밀번호 입력 받기
+            Scanner scanner = new Scanner(System.in);
+            String password;
+            do {
+                System.out.print("관리자 비밀번호 설정: ");
+                password = scanner.nextLine();
+            } while (!FileManager.validateInputReturnBoolWithRE(password, ADMIN_PASSWORD.getValue()));
             // 파일이 없을 때 파일 생성하는 부분.
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(managerInfoFileName))) {
                 System.out.println("Manager info file created");
-                //관리자 정보 파일 생성 후 초기 비밀번호 입력 받기
-                Scanner scanner = new Scanner(System.in);
-                System.out.println("Enter admin password: ");
-                String password = scanner.nextLine();
                 bw.write(password);
                 System.out.println("Save");
+                FileManager.manager.setManagerPw(password);
             } catch (IOException e2) {
                 e2.printStackTrace();
                 return false;
