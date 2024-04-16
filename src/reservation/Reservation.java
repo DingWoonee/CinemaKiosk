@@ -22,6 +22,7 @@ public class Reservation {
 
 
     public void run() throws GoHomePromptException {
+        System.out.println(Prompt.NEW_MENU_START.getPrompt());
         movieChoice(); // 1.영화선택
         List<String> selectedSeats = seatChoice(); // 2.좌석선택
         password(); // 3.패스워드 입력
@@ -44,7 +45,7 @@ public class Reservation {
         // 영화번호 잘못 입력시 예외처리
         if (!input.matches(RE.MOVIE_ORDER.getValue())) {
             System.out.println(Prompt.BAD_INPUT.getPrompt());
-            throw new GoHomePromptException("잘못된 입력입니다. 숫자만 입력하세요.");
+            throw new GoHomePromptException("\n잘못된 입력입니다. 숫자만 입력하세요.");
         }
         try {
             movieNumber = Integer.parseInt(input);
@@ -65,6 +66,7 @@ public class Reservation {
 
     // 1. 영화 선택  - 예매하기, 홈으로 메뉴
     public void movieInfo() {
+        System.out.println(Prompt.NEW_MENU_START.getPrompt());
         System.out.println(FileManager.movieDetailList.get(movieNumber - 1).getInfo());
         System.out.println("1. 예매하기");
         System.out.println("2. 홈으로");
@@ -79,7 +81,7 @@ public class Reservation {
                     countingPeople();
                     break;
                 case "2":
-                    throw new GoHomePromptException("홈으로");
+                    throw new GoHomePromptException("\n홈으로");
             }
         } catch (InputRetryException e) {
             // 예외 입력시 다시 사용자의 키 입력을 받음
@@ -89,7 +91,7 @@ public class Reservation {
 
     // 1. 영화선택 - 인원 수 입력
     public void countingPeople() {
-        System.out.print("인원 수 입력(숫자만 입력):");
+        System.out.print("\n인원 수 입력(숫자만 입력):");
         Scanner scanner = new Scanner(System.in);
         String tempPeopleCount = scanner.nextLine().trim();
         try {
@@ -135,7 +137,7 @@ public class Reservation {
                     } else {
                         System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 이미 예약되었거나 존재하지 않는 좌석입니다: " + seatCode);
                         selectedSeats.clear(); // 에러가 발생하면 이미 추가된 좌석을 클리어
-                        throw new InputRetryException("선택한 좌석이 유효하지 않습니다. 다시 시도하세요.");
+                        throw new InputRetryException("\n선택한 좌석이 유효하지 않습니다. 다시 시도하세요.");
                     }
                 }
                 isValidInput = true; // 모든 좌석이 유효하면 루프 종료
@@ -147,7 +149,7 @@ public class Reservation {
 
     // 3. 패스워드 입력
     public void password() {
-        System.out.print("예매를 위한 비밀번호를 입력하세요:");
+        System.out.print("\n예매를 위한 비밀번호를 입력하세요:");
         Scanner scanner = new Scanner(System.in);
         reservationPassword = scanner.nextLine().trim();
         try {
@@ -196,7 +198,7 @@ public class Reservation {
 
     // 5. 예매 티켓 정보 출력
     public void reservationInfo(List<Ticket> tickets) {
-        System.out.println("예매가 완료되었습니다!!");
+        System.out.println("\n예매가 완료되었습니다!!");
         System.out.println("[예매정보]");
 
         for (Ticket ticket : tickets) {
