@@ -33,7 +33,7 @@ public class FileManager {
 
 
     public static void inputDate() {
-        Pattern pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT.getValue()));
+        Pattern pattern;
         String input;
         String trimmedInput;
         Matcher matcher;
@@ -43,11 +43,19 @@ public class FileManager {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 input = br.readLine();
                 trimmedInput = input.replaceAll("\\s+", "");
-                matcher = pattern.matcher(trimmedInput);
-                if (matcher.matches()) {
-                    break;
-                } else {
-                    System.out.println(Prompt.BAD_INPUT.getPrompt());
+                if (validateInputReturnBoolWithRE(trimmedInput, RE.NUM_EIGHT.getValue())) {
+                    int year = Integer.parseInt(trimmedInput.substring(0, 4));
+                    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) { // 윤년
+                        pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT2.getValue()));
+                    } else { // 윤년 아님
+                        pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT.getValue()));
+                    }
+                    matcher = pattern.matcher(trimmedInput);
+                    if (matcher.matches()) {
+                        break;
+                    } else {
+                        System.out.println(Prompt.BAD_INPUT.getPrompt());
+                    }
                 }
             } catch (IOException ignored) {
             }
