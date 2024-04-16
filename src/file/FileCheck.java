@@ -311,6 +311,7 @@ public class FileCheck {
                 String password = scanner.nextLine();
                 bw.write(password);
                 System.out.println("Save");
+                FileManager.manager.setManagerPw(password);
             } catch (IOException e2) {
                 e2.printStackTrace();
                 return false;
