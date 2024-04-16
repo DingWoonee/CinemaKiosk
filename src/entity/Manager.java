@@ -1,6 +1,9 @@
 package entity;
 
 public class Manager {
+    public Manager() {
+    }
+
     public Manager(String managerPw) {
         this.managerPw = managerPw;
     }

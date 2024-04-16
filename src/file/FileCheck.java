@@ -143,6 +143,10 @@ public class FileCheck {
                     !Pattern.matches(SEAT_CHART.getValue(), elements[5])) {
                 System.out.println("Movie detail file content format does not match");
                 return false;
+            } else {
+                MovieTime time = MovieTime.getMovieTime(elements[4]);
+                MovieDetail movieDetail = new MovieDetail(Integer.parseInt(elements[0]), elements[1], elements[2], elements[3], time, Seat.stringToArray(elements[5]));
+                FileManager.movieDetailList.add(movieDetail);
             }
         } else {
             System.out.println("Movie detail file content format does not match");
@@ -281,6 +285,7 @@ public class FileCheck {
                 return false;
             } else {
                 FileManager.manager.setManagerPw(line);
+                System.out.println("eee"+line+"eee");
             }
         } else {
             System.out.println("Manager info file content format does not match");
@@ -306,6 +311,7 @@ public class FileCheck {
                 String password = scanner.nextLine();
                 bw.write(password);
                 System.out.println("Save");
+                FileManager.manager.setManagerPw(password);
             } catch (IOException e2) {
                 e2.printStackTrace();
                 return false;
