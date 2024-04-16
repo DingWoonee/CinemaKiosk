@@ -57,7 +57,7 @@ public class ManagerMain {
                     addMovie();
                     break;
                 case 3:
-                    deleteMovie(sc);
+                    deleteMovie();
                     break;
                 case 4:
                     // 홈 프롬프트 돌아갑니다..
@@ -75,7 +75,8 @@ public class ManagerMain {
 
     }
 
-    private void deleteMovie(Scanner sc) {
+    private void deleteMovie() {
+        Scanner sc = new Scanner(System.in);
         movieList = FileManager.movieList;
         while (true) {
             System.out.println("[영화 삭제]");
@@ -89,7 +90,7 @@ public class ManagerMain {
                 if (sumNum.length() > 0) {
                     sumNum.deleteCharAt(sumNum.length() - 1);
                 }
-                System.out.printf("%d\t\t%s\t\t%s\t\t%s\n", ++i, movie.getName(), sumNum, movie.getTime().getTime());
+                System.out.printf("%10d\t\t%-12s\t\t%-5s\t\t%-3s\n", ++i, movie.getName(), sumNum, movie.getTime().getTime());
             }
 
             System.out.print("번호 입력(숫자만 입력): ");
@@ -99,7 +100,7 @@ public class ManagerMain {
                 choice = Integer.parseInt(input);
                 if (choice < 1 || choice > movieList.size()) {
                     System.out.println(Prompt.BAD_INPUT.getPrompt());
-                    continue;
+                    return;
                 }
             } catch (NumberFormatException e) {
                 System.out.println(Prompt.BAD_INPUT.getPrompt());
