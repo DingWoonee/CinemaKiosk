@@ -35,13 +35,15 @@ public class FileManager {
     public static void inputDate() {
         Pattern pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT.getValue()));
         String input;
+        String trimmedInput;
         Matcher matcher;
         while (true) {
             System.out.print("오늘 날짜 입력: ");
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 input = br.readLine();
-                matcher = pattern.matcher(input);
+                trimmedInput = input.replaceAll("\\s+", "");
+                matcher = pattern.matcher(trimmedInput);
                 if (matcher.matches()) {
                     break;
                 } else {
@@ -50,7 +52,7 @@ public class FileManager {
             } catch (IOException ignored) {
             }
         }
-        todayDate = input;
+        todayDate = trimmedInput;
     }
 
     // 영화 리스트 저장.
