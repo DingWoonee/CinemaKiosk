@@ -200,7 +200,7 @@ public class FileCheck {
     }
     //무비 디테일 디렉토리 안에 날짜에 맞는 파일이 있는지 확인하고 있으면 내용확인 없으면 내용 담은 파일 생성
     private boolean checkMovieDetail() {
-        try (BufferedReader br = new BufferedReader(new FileReader(movieDetailListDirectoryName + "/" + FileManager.todayDate))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(movieDetailListDirectoryName + "/" + FileManager.todayDate + ".txt"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (!checkDetailDataLine(line)) {
@@ -216,7 +216,7 @@ public class FileCheck {
                 return false;
             }
             // 파일이 없을 때 파일 생성하는 부분.
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(movieDetailListDirectoryName + "/" + FileManager.todayDate))) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(movieDetailListDirectoryName + "/" + FileManager.todayDate + ".txt"))) {
                 System.out.println("Seat info file created");
                 if (!writeMovieDetailListContents(bw)) {
                     return false;
