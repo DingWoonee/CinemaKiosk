@@ -173,7 +173,7 @@ public class ManagerMain {
                 sc = new Scanner(System.in);
                 movieDescription = sc.nextLine().trim();
                 if (!checkDescription(movieDescription)) {
-                    System.out.println(Prompt.BAD_INPUT.getPrompt());
+                    System.out.println(Prompt.NOT_LENGTH10.getPrompt());
                     continue; // 다시 입력
                 }
                 tempMovie.setInfo(movieDescription);
