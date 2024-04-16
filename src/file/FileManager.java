@@ -22,6 +22,16 @@ public class FileManager {
     private final static String movieListFileName = "movie_list.txt";
     private final static String ticketInfoFileName = "ticket_info.txt";
 
+    public static boolean isTheaterNumExist(String num) {
+        for (Seat seat : seatList) {
+            if (seat.getTheaterNum().equals(num)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public static void inputDate() {
         Pattern pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT.getValue()));
         String input;
