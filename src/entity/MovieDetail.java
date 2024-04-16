@@ -73,7 +73,7 @@ public class MovieDetail {
     public static void printMovieDetail(List<MovieDetail> movieDetailList){
         System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간");
         for (int i=0;i<movieDetailList.size(); i++) {
-            System.out.printf("%d\t\t\t%s\t\t%s\t\t    %s\n", i+1,movieDetailList.get(i).name, movieDetailList.get(i).theaterNum, movieDetailList.get(i).time);
+            System.out.printf("%d\t\t\t%s\t\t%s\t\t    %s\n", i+1,movieDetailList.get(i).name, movieDetailList.get(i).theaterNum, movieDetailList.get(i).time.getTime());
         }
     }
 
