@@ -1,9 +1,6 @@
 package manager;
 
-import entity.Manager;
-import entity.Movie;
-import entity.MovieDetail;
-import entity.MovieTime;
+import entity.*;
 import etc.Prompt;
 import etc.RE;
 
@@ -329,22 +326,22 @@ public class ManagerMain {
 
     private static boolean checkTheaterNums(String theaterNums) {
 
-        // 중복된것 있으면 하나로 처리
-
-        // 문법형식
-        if(!theaterNums.matches("^\\s*\\d+\\s*(?:\\|\\s*\\d+\\s*)*$")){
-            return false;
-        }
-
-
-        // 상영관 번호는 숫자여야한다. (의미 규칙)
+        // 상영관 번호는 숫자여야한다.
         String[] tokens = theaterNums.split("\\s*\\|\\s*");
 
+        List<Seat> seatList = FileManager.seatList;
+
         for (String s : tokens) {
-            if(!s.matches("^(0?[1-9]|[1-9][0-9]?)$")){
+            if(!s.matches(RE.ROOM_NUMBER.getValue())){ // "^(0?[1-9]|[1-9][0-9]?)$"
+                return false;
+            }
+
+            if (!FileManager.isTheaterNumExist(s)) {
                 return false;
             }
         }
+
+
 
         return true;
     }

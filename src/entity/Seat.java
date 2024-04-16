@@ -57,5 +57,4 @@ public class Seat {
         this.seatArray = seatArray;
     }
 
-
 }
