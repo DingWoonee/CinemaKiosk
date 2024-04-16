@@ -20,6 +20,7 @@ public enum Prompt {
 
     // 오류
     BAD_INPUT("\n올바르지 않은 입력입니다."),
+    NOT_LENGTH10("\n10자 이상 입력해주세요."),
     NOT_EXIST_RESERVATION("\n존재하지 않는 예매 번호입니다.");
 
     private String prompt;
