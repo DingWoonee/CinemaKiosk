@@ -135,7 +135,7 @@ public class Reservation {
                         seats[row][col] = 1; // 좌석 예약 표시
                         selectedSeats.add(seatCode);
                     } else {
-                        System.out.println(Prompt.BAD_INPUT.getPrompt() + " - 이미 예약되었거나 존재하지 않는 좌석입니다: " + seatCode);
+                        System.out.println(Prompt.BAD_INPUT.getPrompt());
                         selectedSeats.clear(); // 에러가 발생하면 이미 추가된 좌석을 클리어
                         throw new InputRetryException("\n선택한 좌석이 유효하지 않습니다. 다시 시도하세요.");
                     }
