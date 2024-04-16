@@ -15,7 +15,7 @@ public enum RE {
     TICKET_NUMBER("^[A-Z][0-9]{6}$"),
     TICKET_PASSWORD("^[0-9]{4}$"),
     ADMIN_PASSWORD("^[A-Za-z0-9]{6,15}$"),
-    DATE_EIGHT("^(202[4-9]|20[3-9][0-9])(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$");
+    DATE_EIGHT("^([0-9]{4})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$");
 
 
     private String value;
