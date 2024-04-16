@@ -20,6 +20,7 @@ public class Main {
 
         FileCheck fileCheck = new FileCheck();
         if (!fileCheck.checkAll()) {
+            System.out.println("file check error");
             exit(1);
         }
 
