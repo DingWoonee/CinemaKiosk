@@ -17,7 +17,7 @@ public class FileManager {
     public static List<Seat> seatList = new ArrayList<>();
     public static List<MovieDetail> movieDetailList = new ArrayList<>();
     public static List<Ticket> ticketInfoList = new ArrayList<>();
-    public static Manager manager = new Manager("1234");
+    public static Manager manager = new Manager();
 
     private final static String movieListFileName = "movie_list.txt";
     private final static String ticketInfoFileName = "ticket_info.txt";
@@ -57,7 +57,7 @@ public class FileManager {
                     newLine += (theater + "|");
                 }
             }
-            newLine += "$" + movie.getTime() + "\n";
+            newLine += "$" + movie.getTime().getTime() + "\n";
             fileContent += newLine;
         }
         // fileContent 변수의 내용을 movie_list.txt에 덮어씀

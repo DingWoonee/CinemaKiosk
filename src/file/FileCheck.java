@@ -285,6 +285,7 @@ public class FileCheck {
                 return false;
             } else {
                 FileManager.manager.setManagerPw(line);
+                System.out.println("eee"+line+"eee");
             }
         } else {
             System.out.println("Manager info file content format does not match");
