@@ -21,7 +21,7 @@ public class Seat {
             for (int num : seatArray[i]) {
                 joiner.add(String.valueOf(num));
             }
-            result += (startCh + i) + ":" + joiner;
+            result += Character.toString(startCh + i) + ":" + joiner;
             if (i != seatArray.length - 1) {
                 result += "|";
             }
