@@ -44,7 +44,7 @@ public class ManagerMain {
             System.out.println("4. 홈");
             System.out.print("번호 입력(숫자만 입력): ");
             String choiceString = sc.nextLine().trim();
-
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
             if(!choiceString.matches(RE.MANAGER_MODE_INPUT.getValue())){
                 continue;
             }
