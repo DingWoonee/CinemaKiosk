@@ -122,7 +122,6 @@ public class ManagerMain {
                     System.out.println("\n삭제가 완료되었습니다.");
                     break;
                 } else if (confirmChoice == 2) {
-                    System.out.println("\n삭제를 취소합니다.");
                     break;
                 } else {
                     System.out.println(Prompt.BAD_INPUT.getPrompt());
@@ -174,7 +173,7 @@ public class ManagerMain {
                 sc = new Scanner(System.in);
                 movieDescription = sc.nextLine().trim();
                 if (!checkDescription(movieDescription)) {
-                    System.out.println(Prompt.BAD_INPUT.getPrompt());
+                    System.out.println(Prompt.NOT_LENGTH10.getPrompt());
                     continue; // 다시 입력
                 }
                 tempMovie.setInfo(movieDescription);
