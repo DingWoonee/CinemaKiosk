@@ -29,13 +29,14 @@ public class ManagerMain {
         Scanner sc = new Scanner(System.in);
         boolean isGoHome = false;
 
-        System.out.print("관리자 비밀번호 입력: ");
+        System.out.print("\n관리자 비밀번호 입력: ");
         String inputPw = sc.nextLine();
         if (!inputPw.equals(FileManager.manager.getManagerPw())) {
-            System.out.println("관리자 비밀번호가 틀렸습니다.");
+            System.out.println("\n관리자 비밀번호가 틀렸습니다.");
             return;
         }
         while (true) {
+            System.out.println(Prompt.NEW_MENU_START.getPrompt());
             System.out.println("[관리자 메뉴]");
             System.out.println("1. 영화 목록 출력");
             System.out.println("2. 영화 추가");
@@ -62,7 +63,7 @@ public class ManagerMain {
                     break;
 
                 default:
-                    System.out.println("올바르지 않은 입력입니다.");
+                    System.out.println("\n올바르지 않은 입력입니다.");
             }
             if (isGoHome) {
                 isGoHome = false;
@@ -76,6 +77,7 @@ public class ManagerMain {
         Scanner sc = new Scanner(System.in);
         movieList = FileManager.movieList;
         while (true) {
+            System.out.println(Prompt.NEW_MENU_START.getPrompt());
             System.out.println("[영화 삭제]");
             System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간");
             int i = 0;
@@ -106,7 +108,7 @@ public class ManagerMain {
 
 
 
-            System.out.println("[정말 삭제하시겠습니까?]");
+            System.out.println("\n[정말 삭제하시겠습니까?]");
             System.out.println("1. 삭제");
             System.out.println("2. 취소");
             System.out.print("번호 입력(숫자만 입력): ");
@@ -117,10 +119,10 @@ public class ManagerMain {
                 if (confirmChoice == 1) {
                     movieList.remove(choice - 1);
                     fileManager.saveMovie(); // 변경사항을 파일에 저장합니다.
-                    System.out.println("삭제가 완료되었습니다.");
+                    System.out.println("\n삭제가 완료되었습니다.");
                     break;
                 } else if (confirmChoice == 2) {
-                    System.out.println("삭제를 취소합니다.");
+                    System.out.println("\n삭제를 취소합니다.");
                     break;
                 } else {
                     System.out.println(Prompt.BAD_INPUT.getPrompt());
@@ -139,6 +141,7 @@ public class ManagerMain {
         isDuplicateTitle = false;
 
         // 영화 제목 입력
+        System.out.println(Prompt.NEW_MENU_START.getPrompt());
         System.out.println("[영화 추가]");
         System.out.print("영화 제목 입력: ");
         String movieName = sc.nextLine().trim();
@@ -163,7 +166,7 @@ public class ManagerMain {
                 }
                 break;
             }
-            else{ // 중복 아니면 직접 입력 받음
+            else{ // 중복 아니면 직접 입력 받음\n\
                 System.out.println("[영화 추가]");
                 System.out.print("영화 제목:\t");
                 System.out.println(tempMovie.getName());
@@ -180,7 +183,7 @@ public class ManagerMain {
         }
 
         // 상영관 입력
-        System.out.print("영화 제목:\t");
+        System.out.print("\n영화 제목:\t");
         System.out.println(tempMovie.getName());
         System.out.print("영화 설명:\t");
         System.out.println(tempMovie.getInfo());
@@ -203,7 +206,7 @@ public class ManagerMain {
 
 
         // 상영 시간 입력
-        System.out.print("영화 제목:\t");
+        System.out.print("\n영화 제목:\t");
         System.out.println(tempMovie.getName());
         System.out.print("영화 설명:\t");
         System.out.println(tempMovie.getInfo());
@@ -360,6 +363,7 @@ public class ManagerMain {
 
     public static void movieListPrint() {
         movieList = FileManager.movieList;
+        System.out.println(Prompt.NEW_MENU_START.getPrompt());
         System.out.println("[영화 목록 출력]");
         System.out.printf("%-12s\t%-5s\t%-3s\n", "영화 제목", "상영관", "상영 시간");
         for (Movie movie : movieList) {

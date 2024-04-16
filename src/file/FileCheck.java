@@ -38,7 +38,6 @@ public class FileCheck {
             Boolean check2 = !Pattern.matches(MOVIE_INFO.getValue(), elements[1]);
             Boolean check3 = !Pattern.matches(ROOM_NUMBERS.getValue(), elements[2]);
             Boolean check4 = !Pattern.matches(MOVIE_TIME.getValue(), elements[3]);
-            System.out.println(check1.toString() + check2 + check3 + check4);
             if (check1 ||
                     check2 ||
                     check3 ||

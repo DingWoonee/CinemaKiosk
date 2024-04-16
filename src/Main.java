@@ -27,6 +27,8 @@ public class Main {
 
         while (true) {
             try {
+                System.out.println(Prompt.MAIN.getPrompt());
+                System.out.println("[홈]");
                 System.out.println("1. 영화예매");
                 System.out.println("2. 예매취소");
                 System.out.println("3. 관리자");
