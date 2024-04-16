@@ -34,8 +34,9 @@ public class ManagerMain {
 
         System.out.print("관리자 비밀번호 입력: ");
         String inputPw = sc.nextLine();
-        if (!inputPw.equals("1234")) {
+        if (!inputPw.equals(FileManager.manager.getManagerPw())) {
             System.out.println("관리자 비밀번호가 틀렸습니다.");
+            return;
         }
         while (true) {
             System.out.println("[관리자 메뉴]");
