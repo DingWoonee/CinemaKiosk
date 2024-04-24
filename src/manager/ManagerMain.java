@@ -41,8 +41,8 @@ public class ManagerMain {
             System.out.println("4. 홈");
             System.out.print("번호 입력(숫자만 입력): ");
             String choiceString = sc.nextLine().trim();
-
             if(!choiceString.matches(RE.MANAGER_MODE_INPUT.getValue())){
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
                 continue;
             }
 
@@ -64,7 +64,7 @@ public class ManagerMain {
                     break;
 
                 default:
-                    System.out.println("\n올바르지 않은 입력입니다.");
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
             }
             if (isGoHome) {
                 isGoHome = false;

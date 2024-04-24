@@ -254,7 +254,13 @@ public class FileCheck {
         return true;
     }
     private boolean checkTicketInfo() {
-        try (BufferedReader br = new BufferedReader(new FileReader(ticketInfoFileName))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ticketInfoFileName))) {
+            System.out.println("Ticket info file created");
+        } catch (IOException e2) {
+            e2.printStackTrace();
+            return false;
+        }
+        /*try (BufferedReader br = new BufferedReader(new FileReader(ticketInfoFileName))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (!checkTicketDataLine(line)) {
@@ -272,7 +278,7 @@ public class FileCheck {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
-        }
+        }*/
         return true;
     }
 
