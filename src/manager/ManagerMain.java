@@ -6,10 +6,7 @@ import etc.RE;
 
 import file.FileManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ManagerMain {
     private FileManager fileManager;
@@ -44,8 +41,8 @@ public class ManagerMain {
             System.out.println("4. 홈");
             System.out.print("번호 입력(숫자만 입력): ");
             String choiceString = sc.nextLine().trim();
-            System.out.println(Prompt.BAD_INPUT.getPrompt());
             if(!choiceString.matches(RE.MANAGER_MODE_INPUT.getValue())){
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
                 continue;
             }
 
@@ -67,7 +64,7 @@ public class ManagerMain {
                     break;
 
                 default:
-                    System.out.println("\n올바르지 않은 입력입니다.");
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
             }
             if (isGoHome) {
                 isGoHome = false;
@@ -199,10 +196,13 @@ public class ManagerMain {
             return; // 관리자 프롬프트로 이동
         }
 
+        // 입력 토큰화 및 중복 제거
         String[] tokens = theaterNums.split("\\s*\\|\\s*");
+        Set<String> uniqueTokens = new LinkedHashSet<>(Arrays.asList(tokens));
+
 
         List<String> newTheaterNumList = new ArrayList<>();
-        for (String token : tokens) {
+        for (String token : uniqueTokens) {
             newTheaterNumList.add(token);
         }
         tempMovie.setTheaterNumList(newTheaterNumList);
@@ -337,6 +337,7 @@ public class ManagerMain {
 
         List<Seat> seatList = FileManager.seatList;
 
+        // 정규표현식 확인
         for (String s : tokens) {
             if(!s.matches(RE.ROOM_NUMBER.getValue())){ // "^(0?[1-9]|[1-9][0-9]?)$"
                 return false;
