@@ -108,20 +108,28 @@ public class Reservation {
         List<String> selectedSeats = new ArrayList<>();
         MovieDetail movieDetail = FileManager.movieDetailList.get(movieNumber - 1);
         int[][] seats = movieDetail.getSeatArray();
+        boolean[][] originalSeats = new boolean[seats.length][]; // 좌석 예매 과정 중 오류가 났을때 복구하기 위한 배열
+
+        // 원래 좌석 상태 복사
+        for (int i = 0; i < seats.length; i++) {
+            originalSeats[i] = new boolean[seats[i].length];
+            for (int j = 0; j < seats[i].length; j++) {
+                originalSeats[i][j] = seats[i][j] == 1;
+            }
+        }
 
         Scanner scanner = new Scanner(System.in);
         boolean isValidInput = false;
 
         System.out.println("■ : 선택 불가");
         System.out.println("좌석 선택 (입력 예시: A02 A03)");
-        movieDetail.printSeatArray();
+        movieDetail.printSeatArray(); // 좌석 구조 출력
 
         while (!isValidInput) {
             System.out.print("입력:");
             String input = scanner.nextLine().trim().toUpperCase();
             String[] seatCodes = input.split(" ");
-
-            // 중복 좌석 검사
+            // 중복 체크
             Set<String> seatSet = new HashSet<>(Arrays.asList(seatCodes));
             if (seatSet.size() != seatCodes.length) {
                 System.out.println(Prompt.BAD_INPUT.getPrompt());
@@ -134,6 +142,7 @@ public class Reservation {
             }
 
             try {
+                // 좌석마다 문법/예외 규칙 확인, 예약 표시
                 for (String seatCode : seatSet) {
                     FileManager.validateInputWithRE(seatCode, RE.SEAT_NUMBER.getValue());
                     int row = seatCode.charAt(0) - 'A';
@@ -144,17 +153,29 @@ public class Reservation {
                         selectedSeats.add(seatCode);
                     } else {
                         System.out.println(Prompt.BAD_INPUT.getPrompt());
-                        selectedSeats.clear(); // 에러가 발생하면 이미 추가된 좌석을 클리어
+                        System.out.println("에러1");
                         throw new InputRetryException("\n선택한 좌석이 유효하지 않습니다. 다시 시도하세요.");
                     }
                 }
                 isValidInput = true; // 모든 좌석이 유효하면 루프 종료
             } catch (InputRetryException e) {
-                // 예외 처리
+                // 오류 발생 시 모든 좌석을 원래 상태로 복원
+                for (int i = 0; i < seats.length; i++) {
+                    for (int j = 0; j < seats[i].length; j++) {
+                        if (originalSeats[i][j]) {
+                            seats[i][j] = 1;
+                        } else {
+                            seats[i][j] = 0;
+                        }
+                    }
+                }
+                selectedSeats.clear();
+                continue; // 다시 입력 받음
             }
         }
         return selectedSeats;
     }
+
 
     // 3. 패스워드 입력
     public void password() {
