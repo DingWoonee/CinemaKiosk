@@ -6,10 +6,7 @@ import etc.RE;
 
 import file.FileManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ManagerMain {
     private FileManager fileManager;
@@ -107,7 +104,7 @@ public class ManagerMain {
                 }
             } catch (NumberFormatException e) {
                 System.out.println(Prompt.BAD_INPUT.getPrompt());
-                continue;
+                return;
             }
 
 
@@ -199,10 +196,13 @@ public class ManagerMain {
             return; // 관리자 프롬프트로 이동
         }
 
+        // 입력 토큰화 및 중복 제거
         String[] tokens = theaterNums.split("\\s*\\|\\s*");
+        Set<String> uniqueTokens = new LinkedHashSet<>(Arrays.asList(tokens));
+
 
         List<String> newTheaterNumList = new ArrayList<>();
-        for (String token : tokens) {
+        for (String token : uniqueTokens) {
             newTheaterNumList.add(token);
         }
         tempMovie.setTheaterNumList(newTheaterNumList);
@@ -337,6 +337,7 @@ public class ManagerMain {
 
         List<Seat> seatList = FileManager.seatList;
 
+        // 정규표현식 확인
         for (String s : tokens) {
             if(!s.matches(RE.ROOM_NUMBER.getValue())){ // "^(0?[1-9]|[1-9][0-9]?)$"
                 return false;
