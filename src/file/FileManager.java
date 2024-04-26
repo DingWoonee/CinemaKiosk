@@ -33,24 +33,34 @@ public class FileManager {
 
 
     public static void inputDate() {
-        Pattern pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT.getValue()));
+        Pattern pattern;
         String input;
+        String trimmedInput;
         Matcher matcher;
         while (true) {
             System.out.print("오늘 날짜 입력: ");
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 input = br.readLine();
-                matcher = pattern.matcher(input);
-                if (matcher.matches()) {
-                    break;
-                } else {
-                    System.out.println(Prompt.BAD_INPUT.getPrompt());
+                trimmedInput = input.replaceAll("\\s+", "");
+                if (validateInputReturnBoolWithRE(trimmedInput, RE.NUM_EIGHT.getValue())) {
+                    int year = Integer.parseInt(trimmedInput.substring(0, 4));
+                    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) { // 윤년
+                        pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT2.getValue()));
+                    } else { // 윤년 아님
+                        pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT.getValue()));
+                    }
+                    matcher = pattern.matcher(trimmedInput);
+                    if (matcher.matches()) {
+                        break;
+                    } else {
+                        System.out.println(Prompt.BAD_INPUT.getPrompt());
+                    }
                 }
             } catch (IOException ignored) {
             }
         }
-        todayDate = input;
+        todayDate = trimmedInput;
     }
 
     // 영화 리스트 저장.

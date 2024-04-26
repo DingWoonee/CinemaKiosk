@@ -42,10 +42,14 @@ public class ManagerMain {
             System.out.println("2. 영화 추가");
             System.out.println("3. 영화 삭제");
             System.out.println("4. 홈");
-
-
             System.out.print("번호 입력(숫자만 입력): ");
-            int choice = sc.nextInt();
+            String choiceString = sc.nextLine().trim();
+            if(!choiceString.matches(RE.MANAGER_MODE_INPUT.getValue())){
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
+                continue;
+            }
+
+            int choice = Integer.parseInt(choiceString);
 
             switch (choice) {
                 case 1:
@@ -63,7 +67,7 @@ public class ManagerMain {
                     break;
 
                 default:
-                    System.out.println("\n올바르지 않은 입력입니다.");
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
             }
             if (isGoHome) {
                 isGoHome = false;
