@@ -231,6 +231,9 @@ public class ManagerMain {
         }
 
         String[] movieTime = movieTimes.split("\\s*\\|\\s*");
+        Set<String> uniqueTimes = new LinkedHashSet<>(Arrays.asList(movieTime));
+
+
         // 상영관하고 상영시간 겹치는 경우
         for (String newTheaterNum : newTheaterNumList) { // 상영관 입력한 것
 
@@ -241,7 +244,7 @@ public class ManagerMain {
 
                 for (String theaterNum_ : theaterNumList) { // 상영관 등록된 것
                     if (newTheaterNum.equals(theaterNum_)) { // 상영관 같으면
-                        for (String time : movieTime) { // 시간 같은지 확인
+                        for (String time : uniqueTimes) { // 시간 같은지 확인
                             if (time.equals(movie.getTime().getTime())) {
                                 System.out.println(Prompt.BAD_INPUT.getPrompt());
                                 return;
@@ -252,9 +255,10 @@ public class ManagerMain {
             }
         }
 
+
         if(!isDuplicateTitle) {
             Movie newMovie;
-            for (String time : movieTime) {
+            for (String time : uniqueTimes) {
                 newMovie = new Movie();
                 List<String> inputTheaterNumList = new ArrayList<>(tempMovie.getTheaterNumList());
                 newMovie.setName(tempMovie.getName());
@@ -273,33 +277,65 @@ public class ManagerMain {
             }
         }
         else{
-
             for (Movie movie : movies) { // 중복이라는 건 movie가 무조건 있음
                 String originTime = movie.getTime().getTime();
 
-                for (String newMovieTime : movieTime) {
+                for (String newMovieTime : uniqueTimes) {
                     System.out.println("newMovieTime = " + newMovieTime);
                     System.out.println("originTime = " + originTime);
+                    // 시간이 다른 경우
                     if(!originTime.equals(newMovieTime)){
                         continue;
                     }
 
-                    // 시간 같은경우, 상영관 확인
+                    // 시간 같은경우, 상영관 확인 (시작)
+                    int leftUniqueTime = uniqueTimes.size();
                     List<String> originTheaterNumList = movie.getTheaterNumList();
                     for (String newTheaterNum : newTheaterNumList) {
                         for (String originTheaterNum : originTheaterNumList) {
-                            if(newTheaterNum.equals(originTheaterNum)){ // 시간도 같고 상영관도 같으면 패스
+                            // 시간도 같고 상영관도 같으면 패스
+                            if(newTheaterNum.equals(originTheaterNum)){
                                 continue;
                             }
                             // 시간 같지만, 상영관 다른 경우
-                            movie.getTheaterNumList().add(newTheaterNum);
-                            Collections.sort(movie.getTheaterNumList());
-                            break;
-                        }
+                            if(movie.getName().equals(tempMovie.getName())) {
+                                movie.getTheaterNumList().add(newTheaterNum);
+                                Collections.sort(movie.getTheaterNumList());
+
+                                // Num 빼기
+                                leftUniqueTime -= 1;
+                                if(leftUniqueTime == 0){
+                                    uniqueTimes.remove(newMovieTime);
+                                }
+
+                                break;
+                            }
+                        } // 상영관 번호 확인 (끝)
+                    } // 시간 같은경우, 상영관 확인 (끝)
+                } // 영화 시간 탐색 (끝)
+            } // 영화 전체 탐색(끝)
+            if(!uniqueTimes.isEmpty()){
+                Movie newMovie;
+                for (String time : uniqueTimes) {
+                    newMovie = new Movie();
+                    List<String> inputTheaterNumList = new ArrayList<>(tempMovie.getTheaterNumList());
+                    newMovie.setName(tempMovie.getName());
+                    newMovie.setInfo(tempMovie.getInfo());
+                    newMovie.setTheaterNumList(inputTheaterNumList);
+
+                    if (time.equals(MovieTime.Time1.getTime())) {
+                        newMovie.setTime(MovieTime.Time1);
+                    } else if (time.equals(MovieTime.Time2.getTime())) {
+                        newMovie.setTime(MovieTime.Time2);
+                    } else if (time.equals(MovieTime.Time3.getTime())) {
+                        newMovie.setTime(MovieTime.Time3);
                     }
+
+                    movies.add(newMovie);
                 }
+
             }
-        }
+        } // else문 (끝)
 
 
         // movieList에 넣기
