@@ -104,7 +104,7 @@ public class ManagerMain {
                 }
             } catch (NumberFormatException e) {
                 System.out.println(Prompt.BAD_INPUT.getPrompt());
-                continue;
+                return;
             }
 
 
