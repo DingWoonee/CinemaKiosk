@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Reservation {
     FileManager fileManager;
-    int movieNumber;
+    int selectedMovieNumber;
     int peopleCount;
     String reservationPassword;
 
@@ -46,9 +46,9 @@ public class Reservation {
             throw new GoHomePromptException("\n잘못된 입력입니다. 숫자만 입력하세요.");
         }
         try {
-            movieNumber = Integer.parseInt(input);
+            selectedMovieNumber = Integer.parseInt(input);
             // 영화번호에 대한 예외처리
-            if (movieNumber < 1 || movieNumber > FileManager.movieDetailList.size()) {
+            if (selectedMovieNumber < 1 || selectedMovieNumber > FileManager.movieDetailList.size()) {
                 System.out.println(Prompt.BAD_INPUT.getPrompt());
                 throw new GoHomePromptException();
 
@@ -64,8 +64,14 @@ public class Reservation {
 
     // 1. 영화 선택  - 예매하기, 홈으로 메뉴
     public void movieInfo() {
-        System.out.println(Prompt.NEW_MENU_START.getPrompt());
-        System.out.println(FileManager.movieDetailList.get(movieNumber - 1).getInfo());
+        System.out.println();
+        System.out.println("[영화정보]");
+        System.out.println("-제목-");
+        System.out.println(FileManager.movieDetailList.get(selectedMovieNumber - 1).getName());
+        System.out.println("-정보-");
+        System.out.println(FileManager.movieDetailList.get(selectedMovieNumber - 1).getInfo());
+        System.out.println();
+        System.out.println("[예매선택]");
         System.out.println("1. 예매하기");
         System.out.println("2. 홈으로");
         System.out.print("번호입력(숫자만 입력): ");
@@ -100,13 +106,12 @@ public class Reservation {
         } catch (InputRetryException e) {
             countingPeople();
         }
-
     }
 
     // 2. 좌석 선택
     public List<String> seatChoice() throws GoHomePromptException {
         List<String> selectedSeats = new ArrayList<>();
-        MovieDetail movieDetail = FileManager.movieDetailList.get(movieNumber - 1);
+        MovieDetail movieDetail = FileManager.movieDetailList.get(selectedMovieNumber - 1);
         int[][] seats = movieDetail.getSeatArray();
         boolean[][] originalSeats = new boolean[seats.length][]; // 좌석 예매 과정 중 오류가 났을때 복구하기 위한 배열
 
@@ -153,7 +158,6 @@ public class Reservation {
                         selectedSeats.add(seatCode);
                     } else {
                         System.out.println(Prompt.BAD_INPUT.getPrompt());
-                        System.out.println("에러1");
                         throw new InputRetryException("\n선택한 좌석이 유효하지 않습니다. 다시 시도하세요.");
                     }
                 }
@@ -170,7 +174,6 @@ public class Reservation {
                     }
                 }
                 selectedSeats.clear();
-                continue; // 다시 입력 받음
             }
         }
         return selectedSeats;
@@ -193,7 +196,7 @@ public class Reservation {
     // 4. 티켓 생성
     public List<Ticket> createAndAddTickets(List<String> seatCodes) {
         List<Ticket> tickets = new ArrayList<>();
-        MovieDetail movieDetail = FileManager.movieDetailList.get(movieNumber - 1);
+        MovieDetail movieDetail = FileManager.movieDetailList.get(selectedMovieNumber - 1);
         String theaterNum = movieDetail.getTheaterNum();
         MovieTime movieTime = movieDetail.getTime();
 
@@ -232,7 +235,7 @@ public class Reservation {
         System.out.println("[예매정보]");
 
         for (Ticket ticket : tickets) {
-            MovieDetail movieDetail = FileManager.movieDetailList.get(movieNumber - 1);
+            MovieDetail movieDetail = FileManager.movieDetailList.get(selectedMovieNumber - 1);
             System.out.println("예매번호: " + ticket.getReservationId());
             System.out.println("영화 제목: " + movieDetail.getName());
             System.out.println("상영관: " + movieDetail.getTheaterNum());
