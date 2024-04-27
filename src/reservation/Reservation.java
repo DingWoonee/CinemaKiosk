@@ -126,11 +126,12 @@ public class Reservation {
         Scanner scanner = new Scanner(System.in);
         boolean isValidInput = false;
 
-        System.out.println("■ : 선택 불가");
-        System.out.println("좌석 선택 (입력 예시: A02 A03)");
-        movieDetail.printSeatArray(); // 좌석 구조 출력
+
 
         while (!isValidInput) {
+            System.out.println("■ : 선택 불가");
+            System.out.println("좌석 선택 (입력 예시: A02 A03)");
+            movieDetail.printSeatArray(); // 좌석 구조 출력
             System.out.print("입력:");
             String input = scanner.nextLine().trim().toUpperCase();
             String[] seatCodes = input.split(" ");
