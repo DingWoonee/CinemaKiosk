@@ -95,7 +95,7 @@ public class Reservation {
 
     // 1. 영화선택 - 인원 수 입력
     public void countingPeople() {
-        System.out.print("\n인원 수 입력(숫자만 입력):");
+        System.out.print("인원 수 입력(숫자만 입력):");
         Scanner scanner = new Scanner(System.in);
         String tempPeopleCount = scanner.nextLine().trim();
         try {
@@ -129,9 +129,12 @@ public class Reservation {
 
 
         while (!isValidInput) {
+            System.out.println("[좌석]");
+            System.out.println("스크린 위치");
+            movieDetail.printSeatArray(); // 좌석 구조 출력
+            System.out.println();
             System.out.println("■ : 선택 불가");
             System.out.println("좌석 선택 (입력 예시: A02 A03)");
-            movieDetail.printSeatArray(); // 좌석 구조 출력
             System.out.print("입력:");
             String input = scanner.nextLine().trim().toUpperCase();
             String[] seatCodes = input.split(" ");
