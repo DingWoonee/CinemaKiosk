@@ -283,8 +283,6 @@ public class ManagerMain {
                 String originTime = movie.getTime().getTime();
 
                 for (String newMovieTime : uniqueTimes) {
-                    System.out.println("newMovieTime = " + newMovieTime);
-                    System.out.println("originTime = " + originTime);
                     // 시간이 다른 경우
                     if(!originTime.equals(newMovieTime)){
                         continue;
@@ -347,7 +345,6 @@ public class ManagerMain {
         theaterTime.deleteCharAt(theaterTime.length() - 1); // 맨뒤 공백 제거
         theaterTime.deleteCharAt(theaterTime.length() - 1); // 맨뒤 , 제거
 
-        System.out.println("hi");
         System.out.println("\n[영화 추가 완료]");
         System.out.print("영화 제목:\t");
         System.out.println(tempMovie.getName());
