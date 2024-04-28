@@ -234,6 +234,7 @@ public class ManagerMain {
 
         String[] movieTime = movieTimes.split("\\s*\\|\\s*");
         Set<String> uniqueTimes = new LinkedHashSet<>(Arrays.asList(movieTime));
+        Set<String> uniqueTimes2 = new LinkedHashSet<>(Arrays.asList(movieTime));
 
 
         // 상영관하고 상영시간 겹치는 경우
@@ -256,6 +257,8 @@ public class ManagerMain {
                 }
             }
         }
+
+
 
 
         if(!isDuplicateTitle) {
@@ -314,6 +317,7 @@ public class ManagerMain {
                     } // 시간 같은경우, 상영관 확인 (끝)
                 } // 영화 시간 탐색 (끝)
             } // 영화 전체 탐색(끝)
+
             if(!uniqueTimes.isEmpty()){
                 Movie newMovie;
                 for (String time : uniqueTimes) {
@@ -338,7 +342,7 @@ public class ManagerMain {
         } // else문 (끝)
 
         StringBuilder theaterTime = new StringBuilder();
-        for (String time : uniqueTimes) {
+        for (String time : uniqueTimes2) {
             theaterTime.append(time);
             theaterTime.append(", ");
         }
@@ -354,7 +358,6 @@ public class ManagerMain {
         System.out.println(theaterNum);
         System.out.print("상영시간:\t");
         System.out.println(theaterTime);
-
 
         // movieList에 넣기
         FileManager.movieList = movies;
