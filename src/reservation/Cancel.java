@@ -86,7 +86,7 @@ public class Cancel {
 		try {
 			System.out.println("영화 제목: " + movieDetail.getName());
 			System.out.println("상영관: " + movieDetail.getTheaterNum());
-			System.out.println("상영 시간: " + movieDetail.getTime());
+			System.out.println("상영 시간: " + movieDetail.getTime().getTime());
 		} catch (NullPointerException e) {
 			System.out.println("NullPointerException");
 		}

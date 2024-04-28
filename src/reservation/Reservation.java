@@ -95,7 +95,7 @@ public class Reservation {
 
     // 1. 영화선택 - 인원 수 입력
     public void countingPeople() {
-        System.out.print("\n인원 수 입력(숫자만 입력):");
+        System.out.print("인원 수 입력(숫자만 입력):");
         Scanner scanner = new Scanner(System.in);
         String tempPeopleCount = scanner.nextLine().trim();
         try {
@@ -113,24 +113,28 @@ public class Reservation {
         List<String> selectedSeats = new ArrayList<>();
         MovieDetail movieDetail = FileManager.movieDetailList.get(selectedMovieNumber - 1);
         int[][] seats = movieDetail.getSeatArray();
-        boolean[][] originalSeats = new boolean[seats.length][]; // 좌석 예매 과정 중 오류가 났을때 복구하기 위한 배열
+        int[][] originalSeats = new int[seats.length][]; // 좌석 예약 과정 중 오류가 났을 때 복구하기 위한 배열
 
         // 원래 좌석 상태 복사
         for (int i = 0; i < seats.length; i++) {
-            originalSeats[i] = new boolean[seats[i].length];
+            originalSeats[i] = new int[seats[i].length];
             for (int j = 0; j < seats[i].length; j++) {
-                originalSeats[i][j] = seats[i][j] == 1;
+                originalSeats[i][j] = seats[i][j]; // 좌석 상태 직접 복사
             }
         }
 
         Scanner scanner = new Scanner(System.in);
         boolean isValidInput = false;
 
-        System.out.println("■ : 선택 불가");
-        System.out.println("좌석 선택 (입력 예시: A02 A03)");
-        movieDetail.printSeatArray(); // 좌석 구조 출력
+
 
         while (!isValidInput) {
+            System.out.println("[좌석]");
+            System.out.println("스크린 위치");
+            movieDetail.printSeatArray(); // 좌석 구조 출력
+            System.out.println();
+            System.out.println("■ : 선택 불가");
+            System.out.println("좌석 선택 (입력 예시: A02 A03)");
             System.out.print("입력:");
             String input = scanner.nextLine().trim().toUpperCase();
             String[] seatCodes = input.split(" ");
@@ -163,14 +167,10 @@ public class Reservation {
                 }
                 isValidInput = true; // 모든 좌석이 유효하면 루프 종료
             } catch (InputRetryException e) {
-                // 오류 발생 시 모든 좌석을 원래 상태로 복원
+                // 오류 발생 시 좌석 복원 로직
                 for (int i = 0; i < seats.length; i++) {
                     for (int j = 0; j < seats[i].length; j++) {
-                        if (originalSeats[i][j]) {
-                            seats[i][j] = 1;
-                        } else {
-                            seats[i][j] = 0;
-                        }
+                        seats[i][j] = originalSeats[i][j]; // 원래 상태로 복원
                     }
                 }
                 selectedSeats.clear();
