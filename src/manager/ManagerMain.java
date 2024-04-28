@@ -167,7 +167,7 @@ public class ManagerMain {
                 break;
             }
             else{ // 중복 아니면 직접 입력 받음\n\
-                System.out.println("[영화 추가]");
+                System.out.println("\n[영화 추가]");
                 System.out.print("영화 제목:\t");
                 System.out.println(tempMovie.getName());
                 System.out.print("영화 설명 입력(10자 이상):\t");
@@ -183,7 +183,8 @@ public class ManagerMain {
         }
 
         // 상영관 입력
-        System.out.print("\n영화 제목:\t");
+        System.out.println("\n[영화 추가]");
+        System.out.print("영화 제목:\t");
         System.out.println(tempMovie.getName());
         System.out.print("영화 설명:\t");
         System.out.println(tempMovie.getInfo());
@@ -209,7 +210,8 @@ public class ManagerMain {
 
 
         // 상영 시간 입력
-        System.out.print("\n영화 제목:\t");
+        System.out.println("\n[영화 추가]");
+        System.out.print("영화 제목:\t");
         System.out.println(tempMovie.getName());
         System.out.print("영화 설명:\t");
         System.out.println(tempMovie.getInfo());
@@ -336,6 +338,25 @@ public class ManagerMain {
 
             }
         } // else문 (끝)
+
+        StringBuilder theaterTime = new StringBuilder();
+        for (String time : uniqueTimes) {
+            theaterTime.append(time);
+            theaterTime.append(", ");
+        }
+        theaterTime.deleteCharAt(theaterTime.length() - 1); // 맨뒤 공백 제거
+        theaterTime.deleteCharAt(theaterTime.length() - 1); // 맨뒤 , 제거
+
+        System.out.println("hi");
+        System.out.println("\n[영화 추가 완료]");
+        System.out.print("영화 제목:\t");
+        System.out.println(tempMovie.getName());
+        System.out.print("영화 설명:\t");
+        System.out.println(tempMovie.getInfo());
+        System.out.print("상영관:\t");
+        System.out.println(theaterNum);
+        System.out.print("상영시간:\t");
+        System.out.println(theaterTime);
 
 
         // movieList에 넣기
