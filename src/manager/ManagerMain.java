@@ -79,65 +79,93 @@ public class ManagerMain {
 
     private void execAddMovieSchedule() {
 
+
+        // 상영 날짜 입력
+        System.out.println("[영화 스케줄 추가]");
+        System.out.println("상영 날짜 입력(8자리 숫자로 입력): ");
+        String runningDate = inputRunningDate();
+
+        // 상영관 입력
+        System.out.println("[영화 스케줄 추가]");
+        System.out.println("- 상영 날짜: " + runningDate);
+        System.out.println();
+        System.out.print("상영관 입력(상영관 번호 두 자리 숫자만 입력): ");
+        String screenHall = inputScreenHall();
+
+
+
+        // 영화 번호 입력
+        System.out.print("추가할 영화 번호 입력(숫자만 입력): ");
+        String movieNumber = inputMovieNumber();
+
+        // 상영 시작 시간 입력
+        System.out.println("상영 시작 시간 입력(4자리 숫자로 입력): ");
+        String start;
+        start = inputMoiveStartTime();
+
+    }
+
+    private String inputMoiveStartTime() {
+        Scanner sc = new Scanner(System.in);
+        String startTime = sc.nextLine().trim();
+
+        if(!checkStartTime(startTime)){
+            throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
+        }
+        return startTime;
+    }
+
+    private boolean checkStartTime(String startTime) {
+        return true; //startTime.matches(RE.STARTTIME.getValue());
+    }
+
+    private String inputMovieNumber() {
+        Scanner sc = new Scanner(System.in);
+        String movieNumber = sc.nextLine().trim();
+
+        if(!checkMoiveNumber(movieNumber)){
+            throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
+        }
+
+        return movieNumber;
+    }
+
+    private boolean checkMoiveNumber(String movieNumber) {
+        return true; //movieNumber.matches(RE.MOVIENUMBER.getValue());
+    }
+
+    private String inputScreenHall() {
+        Scanner sc = new Scanner(System.in);
+        String screenHalls = sc.nextLine().trim();
+
+        // 문법 체크
+        if(!checkScreenHall(screenHalls)){
+            throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
+        }
+
+        return screenHalls;
+    }
+
+    private boolean checkScreenHall(String screenHalls) {
+        return screenHalls.matches(RE.ROOM_NUMBER.getValue());
+    }
+
+    private String inputRunningDate() {
+        Scanner sc = new Scanner(System.in);
+        String runningDate = sc.nextLine().trim();
+
+        if (!checkRunningDate(runningDate)) {
+            throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
+        }
+        return runningDate;
+    }
+
+    private boolean checkRunningDate(String runningDate) {
+        return runningDate.matches(RE.NUM_EIGHT.getValue());
     }
 
     private void deleteMovie() {
-        Scanner sc = new Scanner(System.in);
-        movieList = FileManager.movieList;
-        while (true) {
-            System.out.println(Prompt.NEW_MENU_START.getPrompt());
-            System.out.println("[영화 삭제]");
-            System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간");
-            int i = 0;
-            for (Movie movie : movieList) {
-                StringBuilder sumNum = new StringBuilder();
-                for (String num : movie.getTheaterNumList()) {
-                    sumNum.append(num).append(",");
-                }
-                if (sumNum.length() > 0) {
-                    sumNum.deleteCharAt(sumNum.length() - 1);
-                }
-                System.out.printf("%10d\t\t%-12s\t\t%-5s\t\t%-3s\n", ++i, movie.getName(), sumNum, movie.getTime().getTime());
-            }
 
-            System.out.print("번호 입력(숫자만 입력): ");
-            String input = sc.nextLine().trim();
-            int choice;
-            try {
-                choice = Integer.parseInt(input);
-                if (choice < 1 || choice > movieList.size()) {
-                    System.out.println(Prompt.BAD_INPUT.getPrompt());
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println(Prompt.BAD_INPUT.getPrompt());
-                return;
-            }
-
-
-
-            System.out.println("\n[정말 삭제하시겠습니까?]");
-            System.out.println("1. 삭제");
-            System.out.println("2. 취소");
-            System.out.print("번호 입력(숫자만 입력): ");
-            input = sc.nextLine().trim();
-
-            try {
-                int confirmChoice = Integer.parseInt(input);
-                if (confirmChoice == 1) {
-                    movieList.remove(choice - 1);
-                    fileManager.saveMovie(); // 변경사항을 파일에 저장합니다.
-                    System.out.println("\n삭제가 완료되었습니다.");
-                    break;
-                } else if (confirmChoice == 2) {
-                    break;
-                } else {
-                    System.out.println(Prompt.BAD_INPUT.getPrompt());
-                }
-            } catch (NumberFormatException e) {
-                System.out.println(Prompt.BAD_INPUT.getPrompt());
-            }
-        }
     }
 
     private void addMovie() {
@@ -238,7 +266,7 @@ public class ManagerMain {
     }
 
     private boolean checkRunningTime(String runningTime) {
-        return runningTime.matches(RE.MOVIE_RUNNINGTIME.getValue());
+        return true;//runningTime.matches(RE.MOVIE_RUNNINGTIME.getValue());
     }
 
 
@@ -250,22 +278,7 @@ public class ManagerMain {
 
     public static void movieListPrint() {
         movieList = FileManager.movieList;
-        System.out.println(Prompt.NEW_MENU_START.getPrompt());
-        System.out.println("[영화 목록 출력]");
-        System.out.printf("%-12s\t%-5s\t%-3s\n", "영화 제목", "상영관", "상영 시간");
-        for (Movie movie : movieList) {
-            StringBuilder sumNum = new StringBuilder();
-            for (String num : movie.getTheaterNumList()) {
-                sumNum.append(num);
-                sumNum.append(",");
-            }
-            // 마지막 쉼표 제거
-            if (!sumNum.isEmpty()) {
-                sumNum.deleteCharAt(sumNum.length() - 1);
-            }
 
-            System.out.printf("%-12s\t%-5s\t%-3s\n", movie.getName(), sumNum, movie.getTime().getTime());
-        }
     }
 
     public static void main(String[] args) {
