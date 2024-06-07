@@ -14,7 +14,7 @@ import static etc.RE.*;
 public class FileCheck {
     private final String movieListFileName = "movie_list.txt";
     private final String seatInfoFileName = "seat_info.txt";
-    private final String movieDetailListDirectoryName = "movie_detail_list";
+    private static final String movieDetailListDirectoryName = "movie_detail_list";
     private final String ticketInfoFileName = "ticket_info.txt";
     private final String managerInfoFileName = "manager_info.txt";
     public int movieOrder = 1;
@@ -329,6 +329,33 @@ public class FileCheck {
             return false;
         }
         return true;
+    }
+
+    public static List<MovieDetail> getMovieDetail(String date) {
+        List<MovieDetail> movieDetailList = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(movieDetailListDirectoryName + "/" + date + ".txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] elements = line.split("\\$");
+                if (elements.length == 6) {
+                    if (!Pattern.matches(MOVIE_ORDER.getValue(), elements[0]) ||
+                            !Pattern.matches(MOVIE_NAME.getValue(), elements[1]) ||
+                            !Pattern.matches(MOVIE_INFO.getValue(), elements[2]) ||
+                            !Pattern.matches(SCHEDULE.getValue(), elements[3]) ||
+                            !Pattern.matches(RUNNING_TIME.getValue(), elements[4]) ||
+                            !Pattern.matches(SEAT_CHART.getValue(), elements[5])) {
+                        System.out.println(date + " Movie detail file content format does not match");
+                    }
+                    MovieDetail movieDetail = new MovieDetail(Integer.parseInt(elements[0]), elements[1], elements[2], elements[3], Integer.parseInt(elements[4]), Seat.stringToArray(elements[5]));
+                    movieDetailList.add(movieDetail);
+                }
+            }
+            return movieDetailList;
+        } catch (IOException e) {
+            return null;
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 
     public static void main(String[] args) {
