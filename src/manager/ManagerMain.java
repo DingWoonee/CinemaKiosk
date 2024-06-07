@@ -88,6 +88,7 @@ public class ManagerMain {
     private void execAddMovieSchedule() {
 
 
+
         // 상영 날짜 입력
         System.out.println("[영화 스케줄 추가]");
         System.out.println("상영 날짜 입력(8자리 숫자로 입력): ");
