@@ -85,8 +85,8 @@ public class Cancel {
 		// 아래 3개의 경우 detailList에 해당 detailId가 존재하지 않는 경우 예외 발생(아직 처리하지 않음)
 		try {
 			System.out.println("영화 제목: " + movieDetail.getMovieName());
-			System.out.println("상영관: " + movieDetail.getTheaterNum());
-			System.out.println("상영 시간: " + movieDetail.getTime().getTime());
+			System.out.println("상영관: " + movieDetail.getTheaterNumber());
+			System.out.println("상영 시간: " + movieDetail.getFormattedTime(movieDetail.getStartTime()) + " ~ " + movieDetail.getFormattedTime(movieDetail.getEndTime()));
 		} catch (NullPointerException e) {
 			System.out.println("NullPointerException");
 		}
