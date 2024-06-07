@@ -17,28 +17,4 @@ public class Movie {
         this.info = info;
         this.runningTime = runningTime;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    public Integer getRunningTime() {
-        return runningTime;
-    }
-
-    public void setRunningTime(Integer runningTime) {
-        this.runningTime = runningTime;
-    }
 }

@@ -97,47 +97,47 @@ public class ManagerMain {
         return movieDeleteTime;
     }
     public static void execDeleteMovieSchedule() {
-        Scanner sc = new Scanner(System.in);
-
-        //날짜 입력 받기
-        String inputDate = inputMovieDate();
-
-        //해당 날짜의 영화 스케줄 가져오기
-        List<MovieDetail> scheduleList = movieDetailList.
-        for (MovieDetail movieDetail : movieDetailList) {
-            if(movieDetail.getSchedule()
-        }
-
-        //날짜에 해당하는 스케줄이 없을 경우
-        if (scheduleList == null || scheduleList.isEmpty()) {
-            System.out.println("올바르지 않은 입력입니다.");
-            return;
-        }
-
-        // 영화 스케줄 정보 출력
-        System.out.println("[영화 스케줄 삭제]");
-        System.out.println("스케줄 번호\t영화 이름\t상영 날짜\t상영관\t시작 시간");
-        for (int i = 0; i < scheduleList.size(); i++) {
-            MovieDetail movieDetail = scheduleList.get(i);
-            System.out.println((i + 1) + "\t" + movieDetail.getTitle() + "\t" + movieDetail.getRunningDate() + "\t" + movieDetail.getScreenHall() + "\t" + movieDetail.getStartTime());
-        }
-
-        System.out.print("삭제할 스케줄 번호 입력(숫자만 입력): ");
-        String input = sc.nextLine().trim();
-
-        // 입력 값 검증 및 삭제
-        if (!input.matches("\\d+")) {
-            System.out.println("올바르지 않은 입력입니다.");
-            return;
-        }
-
-        int scheduleIndex = Integer.parseInt(input) - 1;
-
-
-
-        // 스케줄 삭제
-        MovieDetail removedMovieDetail = scheduleList.remove(scheduleIndex);
-
+//        Scanner sc = new Scanner(System.in);
+//
+//        //날짜 입력 받기
+//        String inputDate = inputMovieDate();
+//
+//        //해당 날짜의 영화 스케줄 가져오기
+//        List<MovieDetail> scheduleList = movieDetailList.
+//        for (MovieDetail movieDetail : movieDetailList) {
+//            if(movieDetail.getSchedule()
+//        }
+//
+//        //날짜에 해당하는 스케줄이 없을 경우
+//        if (scheduleList == null || scheduleList.isEmpty()) {
+//            System.out.println("올바르지 않은 입력입니다.");
+//            return;
+//        }
+//
+//        // 영화 스케줄 정보 출력
+//        System.out.println("[영화 스케줄 삭제]");
+//        System.out.println("스케줄 번호\t영화 이름\t상영 날짜\t상영관\t시작 시간");
+//        for (int i = 0; i < scheduleList.size(); i++) {
+//            MovieDetail movieDetail = scheduleList.get(i);
+//            System.out.println((i + 1) + "\t" + movieDetail.getTitle() + "\t" + movieDetail.getRunningDate() + "\t" + movieDetail.getScreenHall() + "\t" + movieDetail.getStartTime());
+//        }
+//
+//        System.out.print("삭제할 스케줄 번호 입력(숫자만 입력): ");
+//        String input = sc.nextLine().trim();
+//
+//        // 입력 값 검증 및 삭제
+//        if (!input.matches("\\d+")) {
+//            System.out.println("올바르지 않은 입력입니다.");
+//            return;
+//        }
+//
+//        int scheduleIndex = Integer.parseInt(input) - 1;
+//
+//
+//
+//        // 스케줄 삭제
+//        MovieDetail removedMovieDetail = scheduleList.remove(scheduleIndex);
+//
 
 
     }

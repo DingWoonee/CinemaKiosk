@@ -70,27 +70,27 @@ public class Cancel {
 
 	// 해당 Ticket의 예매 정보 출력
 	public void printTicketInfo(Ticket ticket) {
-		int detailId = ticket.getDetailId();
-		MovieDetail movieDetail = null;
-
-		// ticket의 detailId를 통해서 detailList<MovieDetail>의 정보를 얻어옴
-		for (MovieDetail md : FileManager.movieDetailList) {
-			if (detailId == md.getDetailId()) {
-				movieDetail = md;
-			}
-		}
-		System.out.println(Prompt.NEW_MENU_START.getPrompt());
-		System.out.println("[예매 정보 확인]");
-		System.out.println("예매 번호: " + ticket.getReservationId());
-		// 아래 3개의 경우 detailList에 해당 detailId가 존재하지 않는 경우 예외 발생(아직 처리하지 않음)
-		try {
-			System.out.println("영화 제목: " + movieDetail.getMovieName());
-			System.out.println("상영관: " + movieDetail.getTheaterNumber());
-			System.out.println("상영 시간: " + movieDetail.getFormattedTime(movieDetail.getStartTime()) + " ~ " + movieDetail.getFormattedTime(movieDetail.getEndTime()));
-		} catch (NullPointerException e) {
-			System.out.println("NullPointerException");
-		}
-		System.out.println();
+//		int detailId = ticket.getDetailId();
+//		MovieDetail movieDetail = null;
+//
+//		// ticket의 detailId를 통해서 detailList<MovieDetail>의 정보를 얻어옴
+//		for (MovieDetail md : FileManager.movieDetailList) {
+//			if (detailId == md.getDetailId()) {
+//				movieDetail = md;
+//			}
+//		}
+//		System.out.println(Prompt.NEW_MENU_START.getPrompt());
+//		System.out.println("[예매 정보 확인]");
+//		System.out.println("예매 번호: " + ticket.getReservationId());
+//		// 아래 3개의 경우 detailList에 해당 detailId가 존재하지 않는 경우 예외 발생(아직 처리하지 않음)
+//		try {
+//			System.out.println("영화 제목: " + movieDetail.getMovieName());
+//			System.out.println("상영관: " + movieDetail.getTheaterNumber());
+//			System.out.println("상영 시간: " + movieDetail.getFormattedTime(movieDetail.getStartTime()) + " ~ " + movieDetail.getFormattedTime(movieDetail.getEndTime()));
+//		} catch (NullPointerException e) {
+//			System.out.println("NullPointerException");
+//		}
+//		System.out.println();
 	}
 
 	// 최종 승인
