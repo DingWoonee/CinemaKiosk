@@ -68,9 +68,9 @@ public class Reservation {
         System.out.println();
         System.out.println("[영화정보]");
         System.out.println("-제목-");
-        System.out.println(FileManager.movieDetailList.get(selectedMovieNumber - 1).getName());
+        System.out.println(FileManager.movieDetailList.get(selectedMovieNumber - 1).getMovieName());
         System.out.println("-정보-");
-        System.out.println(FileManager.movieDetailList.get(selectedMovieNumber - 1).getInfo());
+        System.out.println(FileManager.movieDetailList.get(selectedMovieNumber - 1).getMovieInfo());
         System.out.println();
         System.out.println("[예매선택]");
         System.out.println("1. 예매하기");
@@ -198,7 +198,7 @@ public class Reservation {
     public List<Ticket> createAndAddTickets(List<String> seatCodes) {
         List<Ticket> tickets = new ArrayList<>();
         MovieDetail movieDetail = FileManager.movieDetailList.get(selectedMovieNumber - 1);
-        String theaterNum = movieDetail.getTheaterNum();
+        String theaterNum = movieDetail.getTheaterNumber();
         MovieTime movieTime = movieDetail.getTime();
 
         for (String seatCode : seatCodes) {
@@ -240,7 +240,7 @@ public class Reservation {
         for (Ticket ticket : tickets) {
             MovieDetail movieDetail = FileManager.movieDetailList.get(selectedMovieNumber - 1);
             System.out.println("예매번호: " + ticket.getReservationId());
-            System.out.println("영화 제목: " + movieDetail.getName());
+            System.out.println("영화 제목: " + movieDetail.getMovieName());
             System.out.println("상영관: " + movieDetail.getTheaterNum());
             System.out.println("상영 시간: " + movieDetail.getTime().getTime());
             System.out.println();

@@ -1,8 +1,12 @@
 package entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
-
+@Setter
+@Getter
 public class Movie {
     private String name;
     private String info;

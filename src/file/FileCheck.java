@@ -193,7 +193,7 @@ public class FileCheck {
         }
         String newLine = "";
         for (MovieDetail movieDetail : FileManager.movieDetailList) {
-            newLine += movieDetail.getDetailId() + "$" + movieDetail.getName() + "$" + movieDetail.getInfo() + "$" + movieDetail.getTheaterNum() + "$" + movieDetail.getTime().getTime() + "$" + Seat.seatToString(movieDetail.getSeatArray()) + "\n";
+            newLine += movieDetail.getDetailId() + "$" + movieDetail.getMovieName() + "$" + movieDetail.getMovieInfo() + "$" + movieDetail.getTheaterNum() + "$" + movieDetail.getTime().getTime() + "$" + Seat.seatToString(movieDetail.getSeatArray()) + "\n";
         }
         bw.write(newLine);
         return true;

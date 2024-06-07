@@ -1,8 +1,12 @@
 package entity;
 
-import java.util.ArrayList;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+@Getter
+@Setter
 public class MovieDetail {
     private int detailId;
     private String movieName;
@@ -20,57 +24,46 @@ public class MovieDetail {
         this.seatArray = seatArray;
     }
 
-    public int getDetailId() {
-        return detailId;
+    public String getTheaterNumber() {
+        // schedule의 앞 2글자를 반환
+        if (schedule != null && schedule.length() >= 2) {
+            return schedule.substring(0, 2);
+        } else {
+            return ""; // schedule이 null이거나 길이가 2보다 작을 경우 빈 문자열 반환
+        }
     }
 
-    public void setDetailId(int detailId) {
-        this.detailId = detailId;
+    public String getStartTimeFormatted() {
+        if (schedule != null && schedule.length() >= 6) {
+            String startTime = schedule.substring(2, 6);
+            if (startTime.length() == 4) {
+                return startTime.substring(0, 2) + "시 " + startTime.substring(2) + "분";
+            }
+        }
+        return ""; // 시작시간이 제대로 형성되지 않은 경우 빈 문자열 반환
     }
 
-    public String getMovieName() {
-        return movieName;
+    public String getEndTimeFormatted() {
+        if (schedule != null && schedule.length() >= 10) {
+            String endTime = schedule.substring(6, 10);
+            if (endTime.length() == 4) {
+                return endTime.substring(0, 2) + "시 " + endTime.substring(2) + "분";
+            }
+        }
+        return ""; // 종료시간이 제대로 형성되지 않은 경우 빈 문자열 반환
     }
 
-    public void setMovieName(String movieName) {
-        this.movieName = movieName;
-    }
-
-    public String getMovieInfo() {
-        return movieInfo;
-    }
-
-    public void setMovieInfo(String movieInfo) {
-        this.movieInfo = movieInfo;
-    }
-
-    public String getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(String schedule) {
-        this.schedule = schedule;
-    }
-
-    public Integer getRunningTime() {
-        return runningTime;
-    }
-
-    public void setRunningTime(Integer runningTime) {
-        this.runningTime = runningTime;
-    }
-
-    public int[][] getSeatArray() {
-        return seatArray;
-    }
-
-    public void setSeatArray(int[][] seatArray) {
-        this.seatArray = seatArray;
-    }
     public static void printMovieDetail(List<MovieDetail> movieDetailList){
         System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간");
-        for (int i=0;i<movieDetailList.size(); i++) {
-            System.out.printf("%d\t\t\t%s\t\t%s\t\t    %s\n", i+1,movieDetailList.get(i).name, movieDetailList.get(i).theaterNum, movieDetailList.get(i).time.getTime());
+        for (int i = 0; i < movieDetailList.size(); i++) {
+            MovieDetail detail = movieDetailList.get(i);
+            System.out.printf("%d\t\t\t%s\t\t%s\t\t%s\t\t%s\t%s\n",
+                    i + 1,
+                    detail.getMovieName(),
+                    detail.getTheaterNumber(),
+                    detail.getSchedule(),
+                    detail.getStartTimeFormatted(),
+                    detail.getEndTimeFormatted());
         }
     }
 
