@@ -33,28 +33,29 @@ public class MovieDetail {
         }
     }
 
-    public String getStartTimeFormatted() {
+    public String getStartTime() {
         if (schedule != null && schedule.length() >= 6) {
-            String startTime = schedule.substring(2, 6);
-            if (startTime.length() == 4) {
-                return startTime.substring(0, 2) + "시 " + startTime.substring(2) + "분";
-            }
+            return schedule.substring(2, 6);
         }
         return ""; // 시작시간이 제대로 형성되지 않은 경우 빈 문자열 반환
     }
 
-    public String getEndTimeFormatted() {
+    public String getEndTime() {
         if (schedule != null && schedule.length() >= 10) {
-            String endTime = schedule.substring(6, 10);
-            if (endTime.length() == 4) {
-                return endTime.substring(0, 2) + "시 " + endTime.substring(2) + "분";
-            }
+            return schedule.substring(6, 10);
         }
         return ""; // 종료시간이 제대로 형성되지 않은 경우 빈 문자열 반환
     }
 
+    public String getFormattedTime(String time) {
+        if (time.length() == 4) {
+            return time.substring(0, 2) + "시 " + time.substring(2) + "분";
+        }
+        return ""; // 시간 문자열이 제대로 형성되지 않은 경우 빈 문자열 반환
+    }
+
     public static void printMovieDetail(List<MovieDetail> movieDetailList){
-        System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간");
+        System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간\t\t시작시간\t종료시간");
         for (int i = 0; i < movieDetailList.size(); i++) {
             MovieDetail detail = movieDetailList.get(i);
             System.out.printf("%d\t\t\t%s\t\t%s\t\t%s\t\t%s\t%s\n",
@@ -62,8 +63,8 @@ public class MovieDetail {
                     detail.getMovieName(),
                     detail.getTheaterNumber(),
                     detail.getSchedule(),
-                    detail.getStartTimeFormatted(),
-                    detail.getEndTimeFormatted());
+                    detail.getFormattedTime(detail.getStartTime()),
+                    detail.getFormattedTime(detail.getEndTime()));
         }
     }
 
