@@ -27,6 +27,7 @@ public class Reservation {
         List<Ticket> tickets = createAndAddTickets(selectedSeats); // 4.티켓 생성, 추가
         FileManager.saveTicketInfo(); // 4. 티켓 저장
         reservationInfo(tickets); // 5. 티켓 정보 출력
+        
     }
 
 
@@ -228,6 +229,8 @@ public class Reservation {
                 theaterNum +
                 timeCode;
     }
+
+
 
     // 5. 예매 티켓 정보 출력
     public void reservationInfo(List<Ticket> tickets) {
