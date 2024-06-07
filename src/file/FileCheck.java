@@ -176,7 +176,7 @@ public class FileCheck {
                 System.out.println("Ticket info file content format does not match");
                 return false;
             } else {
-                Ticket newTicket = new Ticket(elements[0], elements[1], elements[2], Integer.parseInt(elements[3]));
+                Ticket newTicket = new Ticket(elements[0], elements[1], elements[2], elements[3]);
                 FileManager.ticketInfoList.add(newTicket);
             }
         } else {
