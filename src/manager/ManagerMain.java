@@ -11,7 +11,7 @@ import java.util.*;
 public class ManagerMain {
     private FileManager fileManager;
     static List<Movie> movieList = new ArrayList<>();
-
+    static List<MovieDetail> movieDetailList = new ArrayList<>();
     private boolean isDuplicateTitle = false;
 
     private int movieDetailId = 0;
@@ -20,6 +20,7 @@ public class ManagerMain {
     public ManagerMain(FileManager fileManager) {
         this.fileManager = fileManager;
         this.movieList = FileManager.movieList;
+        this.movieDetailList = FileManager.movieDetailList;
     }
 
     public void run() {
@@ -83,6 +84,7 @@ public class ManagerMain {
     }
 
     private void execDeleteMovieSchedule() {
+
     }
 
     private void execAddMovieSchedule() {
@@ -173,8 +175,48 @@ public class ManagerMain {
     }
 
     private void deleteMovie() {
+        Scanner sc = new Scanner(System.in);
+
+        // Display the list of movies with their indices
+        System.out.println("[영화 삭제]");
+        System.out.println("영화 번호\t영화 이름\t러닝 타임");
+        for (int i = 0; i < movieDetailList.size(); i++) {
+            MovieDetail movieDetail = movieDetailList.get(i);
+            int id = movieDetail.getDetailId();
+        }
+        System.out.print("번호 입력(숫자만 입력): ");
+        String input = sc.nextLine().trim();
+
+        // Validate input: only numbers are allowed
+        if (!input.matches("\\d+")) {
+            System.out.println("올바르지 않은 입력입니다.");
+            return;
+        }
+
+        int movieIndex = Integer.parseInt(input) - 1;
+
+        // Check if the index is valid
+        if (movieIndex < 0 || movieIndex >= movieList.size()) {
+            return;
+        }
+
+        // Confirm deletion
+        System.out.println("[정말 삭제하시겠습니까?]");
+        System.out.println("1. 삭제");
+        System.out.println("2. 취소");
+        System.out.print("번호 입력(숫자만 입력): ");
+        String confirmInput = sc.nextLine().trim();
+
+        if (!confirmInput.equals("1")) {
+            return;
+        }
+
+        // Remove the movie from the list
+        Movie removedMovie = movieList.remove(movieIndex);
+
 
     }
+
 
     private void addMovie() {
         // FileManager 클래스의 movieList에 접근
