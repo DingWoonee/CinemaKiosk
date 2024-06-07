@@ -16,12 +16,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-<<<<<<< HEAD
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.28/lombok-1.18.28.jar!/" />
-=======
     <orderEntry type="module-library" scope="PROVIDED">
       <library>
         <CLASSES>
@@ -71,7 +65,6 @@
       <library>
         <CLASSES>
           <root url="jar://$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.30/lombok-1.18.30.jar!/" />
->>>>>>> 55a48ade8bf075270e8fb8df0985a16965a3400d
         </CLASSES>
         <JAVADOC />
         <SOURCES />
