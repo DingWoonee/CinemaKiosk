@@ -177,7 +177,6 @@ public class ManagerMain {
     private void deleteMovie() {
         Scanner sc = new Scanner(System.in);
 
-        // Display the list of movies with their indices
         System.out.println("[영화 삭제]");
         System.out.println("영화 번호\t영화 이름\t러닝 타임");
         for (int i = 0; i < movieDetailList.size(); i++) {
@@ -187,7 +186,6 @@ public class ManagerMain {
         System.out.print("번호 입력(숫자만 입력): ");
         String input = sc.nextLine().trim();
 
-        // Validate input: only numbers are allowed
         if (!input.matches("\\d+")) {
             System.out.println("올바르지 않은 입력입니다.");
             return;
@@ -195,12 +193,10 @@ public class ManagerMain {
 
         int movieIndex = Integer.parseInt(input) - 1;
 
-        // Check if the index is valid
         if (movieIndex < 0 || movieIndex >= movieList.size()) {
             return;
         }
 
-        // Confirm deletion
         System.out.println("[정말 삭제하시겠습니까?]");
         System.out.println("1. 삭제");
         System.out.println("2. 취소");
@@ -211,7 +207,6 @@ public class ManagerMain {
             return;
         }
 
-        // Remove the movie from the list
         Movie removedMovie = movieList.remove(movieIndex);
 
 
