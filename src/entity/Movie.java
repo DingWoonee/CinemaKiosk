@@ -6,18 +6,12 @@ import java.util.List;
 public class Movie {
     private String name;
     private String info;
-    private List<String> theaterNumList;
-    private MovieTime time;
+    private Integer runningTime;
 
-    public Movie() {
-        this.theaterNumList = new ArrayList<>();
-    }
-
-    public Movie(String name, String info, List<String> theaterNumList, MovieTime time) {
+    public Movie(String name, String info, Integer runningTime) {
         this.name = name;
         this.info = info;
-        this.theaterNumList = theaterNumList;
-        this.time = time;
+        this.runningTime = runningTime;
     }
 
     public String getName() {
@@ -36,19 +30,11 @@ public class Movie {
         this.info = info;
     }
 
-    public List<String> getTheaterNumList() {
-        return theaterNumList;
+    public Integer getRunningTime() {
+        return runningTime;
     }
 
-    public void setTheaterNumList(List<String> theaterNum) {
-        this.theaterNumList = theaterNum;
-    }
-
-    public MovieTime getTime() {
-        return time;
-    }
-
-    public void setTime(MovieTime time) {
-        this.time = time;
+    public void setRunningTime(Integer runningTime) {
+        this.runningTime = runningTime;
     }
 }

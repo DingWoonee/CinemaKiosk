@@ -5,15 +5,7 @@ import etc.Prompt;
 public class Ticket {
     private String reservationId;
     private String reservationPw;
-    private int detailId;
-
-    public Ticket(String reservationId, String reservationPw, int detailId, String seatCode) {
-        this.reservationId = reservationId;
-        this.reservationPw = reservationPw;
-        this.detailId = detailId;
-        this.seatCode = seatCode;
-    }
-
+    private String movieName;
     private String seatCode;
 
     public String getReservationId() {
@@ -32,12 +24,12 @@ public class Ticket {
         this.reservationPw = reservationPw;
     }
 
-    public int getDetailId() {
-        return detailId;
+    public String getMovieName() {
+        return movieName;
     }
 
-    public void setDetailId(int detailId) {
-        this.detailId = detailId;
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
     }
 
     public String getSeatCode() {
