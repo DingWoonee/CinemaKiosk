@@ -21,6 +21,7 @@ public class FileManager {
 
     private final static String movieListFileName = "movie_list.txt";
     private final static String ticketInfoFileName = "ticket_info.txt";
+    private final static String movieDetailFolder = "ticket_info";
 
     public static boolean isTheaterNumExist(String num) {
         for (Seat seat : seatList) {
@@ -101,13 +102,35 @@ public class FileManager {
     public static boolean saveMovieDetail() {
         String fileContent = "";
         for (MovieDetail movieDetail : movieDetailList) {
-            String newLine = movieDetail.getDetailId() + "$" + movieDetail.getMovieName() + "$" + movieDetail.getMovieInfo() + "$" + movieDetail.getSchedule() + "$" + movieDetail.getRunningTime() + "$" ;
+            String newLine = movieDetail.getDetailId() + "$" + movieDetail.getMovieName() + "$" + movieDetail.getMovieInfo() + "$" + movieDetail.getSchedule() + "$" + movieDetail.getRunningTime() + "$" + Seat.seatToString(movieDetail.getSeatArray());
+
+            fileContent += newLine;
         }
-        return true;
+        // fileContent 변수의 내용을 movie_list.txt에 덮어씀
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(movieDetailFolder + "/" + todayDate + ".txt"))) {
+            bw.write(fileContent);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static boolean saveMovieDetail2(String date, List<MovieDetail> movieDetailList) {
-        return true;
+        String fileContent = "";
+        for (MovieDetail movieDetail : movieDetailList) {
+            String newLine = movieDetail.getDetailId() + "$" + movieDetail.getMovieName() + "$" + movieDetail.getMovieInfo() + "$" + movieDetail.getSchedule() + "$" + movieDetail.getRunningTime() + "$" + Seat.seatToString(movieDetail.getSeatArray());
+
+            fileContent += newLine;
+        }
+        // fileContent 변수의 내용을 movie_list.txt에 덮어씀
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(movieDetailFolder + "/" + date + ".txt"))) {
+            bw.write(fileContent);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // 정규 표현식과 input을 비교하는 메소드
@@ -124,21 +147,5 @@ public class FileManager {
         } else {
             return true;
         }
-    }
-
-
-    public static void main(String[] args) {
-        for (int i = 0; i < 10; i++) {
-            List<String> a = new ArrayList<>();
-            a.add("01");
-            a.add("02");
-            Movie movie = new Movie("이름", "재밌어요", a, MovieTime.Time1);
-            movieList.add(movie);
-        }
-        //saveMovie();
-        System.out.println(RE.DATE_EIGHT.getValue());
-
-        FileManager.inputDate();
-        System.out.println(todayDate);
     }
 }
