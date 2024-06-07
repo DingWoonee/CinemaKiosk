@@ -39,7 +39,9 @@ public class ManagerMain {
             System.out.println("1. 영화 목록 출력");
             System.out.println("2. 영화 추가");
             System.out.println("3. 영화 삭제");
-            System.out.println("4. 홈");
+            System.out.println("4. 영화 스케줄 추가");
+            System.out.println("5. 영화 스케줄 삭제");
+            System.out.println("6. 홈");
             System.out.print("번호 입력(숫자만 입력): ");
             String choiceString = sc.nextLine().trim();
             if(!choiceString.matches(RE.MANAGER_MODE_INPUT.getValue())){
@@ -61,6 +63,9 @@ public class ManagerMain {
                     break;
                 case 4:
                     execAddMovieSchedule();
+                case 5:
+                    execDeleteMovieSchedule();
+
                 case 6:
                     // 홈 프롬프트 돌아갑니다..
                     isGoHome = true;
@@ -75,6 +80,9 @@ public class ManagerMain {
             }
         }
 
+    }
+
+    private void execDeleteMovieSchedule() {
     }
 
     private void execAddMovieSchedule() {
