@@ -5,62 +5,59 @@ import java.util.List;
 
 public class MovieDetail {
     private int detailId;
-    private String name;
-    private String info;
-    private String theaterNum;
-    private MovieTime time;
+    private String movieName;
+    private String movieInfo;
+    private String schedule;
+    private Integer runningTime;
+    private int[][] seatArray;
 
-
-    public MovieDetail(int detailId, String name, String info, String theaterNum, MovieTime time, int[][] seatArray) {
+    public MovieDetail(int detailId, String movieName, String movieInfo, String schedule, Integer runningTime, int[][] seatArray) {
         this.detailId = detailId;
-        this.name = name;
-        this.info = info;
-        this.theaterNum = theaterNum;
-        this.time = time;
+        this.movieName = movieName;
+        this.movieInfo = movieInfo;
+        this.schedule = schedule;
+        this.runningTime = runningTime;
         this.seatArray = seatArray;
     }
 
-    private int[][] seatArray;
-
     public int getDetailId() {
         return detailId;
-
     }
 
     public void setDetailId(int detailId) {
         this.detailId = detailId;
     }
 
-    public String getName() {
-        return name;
+    public String getMovieName() {
+        return movieName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
     }
 
-    public String getInfo() {
-        return info;
+    public String getMovieInfo() {
+        return movieInfo;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setMovieInfo(String movieInfo) {
+        this.movieInfo = movieInfo;
     }
 
-    public String getTheaterNum() {
-        return theaterNum;
+    public String getSchedule() {
+        return schedule;
     }
 
-    public void setTheaterNum(String theaterNum) {
-        this.theaterNum = theaterNum;
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 
-    public MovieTime getTime() {
-        return time;
+    public Integer getRunningTime() {
+        return runningTime;
     }
 
-    public void setTime(MovieTime time) {
-        this.time = time;
+    public void setRunningTime(Integer runningTime) {
+        this.runningTime = runningTime;
     }
 
     public int[][] getSeatArray() {
