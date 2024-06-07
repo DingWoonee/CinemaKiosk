@@ -68,16 +68,7 @@ public class FileManager {
     public static boolean saveMovie() {
         String fileContent = "";
         for (Movie movie : movieList) {
-            String newLine = movie.getName() + "$" + movie.getInfo() + "$";
-            for (int i = 0; i < movie.getTheaterNumList().size(); i++) {
-                String theater = movie.getTheaterNumList().get(i);
-                if (i == movie.getTheaterNumList().size() - 1) {
-                    newLine += (theater);
-                } else {
-                    newLine += (theater + "|");
-                }
-            }
-            newLine += "$" + movie.getTime().getTime() + "\n";
+            String newLine = movie.getName() + "$" + movie.getInfo() + "$" + movie.getRunningTime();
             fileContent += newLine;
         }
         // fileContent 변수의 내용을 movie_list.txt에 덮어씀
@@ -93,7 +84,7 @@ public class FileManager {
     public static boolean saveTicketInfo() {
         String fileContent = "";
         for (Ticket ticket : ticketInfoList) {
-            String newLine = ticket.getReservationId() + "$" + ticket.getReservationPw() + "$" + ticket.getDetailId() + "$" + ticket.getSeatCode() + "\n";
+            String newLine = ticket.getReservationId() + "$" + ticket.getReservationPw() + "$" + ticket.getMovieName() + "$" + ticket.getSeatCode() + "\n";
 
             fileContent += newLine;
         }
@@ -105,6 +96,18 @@ public class FileManager {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static boolean saveMovieDetail() {
+        String fileContent = "";
+        for (MovieDetail movieDetail : movieDetailList) {
+            String newLine = movieDetail.getDetailId() + "$" + movieDetail.getMovieName() + "$" + movieDetail.getMovieInfo() + "$" + movieDetail.getSchedule() + "$" + movieDetail.getRunningTime() + "$" ;
+        }
+        return true;
+    }
+
+    public static boolean saveMovieDetail2(String date, List<MovieDetail> movieDetailList) {
+        return true;
     }
 
     // 정규 표현식과 input을 비교하는 메소드
