@@ -11,7 +11,7 @@ import java.util.*;
 public class ManagerMain {
     private FileManager fileManager;
     static List<Movie> movieList = new ArrayList<>();
-
+    static List<MovieDetail> movieDetailList = new ArrayList<>();
     private boolean isDuplicateTitle = false;
 
     private int movieDetailId = 0;
@@ -20,6 +20,7 @@ public class ManagerMain {
     public ManagerMain(FileManager fileManager) {
         this.fileManager = fileManager;
         this.movieList = FileManager.movieList;
+        this.movieDetailList = FileManager.movieDetailList;
     }
 
     public void run() {
@@ -63,8 +64,10 @@ public class ManagerMain {
                     break;
                 case 4:
                     execAddMovieSchedule();
+                    break;
                 case 5:
                     execDeleteMovieSchedule();
+                    break;
 
                 case 6:
                     // 홈 프롬프트 돌아갑니다..
@@ -81,11 +84,66 @@ public class ManagerMain {
         }
 
     }
+    public static String inputMovieDate() {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("삭제할 날짜 입력(8자리 숫자로 입력): ");
+        String movieDeleteTime = sc.nextLine().trim();
 
-    private void execDeleteMovieSchedule() {
+        //날짜 형식 검사
+        if (!movieDeleteTime.matches("\\d{8}")) {
+            throw new InvalidInputException("올바르지 않은 입력입니다.");
+        }
+
+        return movieDeleteTime;
+    }
+    public static void execDeleteMovieSchedule() {
+//        Scanner sc = new Scanner(System.in);
+//
+//        //날짜 입력 받기
+//        String inputDate = inputMovieDate();
+//
+//        //해당 날짜의 영화 스케줄 가져오기
+//        List<MovieDetail> scheduleList = movieDetailList.
+//        for (MovieDetail movieDetail : movieDetailList) {
+//            if(movieDetail.getSchedule()
+//        }
+//
+//        //날짜에 해당하는 스케줄이 없을 경우
+//        if (scheduleList == null || scheduleList.isEmpty()) {
+//            System.out.println("올바르지 않은 입력입니다.");
+//            return;
+//        }
+//
+//        // 영화 스케줄 정보 출력
+//        System.out.println("[영화 스케줄 삭제]");
+//        System.out.println("스케줄 번호\t영화 이름\t상영 날짜\t상영관\t시작 시간");
+//        for (int i = 0; i < scheduleList.size(); i++) {
+//            MovieDetail movieDetail = scheduleList.get(i);
+//            System.out.println((i + 1) + "\t" + movieDetail.getTitle() + "\t" + movieDetail.getRunningDate() + "\t" + movieDetail.getScreenHall() + "\t" + movieDetail.getStartTime());
+//        }
+//
+//        System.out.print("삭제할 스케줄 번호 입력(숫자만 입력): ");
+//        String input = sc.nextLine().trim();
+//
+//        // 입력 값 검증 및 삭제
+//        if (!input.matches("\\d+")) {
+//            System.out.println("올바르지 않은 입력입니다.");
+//            return;
+//        }
+//
+//        int scheduleIndex = Integer.parseInt(input) - 1;
+//
+//
+//
+//        // 스케줄 삭제
+//        MovieDetail removedMovieDetail = scheduleList.remove(scheduleIndex);
+//
+
+
     }
 
     private void execAddMovieSchedule() {
+
 
 
         // 상영 날짜 입력
@@ -173,8 +231,43 @@ public class ManagerMain {
     }
 
     private void deleteMovie() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("[영화 삭제]");
+        System.out.println("영화 번호\t영화 이름\t러닝 타임");
+        for (int i = 0; i < movieDetailList.size(); i++) {
+            MovieDetail movieDetail = movieDetailList.get(i);
+            int id = movieDetail.getDetailId();
+        }
+        System.out.print("번호 입력(숫자만 입력): ");
+        String input = sc.nextLine().trim();
+
+        if (!input.matches("\\d+")) {
+            System.out.println("올바르지 않은 입력입니다.");
+            return;
+        }
+
+        int movieIndex = Integer.parseInt(input) - 1;
+
+        if (movieIndex < 0 || movieIndex >= movieList.size()) {
+            return;
+        }
+
+        System.out.println("[정말 삭제하시겠습니까?]");
+        System.out.println("1. 삭제");
+        System.out.println("2. 취소");
+        System.out.print("번호 입력(숫자만 입력): ");
+        String confirmInput = sc.nextLine().trim();
+
+        if (!confirmInput.equals("1")) {
+            return;
+        }
+
+        Movie removedMovie = movieList.remove(movieIndex);
+
 
     }
+
 
     private void addMovie() {
         // FileManager 클래스의 movieList에 접근

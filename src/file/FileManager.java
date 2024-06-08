@@ -20,8 +20,8 @@ public class FileManager {
     public static Manager manager = new Manager();
 
     private final static String movieListFileName = "movie_list.txt";
-    private final static String ticketInfoFileName = "ticket_info.txt";
-    private final static String movieDetailFolder = "ticket_info";
+    private final static String ticketInfoFolder = "ticket_info";
+    private final static String movieDetailFolder = "movie_detail_list";
 
     public static boolean isTheaterNumExist(String num) {
         for (Seat seat : seatList) {
@@ -90,7 +90,7 @@ public class FileManager {
             fileContent += newLine;
         }
         // fileContent 변수의 내용을 movie_list.txt에 덮어씀
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ticketInfoFileName))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ticketInfoFolder + "/" + todayDate + ".txt"))) {
             bw.write(fileContent);
             return true;
         } catch (IOException e) {
