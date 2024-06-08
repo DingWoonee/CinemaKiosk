@@ -69,7 +69,7 @@ public class FileManager {
     public static boolean saveMovie() {
         String fileContent = "";
         for (Movie movie : movieList) {
-            String newLine = movie.getName() + "$" + movie.getInfo() + "$" + movie.getRunningTime();
+            String newLine = movie.getName() + "$" + movie.getInfo() + "$" + movie.getRunningTime() + "\n";
             fileContent += newLine;
         }
         // fileContent 변수의 내용을 movie_list.txt에 덮어씀
