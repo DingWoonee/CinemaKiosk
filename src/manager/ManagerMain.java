@@ -138,13 +138,15 @@ public class ManagerMain {
 
     private void execAddMovieSchedule() {
         List<Movie> movieLists = movieList;
-        List<MovieDetail> movieDetailLists = movieDetailList;
+        //List<MovieDetail> movieDetailLists = movieDetailList;
 
 
         // 상영 날짜 입력
         System.out.println("[영화 스케줄 추가]");
         System.out.print("상영 날짜 입력(8자리 숫자로 입력): ");
         String runningDate = inputRunningDate();
+
+        List<MovieDetail> movieDetailLists = FileCheck.getMovieDetail(runningDate);
 
         // 상영관 입력
         System.out.println("[영화 스케줄 추가]");
@@ -298,7 +300,9 @@ public class ManagerMain {
     }
 
     private boolean checkMoiveNumber(String movieNumber) {
-        return movieList.size() <= Integer.parseInt(movieNumber);//movieNumber.matches(RE.MOVIENUMBER.getValue());
+        System.out.println(movieList.size());
+        System.out.println(Integer.parseInt(movieNumber));
+        return movieList.size() >= Integer.parseInt(movieNumber);//movieNumber.matches(RE.MOVIENUMBER.getValue());
     }
 
     private String inputScreenHall() {

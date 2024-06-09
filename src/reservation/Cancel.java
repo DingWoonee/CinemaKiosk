@@ -73,7 +73,6 @@ public class Cancel {
 //		int detailId = ticket.getDetailId();
 //		MovieDetail movieDetail = null;
 //
-//		// ticket의 detailId를 통해서 detailList<MovieDetail>의 정보를 얻어옴
 //		for (MovieDetail md : FileManager.movieDetailList) {
 //			if (detailId == md.getDetailId()) {
 //				movieDetail = md;
