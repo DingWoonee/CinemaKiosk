@@ -6,6 +6,9 @@ import etc.RE;
 
 import file.FileManager;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class ManagerMain {
@@ -143,32 +146,116 @@ public class ManagerMain {
     }
 
     private void execAddMovieSchedule() {
-
+        List<Movie> movieLists = movieList;
+        List<MovieDetail> movieDetailLists = movieDetailList;
 
 
         // 상영 날짜 입력
         System.out.println("[영화 스케줄 추가]");
-        System.out.println("상영 날짜 입력(8자리 숫자로 입력): ");
+        System.out.print("상영 날짜 입력(8자리 숫자로 입력): ");
         String runningDate = inputRunningDate();
 
         // 상영관 입력
         System.out.println("[영화 스케줄 추가]");
-        System.out.println("- 상영 날짜: " + runningDate);
+        System.out.println("- 상영 날짜: " + runningDate.substring(0, 4) + "년 " + runningDate.substring(4, 6) + "월 " + runningDate.substring(6, 8) + "일 ");
         System.out.println();
         System.out.print("상영관 입력(상영관 번호 두 자리 숫자만 입력): ");
         String screenHall = inputScreenHall();
 
 
 
+
         // 영화 번호 입력
+        int number = 1;
+        System.out.println("[영화 스케줄 추가]");
+        System.out.println("- 상영 날짜: " + runningDate.substring(0, 4) + "년 " + runningDate.substring(4, 6) + "월 " + runningDate.substring(6, 8) + "일 ");
+        System.out.println("- 상영관: " + screenHall + "관");
+        System.out.println("- 해당 날짜 " + screenHall + "관 기존 상영 정보");
+
+        // 리스트 크기 확인
+        int size = movieDetailLists.size();
+
+        for (int i = 0; i < size; i++) {
+            MovieDetail detail = movieDetailLists.get(i);
+            System.out.print(detail.getMovieName() + ": ");
+            System.out.print(detail.getStartTime().substring(0, 2) + "시" + detail.getStartTime().substring(2, 4) + "분");
+            System.out.print(" ~ ");
+            System.out.print(detail.getEndTime().substring(0, 2) + "시" + detail.getEndTime().substring(2, 4) + "분");
+            if (i < size - 1) {
+                System.out.print(" / ");
+            } else {
+                System.out.println(); // 마지막 요소는 "/"를 붙이지 않음
+            }
+        }
+        System.out.println();
+        // 해야할 것 : <영화이름>: (시작시간~끝시간 /)* 시작시간~끝시간
+
+        System.out.println("영화번호\t영화 이름\t러닝 타임");
+        for (Movie movieList : movieLists) {
+            System.out.print(number++);
+            System.out.print("\t\t");
+            System.out.print(movieList.getName());
+            System.out.print("\t\t");
+            System.out.println(movieList.getRunningTime());
+        }
+
         System.out.print("추가할 영화 번호 입력(숫자만 입력): ");
         String movieNumber = inputMovieNumber();
+        System.out.println();
+
 
         // 상영 시작 시간 입력
-        System.out.println("상영 시작 시간 입력(4자리 숫자로 입력): ");
+        Movie selectedMovie = movieLists.get(Integer.parseInt(movieNumber)-1);
+        String addMovieName = selectedMovie.getName();
+
+        System.out.println("[영화 스케줄 추가]");
+        System.out.println("- 상영 날짜: " + runningDate.substring(0, 4) + "년 " + runningDate.substring(4, 6) + "월 " + runningDate.substring(6, 8) + "일 ");
+        System.out.println("- 상영관: " + screenHall + "관");
+        System.out.println("- 해당 날짜 " + screenHall + "관 기존 상영 정보");
+        System.out.println();
+        System.out.println("추가할 영화 이름: " + addMovieName);
+        System.out.println();
+        System.out.print("상영 시작 시간 입력(4자리 숫자로 입력): ");
+
         String start;
         start = inputMoiveStartTime();
 
+        // 문자열을 시간으로 파싱
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
+        LocalTime startTime = LocalTime.parse(start, formatter);
+
+        // 더한 시간 계산
+        LocalTime endTime = startTime.plusMinutes(selectedMovie.getRunningTime());
+
+
+
+
+        System.out.println("[영화 스케줄 추가 완료]");
+        System.out.println("- 영화 이름: " + addMovieName);
+        System.out.println("- 상영 날짜: " + runningDate.substring(0, 4) + "년 " + runningDate.substring(4, 6) + "월 " + runningDate.substring(6, 8) + "일 ");
+        System.out.println("- 상영관: " + screenHall + "관");
+        System.out.println("- 상영 시작 시간: " + formatTime(startTime));
+        System.out.println("- 상영 종료 시간: " + formatTime(endTime));
+
+        int movieListSize =  movieDetailLists.size();
+        System.out.println(movieListSize);
+
+        StringBuilder scheduleBuild = new StringBuilder();
+        scheduleBuild.append(screenHall).append(start).append(endTime.format(formatter));
+        String schedule = new String(scheduleBuild);
+
+
+        List<Seat> seatList = FileManager.seatList;
+        Seat seat = seatList.get(Integer.parseInt(screenHall) - 1);
+        MovieDetail newMovieDetail = new MovieDetail(movieListSize, addMovieName, selectedMovie.getInfo(), schedule, selectedMovie.getRunningTime(), seat.getSeatArray());
+        movieDetailLists.add(newMovieDetail);
+        movieDetailList = movieDetailLists;
+    }
+
+    // 시간을 "H시 mm분" 형식으로 포맷하는 메소드
+    private static String formatTime(LocalTime time) {
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("H시 mm분");
+        return time.format(outputFormatter);
     }
 
     private String inputMoiveStartTime() {
@@ -304,6 +391,8 @@ public class ManagerMain {
 
         Movie newMoive = new Movie(movieName, movieDescription, runningTime);
 
+        movies.add(newMoive);
+
         // movieList에 넣기
         FileManager.movieList = movies;
         FileManager.saveMovie();
@@ -380,6 +469,11 @@ public class ManagerMain {
     public static void movieListPrint() {
         movieList = FileManager.movieList;
 
+        System.out.println("[영화 목록 출력]");
+        System.out.println("영화 이름\t러닝 타임");
+        for (Movie movie : movieList) {
+            System.out.println(movie.getName() + "\t\t" + movie.getRunningTime());
+        }
     }
 
     public static void main(String[] args) {
