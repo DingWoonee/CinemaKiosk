@@ -119,7 +119,7 @@ public class FileManager {
     public static boolean saveMovieDetail2(String date, List<MovieDetail> movieDetailList) {
         String fileContent = "";
         for (MovieDetail movieDetail : movieDetailList) {
-            String newLine = movieDetail.getDetailId() + "$" + movieDetail.getMovieName() + "$" + movieDetail.getMovieInfo() + "$" + movieDetail.getSchedule() + "$" + movieDetail.getRunningTime() + "$" + Seat.seatToString(movieDetail.getSeatArray());
+            String newLine = movieDetail.getDetailId() + "$" + movieDetail.getMovieName() + "$" + movieDetail.getMovieInfo() + "$" + movieDetail.getSchedule() + "$" + movieDetail.getRunningTime() + "$" + Seat.seatToString(movieDetail.getSeatArray()) + "\n";
 
             fileContent += newLine;
         }
@@ -160,5 +160,13 @@ public class FileManager {
         } else {
             return true;
         }
+    }
+
+    public static void main(String[] args) {
+        List<MovieDetail> movieDetailList1 = new ArrayList<>();
+        movieDetailList1.add(new MovieDetail(1, "기생충", "기생충 같이 사는 사람들의 이야기", "0112201440", 140, new int[][]{{0, 0, 0, 0}, {0, 0, 0, 0}}));
+        movieDetailList1.add(new MovieDetail(2, "기생충2", "222기생충 같이 사는 사람들의 이야기", "0115201740", 140, new int[][]{{0, 0, 0, 0}, {0, 0, 0, 0}}));
+
+        saveMovieDetail2("20240101", movieDetailList1);
     }
 }
