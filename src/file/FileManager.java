@@ -124,9 +124,22 @@ public class FileManager {
             fileContent += newLine;
         }
         // fileContent 변수의 내용을 movie_list.txt에 덮어씀
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(movieDetailFolder + "/" + date + ".txt"))) {
-            bw.write(fileContent);
-            return true;
+        // 파일과 디렉토리가 없을 경우 생성
+        try {
+            File directory = new File(movieDetailFolder);
+            if (!directory.exists()) {
+                directory.mkdirs(); // 디렉토리가 없으면 생성
+            }
+
+            File file = new File(movieDetailFolder + "/" + date + ".txt");
+            if (!file.exists()) {
+                file.createNewFile(); // 파일이 없으면 생성
+            }
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+                bw.write(fileContent.toString());
+                return true;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return false;
