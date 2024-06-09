@@ -5,6 +5,7 @@ import etc.Prompt;
 import etc.RE;
 
 import file.FileManager;
+import reservation.GoHomePromptException;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -162,9 +163,6 @@ public class ManagerMain {
         System.out.print("상영관 입력(상영관 번호 두 자리 숫자만 입력): ");
         String screenHall = inputScreenHall();
 
-
-
-
         // 영화 번호 입력
         int number = 1;
         System.out.println("[영화 스케줄 추가]");
@@ -218,7 +216,16 @@ public class ManagerMain {
         System.out.print("상영 시작 시간 입력(4자리 숫자로 입력): ");
 
         String start;
-        start = inputMoiveStartTime();
+        start = inputMoiveStartTime(); //4자리인지는 체크 해주길
+
+
+        for (MovieDetail detailList : movieDetailLists) {
+            String schedule = detailList.getSchedule();
+            if (isWithinSchedule(schedule, start)){
+                throw new GoHomePromptException(Prompt.BAD_INPUT.getPrompt());
+            }    
+        }
+        
 
         // 문자열을 시간으로 파싱
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
@@ -249,7 +256,22 @@ public class ManagerMain {
         Seat seat = seatList.get(Integer.parseInt(screenHall) - 1);
         MovieDetail newMovieDetail = new MovieDetail(movieListSize, addMovieName, selectedMovie.getInfo(), schedule, selectedMovie.getRunningTime(), seat.getSeatArray());
         movieDetailLists.add(newMovieDetail);
-        movieDetailList = movieDetailLists;
+        //movieDetailList = movieDetailLists;
+        FileManager.saveMovieDetail2(runningDate, movieDetailLists);
+    }
+
+    private boolean isWithinSchedule(String schedule, String start) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
+
+        // 기존 스케줄의 시작 시간과 종료 시간
+        LocalTime scheduleStart = LocalTime.parse(schedule.substring(2, 6), formatter);
+        LocalTime scheduleEnd = LocalTime.parse(schedule.substring(6, 10), formatter);
+
+        // 입력한 시작 시간
+        LocalTime inputStart = LocalTime.parse(start, formatter).plusMinutes(1);
+
+        // 입력된 시간이 기존 스케줄 내에 있는지 확인
+        return !inputStart.isBefore(scheduleStart) && !inputStart.isAfter(scheduleEnd);
     }
 
     // 시간을 "H시 mm분" 형식으로 포맷하는 메소드
@@ -261,6 +283,8 @@ public class ManagerMain {
     private String inputMoiveStartTime() {
         Scanner sc = new Scanner(System.in);
         String startTime = sc.nextLine().trim();
+
+
 
         if(!checkStartTime(startTime)){
             throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
@@ -284,7 +308,7 @@ public class ManagerMain {
     }
 
     private boolean checkMoiveNumber(String movieNumber) {
-        return true; //movieNumber.matches(RE.MOVIENUMBER.getValue());
+        return movieList.size() <= Integer.parseInt(movieNumber);//movieNumber.matches(RE.MOVIENUMBER.getValue());
     }
 
     private String inputScreenHall() {
@@ -444,11 +468,9 @@ public class ManagerMain {
             return false;
         }
 
-        if (movieList != null) { // 중복체크
-            for (Movie movie : movieList) {
-                if (movie.getName().equals(movieTitle)) {
-                    isDuplicateTitle = true;
-                }
+        for (Movie movie : movieList) { // 중복된 영화 이름
+            if(movie.getName().equals(movieTitle)){
+                return false;
             }
         }
 
