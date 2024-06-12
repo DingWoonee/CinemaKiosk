@@ -20,7 +20,8 @@ public class FileManager {
     public static Manager manager = new Manager();
 
     private final static String movieListFileName = "movie_list.txt";
-    private final static String ticketInfoFileName = "ticket_info.txt";
+
+    private final static String ticketInfoFolder = "ticket_info";
     private final static String movieDetailFolder = "movie_detail_list";
 
     public static boolean isTheaterNumExist(String num) {
@@ -69,7 +70,7 @@ public class FileManager {
     public static boolean saveMovie() {
         String fileContent = "";
         for (Movie movie : movieList) {
-            String newLine = movie.getName() + "$" + movie.getInfo() + "$" + movie.getRunningTime();
+            String newLine = movie.getName() + "$" + movie.getInfo() + "$" + movie.getRunningTime() + "\n";
             fileContent += newLine;
         }
         // fileContent 변수의 내용을 movie_list.txt에 덮어씀
@@ -90,7 +91,7 @@ public class FileManager {
             fileContent += newLine;
         }
         // fileContent 변수의 내용을 movie_list.txt에 덮어씀
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ticketInfoFileName))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(ticketInfoFolder + "/" + todayDate + ".txt"))) {
             bw.write(fileContent);
             return true;
         } catch (IOException e) {
@@ -119,14 +120,27 @@ public class FileManager {
     public static boolean saveMovieDetail2(String date, List<MovieDetail> movieDetailList) {
         String fileContent = "";
         for (MovieDetail movieDetail : movieDetailList) {
-            String newLine = movieDetail.getDetailId() + "$" + movieDetail.getMovieName() + "$" + movieDetail.getMovieInfo() + "$" + movieDetail.getSchedule() + "$" + movieDetail.getRunningTime() + "$" + Seat.seatToString(movieDetail.getSeatArray());
+            String newLine = movieDetail.getDetailId() + "$" + movieDetail.getMovieName() + "$" + movieDetail.getMovieInfo() + "$" + movieDetail.getSchedule() + "$" + movieDetail.getRunningTime() + "$" + Seat.seatToString(movieDetail.getSeatArray()) + "\n";
 
             fileContent += newLine;
         }
         // fileContent 변수의 내용을 movie_list.txt에 덮어씀
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(movieDetailFolder + "/" + date + ".txt"))) {
-            bw.write(fileContent);
-            return true;
+        // 파일과 디렉토리가 없을 경우 생성
+        try {
+            File directory = new File(movieDetailFolder);
+            if (!directory.exists()) {
+                directory.mkdirs(); // 디렉토리가 없으면 생성
+            }
+
+            File file = new File(movieDetailFolder + "/" + date + ".txt");
+            if (!file.exists()) {
+                file.createNewFile(); // 파일이 없으면 생성
+            }
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+                bw.write(fileContent.toString());
+                return true;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -147,5 +161,13 @@ public class FileManager {
         } else {
             return true;
         }
+    }
+
+    public static void main(String[] args) {
+        List<MovieDetail> movieDetailList1 = new ArrayList<>();
+        movieDetailList1.add(new MovieDetail(1, "기생충", "기생충 같이 사는 사람들의 이야기", "0112201440", 140, new int[][]{{0, 0, 0, 0}, {0, 0, 0, 0}}));
+        movieDetailList1.add(new MovieDetail(2, "기생충2", "222기생충 같이 사는 사람들의 이야기", "0115201740", 140, new int[][]{{0, 0, 0, 0}, {0, 0, 0, 0}}));
+
+        saveMovieDetail2("20240101", movieDetailList1);
     }
 }
