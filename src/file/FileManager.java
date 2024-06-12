@@ -21,7 +21,7 @@ public class FileManager {
 
     private final static String movieListFileName = "movie_list.txt";
     private final static String ticketInfoFileName = "ticket_info.txt";
-    private final static String movieDetailFolder = "ticket_info";
+    private final static String movieDetailFolder = "movie_detail_list";
 
     public static boolean isTheaterNumExist(String num) {
         for (Seat seat : seatList) {

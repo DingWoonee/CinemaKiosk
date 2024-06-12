@@ -33,7 +33,7 @@ public class Cancel {
 				switch (final_choice) {
 					case 1 -> {
 						// 예매 취소 및 좌석 삭제
-						cancelRerservation(ticket);
+//						cancelRerservation(ticket);
 						// TicketInfo을 업데이트
 						FileManager.saveTicketInfo();
 						System.out.println("예매 취소가 완료되었습니다.");
@@ -110,28 +110,28 @@ public class Cancel {
 	}
 
 	// 예매 취소 및 좌석 삭제
-	public void cancelRerservation(Ticket ticket) {
-		int detailId = ticket.getDetailId();
-
-		// ticketInfoList에서 해당 Ticket 객체를 삭제
-		FileManager.ticketInfoList.remove(ticket);
-		// 해당 Seat 객체에서 예약된 좌석을 취소함 (1에서 0으로 조정)
-		MovieDetail movieDetail = FileManager.movieDetailList.get(detailId);
-
-		int[][] seatArray = movieDetail.getSeatArray();
-		String seatCode = ticket.getSeatCode();
-
-		// seatCode에서 알파벳과 숫자를 분리
-		char alphabet = seatCode.charAt(0);
-		String num_str = seatCode.substring(1);
-
-		// 주어진 알파벳과 숫자를 인덱스로 변환
-		int row = alphabet - 65;
-		int col = Integer.parseInt(num_str) - 1;
-
-		// 해당 좌석을 0으로 설정
-		seatArray[row][col] = 0;
-	}
+//	public void cancelRerservation(Ticket ticket) {
+//		int detailId = ticket.getDetailId();
+//
+//		// ticketInfoList에서 해당 Ticket 객체를 삭제
+//		FileManager.ticketInfoList.remove(ticket);
+//		// 해당 Seat 객체에서 예약된 좌석을 취소함 (1에서 0으로 조정)
+//		MovieDetail movieDetail = FileManager.movieDetailList.get(detailId);
+//
+//		int[][] seatArray = movieDetail.getSeatArray();
+//		String seatCode = ticket.getSeatCode();
+//
+//		// seatCode에서 알파벳과 숫자를 분리
+//		char alphabet = seatCode.charAt(0);
+//		String num_str = seatCode.substring(1);
+//
+//		// 주어진 알파벳과 숫자를 인덱스로 변환
+//		int row = alphabet - 65;
+//		int col = Integer.parseInt(num_str) - 1;
+//
+//		// 해당 좌석을 0으로 설정
+//		seatArray[row][col] = 0;
+//	}
 
 	public static void main(String[] args) {
 

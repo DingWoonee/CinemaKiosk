@@ -55,14 +55,14 @@ public class MovieDetail {
     }
 
     public static void printMovieDetail(List<MovieDetail> movieDetailList){
-        System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t상영시간\t\t시작시간\t종료시간");
+        System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t러닝타임\t\t시작시간\t종료시간");
         for (int i = 0; i < movieDetailList.size(); i++) {
             MovieDetail detail = movieDetailList.get(i);
             System.out.printf("%d\t\t\t%s\t\t%s\t\t%s\t\t%s\t%s\n",
                     i + 1,
                     detail.getMovieName(),
                     detail.getTheaterNumber(),
-                    detail.getSchedule(),
+                    detail.getRunningTime(),
                     detail.getFormattedTime(detail.getStartTime()),
                     detail.getFormattedTime(detail.getEndTime()));
         }
