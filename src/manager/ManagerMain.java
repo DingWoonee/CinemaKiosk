@@ -395,7 +395,10 @@ public class ManagerMain {
             System.out.println(movieName);
             System.out.print("영화 설명 입력(10자 이상):\t");
             movieDescription = inputDescription();
-            break;
+
+            if(movieDescription != null) {
+                break;
+            }
         }
 
         // 상영관 입력
