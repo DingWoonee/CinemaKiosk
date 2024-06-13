@@ -33,7 +33,7 @@ public class Cancel {
 				switch (final_choice) {
 					case 1 -> {
 						// 예매 취소 및 좌석 삭제
-						cancelRerservation(ticket);
+//						cancelRerservation(ticket);
 						// TicketInfo을 업데이트
 						FileManager.saveTicketInfo();
 						System.out.println("예매 취소가 완료되었습니다.");
@@ -103,6 +103,7 @@ public class Cancel {
 	}
 
 	// 예매 취소 및 좌석 삭제
+
 	public void cancelRerservation(Ticket ticket) {
 		MovieDetail movieDetail = getMovieDetailFromTicket(ticket);
 

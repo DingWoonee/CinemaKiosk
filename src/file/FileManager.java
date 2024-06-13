@@ -20,6 +20,7 @@ public class FileManager {
     public static Manager manager = new Manager();
 
     private final static String movieListFileName = "movie_list.txt";
+
     private final static String ticketInfoFolder = "ticket_info";
     private final static String movieDetailFolder = "movie_detail_list";
 
