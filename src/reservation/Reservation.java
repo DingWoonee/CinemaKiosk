@@ -118,56 +118,55 @@ public class Reservation {
         }
 
         Scanner scanner = new Scanner(System.in);
-        boolean isValidInput = false;
 
-        while (!isValidInput) {
-            System.out.println("[좌석]");
-            System.out.println("스크린 위치");
-            movieDetail.printSeatArray(); // 좌석 구조 출력
-            System.out.println();
-            System.out.println("■ : 선택 불가");
-            System.out.println("좌석 선택 (입력 예시: A02 A03)");
-            System.out.print("입력:");
-            String input = scanner.nextLine().trim().toUpperCase();
-            String[] seatCodes = input.split(" ");
-            // 중복 체크
-            Set<String> seatSet = new HashSet<>(Arrays.asList(seatCodes));
-            if (seatSet.size() != seatCodes.length) {
-                System.out.println(Prompt.BAD_INPUT.getPrompt());
-                continue; // 중복이 있으면 입력을 다시 받습니다.
-            }
-            // 인원수 검사
-            if (seatCodes.length != peopleCount) {
-                System.out.println(Prompt.BAD_INPUT.getPrompt());
-                continue;
-            }
+        System.out.println("[좌석]");
+        System.out.println("스크린 위치");
+        movieDetail.printSeatArray(); // 좌석 구조 출력
+        System.out.println();
+        System.out.println("■ : 선택 불가");
+        System.out.println("좌석 선택 (입력 예시: A02 A03)");
+        System.out.print("입력:");
 
-            try {
-                // 좌석마다 문법/예외 규칙 확인, 예약 표시
-                for (String seatCode : seatSet) {
-                    FileManager.validateInputWithRE(seatCode, RE.SEAT_NUMBER.getValue());
-                    int row = seatCode.charAt(0) - 'A';
-                    int col = Integer.parseInt(seatCode.substring(1)) - 1;
-
-                    if (row >= 0 && row < seats.length && col >= 0 && col < seats[row].length && seats[row][col] == 0) {
-                        seats[row][col] = 1; // 좌석 예약 표시
-                        selectedSeats.add(seatCode);
-                    } else {
-                        System.out.println(Prompt.BAD_INPUT.getPrompt());
-                        throw new InputRetryException("\n선택한 좌석이 유효하지 않습니다. 다시 시도하세요.");
-                    }
-                }
-                isValidInput = true; // 모든 좌석이 유효하면 루프 종료
-            } catch (InputRetryException e) {
-                // 오류 발생 시 좌석 복원 로직
-                for (int i = 0; i < seats.length; i++) {
-                    for (int j = 0; j < seats[i].length; j++) {
-                        seats[i][j] = originalSeats[i][j]; // 원래 상태로 복원
-                    }
-                }
-                selectedSeats.clear();
-            }
+        String input = scanner.nextLine().trim().toUpperCase();
+        String[] seatCodes = input.split(" ");
+        // 중복 체크
+        Set<String> seatSet = new HashSet<>(Arrays.asList(seatCodes));
+        if (seatSet.size() != seatCodes.length) {
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
+            throw new GoHomePromptException("\n중복된 좌석이 있습니다. 홈으로 이동합니다.");
         }
+        // 인원수 검사
+        if (seatCodes.length != peopleCount) {
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
+            throw new GoHomePromptException("\n선택한 좌석 수가 인원 수와 맞지 않습니다. 홈으로 이동합니다.");
+        }
+
+        try {
+            // 좌석마다 문법/예외 규칙 확인, 예약 표시
+            for (String seatCode : seatSet) {
+                FileManager.validateInputWithRE(seatCode, RE.SEAT_NUMBER.getValue());
+                int row = seatCode.charAt(0) - 'A';
+                int col = Integer.parseInt(seatCode.substring(1)) - 1;
+
+                if (row >= 0 && row < seats.length && col >= 0 && col < seats[row].length && seats[row][col] == 0) {
+                    seats[row][col] = 1; // 좌석 예약 표시
+                    selectedSeats.add(seatCode);
+                } else {
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
+                    throw new GoHomePromptException("\n선택한 좌석이 유효하지 않습니다. 홈으로 이동합니다.");
+                }
+            }
+        } catch (InputRetryException e) {
+            // 오류 발생 시 좌석 복원 로직
+            for (int i = 0; i < seats.length; i++) {
+                for (int j = 0; j < seats[i].length; j++) {
+                    seats[i][j] = originalSeats[i][j]; // 원래 상태로 복원
+                }
+            }
+            selectedSeats.clear();
+            throw new GoHomePromptException("\n좌석 선택 중 오류가 발생했습니다. 홈으로 이동합니다.");
+        }
+
         return selectedSeats;
     }
 
