@@ -13,6 +13,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ManagerMain {
     private FileManager fileManager;
@@ -243,8 +245,7 @@ public class ManagerMain {
             for (MovieDetail detailList : movieDetailLists) {
                 String schedule = detailList.getSchedule();
                 if (isWithinSchedule(schedule, start, end)) {
-                    System.out.println(Prompt.BAD_INPUT.getPrompt());
-                    throw new GoHomePromptException(Prompt.BAD_INPUT.getPrompt());
+                    throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
                 }
             }
         }
@@ -330,6 +331,7 @@ public class ManagerMain {
         String movieNumber = sc.nextLine().trim();
 
         if(!checkMovieNumber(movieNumber)){
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
             throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
         }
 
@@ -379,11 +381,31 @@ public class ManagerMain {
         if (!checkRunningDate(runningDate)) {
             throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
         }
+
         return runningDate;
     }
 
     private boolean checkRunningDate(String runningDate) {
-        return runningDate.matches(RE.NUM_EIGHT.getValue());
+        Pattern pattern;
+        Matcher matcher;
+
+        if (FileManager.validateInputReturnBoolWithRE(runningDate, RE.NUM_EIGHT.getValue())) {
+            int year = Integer.parseInt(runningDate.substring(0, 4));
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) { // 윤년
+                pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT2.getValue()));
+            } else { // 윤년 아님
+                pattern = Pattern.compile(String.valueOf(RE.DATE_EIGHT.getValue()));
+            }
+            matcher = pattern.matcher(runningDate);
+            if (matcher.matches()) {
+                return true;
+            } else {
+                throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
+            }
+        }
+
+
+        return false;
     }
 
     private void deleteMovie() {
