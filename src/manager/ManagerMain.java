@@ -132,6 +132,9 @@ public class ManagerMain {
                 return;
             }
             scheduleList.remove(scheduleNumber - 1);
+            if(inputDate.equals(FileManager.todayDate)){
+                FileManager.movieDetailList = scheduleList;
+            }
             FileManager.saveMovieDetail2(inputDate, scheduleList);
 
             System.out.println("[영화 스케줄 삭제 완료]");
