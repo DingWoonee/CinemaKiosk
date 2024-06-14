@@ -439,16 +439,20 @@ public class ManagerMain {
     }
 
     private Integer inputRunningTime() {
-        Scanner sc = new Scanner(System.in);
+        String runningTime;
+        while (true) {
+            Scanner sc = new Scanner(System.in);
 
-        // Integer형으로 변환합니다.
-        String runningTime = sc.nextLine().trim();
+            // Integer형으로 변환합니다.
+            runningTime = sc.nextLine().trim();
 
-        if (!checkRunningTime(runningTime)) {
-            System.out.println(Prompt.BAD_INPUT.getPrompt());
-            return null;
+            if (!checkRunningTime(runningTime)) {
+                System.out.println(Prompt.BAD_INPUT.getPrompt());
+                System.out.print("\n러닝 타임 입력(분 단위로 숫자만 입력): ");
+            } else {
+                break;
+            }
         }
-
 
         return Integer.valueOf(runningTime);
     }
@@ -493,6 +497,21 @@ public class ManagerMain {
     }
 
     private boolean checkRunningTime(String runningTime) {
+        // 숫자인지 검사
+        for (char c : runningTime.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        // 크기 검사
+        int integerRunningTime = Integer.parseInt(runningTime);
+        if (integerRunningTime > 360 || integerRunningTime < 1) {
+            return false;
+        }
+        // 자리수 검사
+        if (runningTime.length() > 3 || runningTime.isEmpty()) {
+            return false;
+        }
         return true;//runningTime.matches(RE.MOVIE_RUNNINGTIME.getValue());
     }
 
