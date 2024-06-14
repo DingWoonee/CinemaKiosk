@@ -8,6 +8,7 @@ import file.FileCheck;
 import file.FileManager;
 import reservation.GoHomePromptException;
 
+import java.sql.SQLOutput;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -40,51 +41,55 @@ public class ManagerMain {
         }
 
         while (true) {
-            System.out.println(Prompt.NEW_MENU_START.getPrompt());
-            System.out.println("[관리자 메뉴]");
-            System.out.println("1. 영화 목록 출력");
-            System.out.println("2. 영화 추가");
-            System.out.println("3. 영화 삭제");
-            System.out.println("4. 영화 스케줄 추가");
-            System.out.println("5. 영화 스케줄 삭제");
-            System.out.println("6. 홈");
-            System.out.print("번호 입력(숫자만 입력): ");
-            String choiceString = sc.nextLine().trim();
-            if(!choiceString.matches(RE.MANAGER_MODE_INPUT.getValue())){
-                System.out.println(Prompt.BAD_INPUT.getPrompt());
-                continue;
-            }
-
-            int choice = Integer.parseInt(choiceString);
-
-            switch (choice) {
-                case 1:
-                    movieListPrint();
-                    break;
-                case 2:
-                    addMovie();
-                    break;
-                case 3:
-                    deleteMovie();
-                    break;
-                case 4:
-                    execAddMovieSchedule();
-                    break;
-                case 5:
-                    execDeleteMovieSchedule();
-                    break;
-
-                case 6:
-                    // 홈 프롬프트 돌아갑니다..
-                    isGoHome = true;
-                    break;
-
-                default:
+            try {
+                System.out.println(Prompt.NEW_MENU_START.getPrompt());
+                System.out.println("[관리자 메뉴]");
+                System.out.println("1. 영화 목록 출력");
+                System.out.println("2. 영화 추가");
+                System.out.println("3. 영화 삭제");
+                System.out.println("4. 영화 스케줄 추가");
+                System.out.println("5. 영화 스케줄 삭제");
+                System.out.println("6. 홈");
+                System.out.print("번호 입력(숫자만 입력): ");
+                String choiceString = sc.nextLine().trim();
+                if (!choiceString.matches(RE.MANAGER_MODE_INPUT.getValue())) {
                     System.out.println(Prompt.BAD_INPUT.getPrompt());
-            }
-            if (isGoHome) {
-                isGoHome = false;
-                break;
+                    continue;
+                }
+
+                int choice = Integer.parseInt(choiceString);
+
+                switch (choice) {
+                    case 1:
+                        movieListPrint();
+                        break;
+                    case 2:
+                        addMovie();
+                        break;
+                    case 3:
+                        deleteMovie();
+                        break;
+                    case 4:
+                        execAddMovieSchedule();
+                        break;
+                    case 5:
+                        execDeleteMovieSchedule();
+                        break;
+
+                    case 6:
+                        // 홈 프롬프트 돌아갑니다..
+                        isGoHome = true;
+                        break;
+
+                    default:
+                        System.out.println(Prompt.BAD_INPUT.getPrompt());
+                }
+                if (isGoHome) {
+                    isGoHome = false;
+                    break;
+                }
+            } catch(InvalidInputException e){
+                System.out.println(e.getMessage());
             }
         }
 
@@ -156,30 +161,30 @@ public class ManagerMain {
         String screenHall = inputScreenHall();
 
         // 영화 번호 입력
-        int number = 1;
         System.out.println("[영화 스케줄 추가]");
         System.out.println("- 상영 날짜: " + runningDate.substring(0, 4) + "년 " + runningDate.substring(4, 6) + "월 " + runningDate.substring(6, 8) + "일 ");
         System.out.println("- 상영관: " + screenHall + "관");
         System.out.println("- 해당 날짜 " + screenHall + "관 기존 상영 정보");
 
         // 리스트 크기 확인
-        int size = movieDetailLists.size();
+        if(movieDetailLists != null) {
+            int size = movieDetailLists.size();
 
-        for (int i = 0; i < size; i++) {
-            MovieDetail detail = movieDetailLists.get(i);
-            System.out.print(detail.getMovieName() + ": ");
-            System.out.print(detail.getStartTime().substring(0, 2) + "시" + detail.getStartTime().substring(2, 4) + "분");
-            System.out.print(" ~ ");
-            System.out.print(detail.getEndTime().substring(0, 2) + "시" + detail.getEndTime().substring(2, 4) + "분");
-            if (i < size - 1) {
-                System.out.print(" / ");
-            } else {
-                System.out.println(); // 마지막 요소는 "/"를 붙이지 않음
+            for (int i = 0; i < size; i++) {
+                MovieDetail detail = movieDetailLists.get(i);
+                System.out.print(detail.getMovieName() + ": ");
+                System.out.print(detail.getStartTime().substring(0, 2) + "시" + detail.getStartTime().substring(2, 4) + "분");
+                System.out.print(" ~ ");
+                System.out.print(detail.getEndTime().substring(0, 2) + "시" + detail.getEndTime().substring(2, 4) + "분");
+                if (i < size - 1) {
+                    System.out.print(" / ");
+                } else {
+                    System.out.println(); // 마지막 요소는 "/"를 붙이지 않음
+                }
             }
         }
         System.out.println();
-        // 해야할 것 : <영화이름>: (시작시간~끝시간 /)* 시작시간~끝시간
-
+        int number = 1;
         System.out.println("영화번호\t영화 이름\t러닝 타임");
         for (Movie movieList : movieLists) {
             System.out.print(number++);
@@ -191,6 +196,7 @@ public class ManagerMain {
 
         System.out.print("추가할 영화 번호 입력(숫자만 입력): ");
         String movieNumber = inputMovieNumber();
+        System.out.println("추가 영화 번호 출력 완료");
         System.out.println();
 
 
@@ -210,12 +216,13 @@ public class ManagerMain {
         String start;
         start = inputMoiveStartTime(); //4자리인지는 체크 해주길
 
-
-        for (MovieDetail detailList : movieDetailLists) {
-            String schedule = detailList.getSchedule();
-            if (isWithinSchedule(schedule, start)){
-                throw new GoHomePromptException(Prompt.BAD_INPUT.getPrompt());
-            }    
+        if(movieDetailLists != null) {
+            for (MovieDetail detailList : movieDetailLists) {
+                String schedule = detailList.getSchedule();
+                if (isWithinSchedule(schedule, start)) {
+                    throw new GoHomePromptException(Prompt.BAD_INPUT.getPrompt());
+                }
+            }
         }
         
 
@@ -236,8 +243,14 @@ public class ManagerMain {
         System.out.println("- 상영 시작 시간: " + formatTime(startTime));
         System.out.println("- 상영 종료 시간: " + formatTime(endTime));
 
-        int movieListSize =  movieDetailLists.size();
-        System.out.println(movieListSize);
+
+        int movieListSize;
+        if(movieDetailLists == null) {
+            movieListSize = 0;
+        }else {
+            movieListSize = movieDetailLists.size();
+        }
+
 
         StringBuilder scheduleBuild = new StringBuilder();
         scheduleBuild.append(screenHall).append(start).append(endTime.format(formatter));
@@ -247,8 +260,10 @@ public class ManagerMain {
         List<Seat> seatList = FileManager.seatList;
         Seat seat = seatList.get(Integer.parseInt(screenHall) - 1);
         MovieDetail newMovieDetail = new MovieDetail(movieListSize, addMovieName, selectedMovie.getInfo(), schedule, selectedMovie.getRunningTime(), seat.getSeatArray());
+        if(movieDetailLists == null) {
+            movieDetailLists = new ArrayList<>();
+        }
         movieDetailLists.add(newMovieDetail);
-        //movieDetailList = movieDetailLists;
         FileManager.saveMovieDetail2(runningDate, movieDetailLists);
     }
 
@@ -276,16 +291,17 @@ public class ManagerMain {
         Scanner sc = new Scanner(System.in);
         String startTime = sc.nextLine().trim();
 
-
-
         if(!checkStartTime(startTime)){
+            System.out.println("실패실패");
             throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
         }
+        System.out.println("통과통과통과");
         return startTime;
     }
 
     private boolean checkStartTime(String startTime) {
-        return true; //startTime.matches(RE.STARTTIME.getValue());
+        System.out.println(startTime);
+        return startTime.matches(RE.MOVIE_START_TIME.getValue());
     }
 
     private String inputMovieNumber() {
@@ -300,9 +316,11 @@ public class ManagerMain {
     }
 
     private boolean checkMoiveNumber(String movieNumber) {
-        System.out.println(movieList.size());
-        System.out.println(Integer.parseInt(movieNumber));
-        return movieList.size() >= Integer.parseInt(movieNumber);//movieNumber.matches(RE.MOVIENUMBER.getValue());
+        if(movieNumber.isEmpty()) {
+            return false;
+        }
+        return (movieList.size() >= Integer.parseInt(movieNumber))
+                && Integer.parseInt(movieNumber) > 0;
     }
 
     private String inputScreenHall() {
@@ -395,7 +413,10 @@ public class ManagerMain {
             System.out.println(movieName);
             System.out.print("영화 설명 입력(10자 이상):\t");
             movieDescription = inputDescription();
-            break;
+
+            if(movieDescription != null) {
+                break;
+            }
         }
 
         // 상영관 입력
