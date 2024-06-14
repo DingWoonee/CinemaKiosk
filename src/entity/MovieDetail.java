@@ -54,19 +54,26 @@ public class MovieDetail {
         return ""; // 시간 문자열이 제대로 형성되지 않은 경우 빈 문자열 반환
     }
 
-    public static void printMovieDetail(List<MovieDetail> movieDetailList){
-        System.out.println("영화 번호\t\t영화 제목\t\t상영관\t\t러닝타임\t\t시작시간\t종료시간");
+    public static void printMovieDetail(List<MovieDetail> movieDetailList) {
+        System.out.println("영화 번호\t\t영화 제목\t\t상영관\t러닝타임\t시작시간\t\t종료시간");
         for (int i = 0; i < movieDetailList.size(); i++) {
             MovieDetail detail = movieDetailList.get(i);
+            String theaterNumber = detail.getTheaterNumber();
+            if (theaterNumber.startsWith("0")) {
+                theaterNumber = theaterNumber.substring(1);
+            }
+            theaterNumber += "관";
+
             System.out.printf("%d\t\t\t%s\t\t%s\t\t%s\t\t%s\t%s\n",
                     i + 1,
                     detail.getMovieName(),
-                    detail.getTheaterNumber(),
+                    theaterNumber,
                     detail.getRunningTime(),
                     detail.getFormattedTime(detail.getStartTime()),
                     detail.getFormattedTime(detail.getEndTime()));
         }
     }
+
 
     // 좌석 구조 출력
     public void printSeatArray() {
