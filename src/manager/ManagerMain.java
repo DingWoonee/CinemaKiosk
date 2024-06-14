@@ -8,6 +8,7 @@ import file.FileCheck;
 import file.FileManager;
 import reservation.GoHomePromptException;
 
+import java.sql.SQLOutput;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -291,13 +292,16 @@ public class ManagerMain {
         String startTime = sc.nextLine().trim();
 
         if(!checkStartTime(startTime)){
+            System.out.println("실패실패");
             throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
         }
+        System.out.println("통과통과통과");
         return startTime;
     }
 
     private boolean checkStartTime(String startTime) {
-        return true; //startTime.matches(RE.STARTTIME.getValue());
+        System.out.println(startTime);
+        return startTime.matches(RE.MOVIE_START_TIME.getValue());
     }
 
     private String inputMovieNumber() {
