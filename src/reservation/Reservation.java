@@ -127,7 +127,7 @@ public class Reservation {
         System.out.println("좌석 선택 (입력 예시: A02 A03)");
         System.out.print("입력:");
 
-        String input = scanner.nextLine().trim().toUpperCase();
+        String input = scanner.nextLine().trim();
         String[] seatCodes = input.split(" ");
         // 중복 체크
         Set<String> seatSet = new HashSet<>(Arrays.asList(seatCodes));
