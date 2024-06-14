@@ -227,7 +227,11 @@ public class ManagerMain {
             movieDetailLists = new ArrayList<>();
         }
         movieDetailLists.add(newMovieDetail);
-        movieDetailList = movieDetailLists;
+
+        if(runningDate.equals(FileManager.todayDate)) {
+            FileManager.movieDetailList = movieDetailLists;
+        }
+
         FileManager.saveMovieDetail2(runningDate, movieDetailLists);
     }
 
