@@ -214,12 +214,20 @@ public class ManagerMain {
         System.out.print("상영 시작 시간 입력(4자리 숫자로 입력): ");
 
         String start;
-        start = inputMoiveStartTime(); //4자리인지는 체크 해주길
+        start = inputMoiveStartTime();
+
+        // 시작 시간으로부터 추가된 시간을 계산하여 종료 시간 설정
+        LocalTime inputStart = LocalTime.parse(start, DateTimeFormatter.ofPattern("HHmm"));
+        LocalTime inputEnd = inputStart.plusMinutes(selectedMovie.getRunningTime());
+
+        String end;
+        end = inputEnd.format(DateTimeFormatter.ofPattern("HHmm"));
 
         if(movieDetailLists != null) {
             for (MovieDetail detailList : movieDetailLists) {
                 String schedule = detailList.getSchedule();
-                if (isWithinSchedule(schedule, start)) {
+                if (isWithinSchedule(schedule, start, end)) {
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
                     throw new GoHomePromptException(Prompt.BAD_INPUT.getPrompt());
                 }
             }
@@ -251,12 +259,12 @@ public class ManagerMain {
             movieListSize = movieDetailLists.size();
         }
 
-
+        // 스케줄 String 만들기
         StringBuilder scheduleBuild = new StringBuilder();
         scheduleBuild.append(screenHall).append(start).append(endTime.format(formatter));
         String schedule = new String(scheduleBuild);
 
-
+        // 상영관에 해당하는 좌석정보 가져오기
         List<Seat> seatList = FileManager.seatList;
         Seat seat = seatList.get(Integer.parseInt(screenHall) - 1);
         MovieDetail newMovieDetail = new MovieDetail(movieListSize, addMovieName, selectedMovie.getInfo(), schedule, selectedMovie.getRunningTime(), seat.getSeatArray());
@@ -267,7 +275,7 @@ public class ManagerMain {
         FileManager.saveMovieDetail2(runningDate, movieDetailLists);
     }
 
-    private boolean isWithinSchedule(String schedule, String start) {
+    private boolean isWithinSchedule(String schedule, String start, String end) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
 
         // 기존 스케줄의 시작 시간과 종료 시간
@@ -275,10 +283,17 @@ public class ManagerMain {
         LocalTime scheduleEnd = LocalTime.parse(schedule.substring(6, 10), formatter);
 
         // 입력한 시작 시간
-        LocalTime inputStart = LocalTime.parse(start, formatter).plusMinutes(1);
+        LocalTime inputStart = LocalTime.parse(start, formatter);
+        LocalTime inputEnd = LocalTime.parse(end, formatter);
 
-        // 입력된 시간이 기존 스케줄 내에 있는지 확인
-        return !inputStart.isBefore(scheduleStart) && !inputStart.isAfter(scheduleEnd);
+        System.out.println("inputStart = " + inputStart);
+        System.out.println("inputEnd = " + inputEnd);
+        System.out.println("scheduleStart = " + scheduleStart);
+        System.out.println("scheduleEnd = " + scheduleEnd);
+
+        // 입력된 시간이 기존 스케줄과 겹치는지 확인
+        return !((inputStart.isAfter(scheduleEnd.minusMinutes(1)) && inputEnd.isAfter(scheduleEnd)) ||
+                inputStart.isBefore(scheduleStart) && inputEnd.isBefore(scheduleStart.plusMinutes(1)));
     }
 
     // 시간을 "H시 mm분" 형식으로 포맷하는 메소드

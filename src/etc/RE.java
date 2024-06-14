@@ -2,7 +2,7 @@ package etc;
 
 public enum RE {
 
-    MANAGER_MODE_INPUT("^\\s*(1|2|3|4)\\s*$"),
+    MANAGER_MODE_INPUT("^\\s*(1|2|3|4|5|6)\\s*$"),
     MOVIE_NAME("^[A-Za-z0-9가-힣ㅏ-ㅣㄱ-ㅎ\\s!@#%^&*()\\-_=+\\[\\]{};:'\",.<>/?]{1,15}$"),
     MOVIE_INFO("^[A-Za-z0-9가-힣ㅏ-ㅣㄱ-ㅎ\\s!@#%^&*()\\-_=+\\[\\]{};:'\",.<>/?]{10,}$"),
     MOVIE_CHOICE_MENU_NUMBER("^[1-2]$"),
