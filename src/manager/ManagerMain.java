@@ -132,7 +132,7 @@ public class ManagerMain {
                 return;
             }
             scheduleList.remove(scheduleNumber - 1);
-
+            FileManager.saveMovieDetail2(inputDate, scheduleList);
 
             System.out.println("[영화 스케줄 삭제 완료]");
         } catch (Exception e) {
@@ -381,28 +381,36 @@ public class ManagerMain {
     }
 
     private void deleteMovie() {
+        // 영화 목록 불러오기
+        List<Movie> movies = FileManager.movieList;
+
         Scanner sc = new Scanner(System.in);
 
+        // 영화 목록 출력
         System.out.println("[영화 삭제]");
-        System.out.println("영화 번호\t영화 이름\t러닝 타임");
-        for (int i = 0; i < movieDetailList.size(); i++) {
-            MovieDetail movieDetail = movieDetailList.get(i);
-            int id = movieDetail.getDetailId();
+        System.out.println("번호\t영화 이름\t러닝 타임");
+        for (int i = 0; i < movies.size(); i++) {
+            Movie movie = movies.get(i);
+            System.out.printf("%d\t%s\t%d분\n", i + 1, movie.getName(), movie.getRunningTime());
         }
-        System.out.print("번호 입력(숫자만 입력): ");
+
+        // 사용자 입력 받기
+        System.out.print("삭제할 영화 번호 입력(숫자만 입력): ");
         String input = sc.nextLine().trim();
 
         if (!input.matches("\\d+")) {
-            System.out.println("올바르지 않은 입력입니다.");
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
             return;
         }
 
         int movieIndex = Integer.parseInt(input) - 1;
 
-        if (movieIndex < 0 || movieIndex >= movieList.size()) {
+        if (movieIndex < 0 || movieIndex >= movies.size()) {
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
             return;
         }
 
+        // 삭제 확인
         System.out.println("[정말 삭제하시겠습니까?]");
         System.out.println("1. 삭제");
         System.out.println("2. 취소");
@@ -410,11 +418,19 @@ public class ManagerMain {
         String confirmInput = sc.nextLine().trim();
 
         if (!confirmInput.equals("1")) {
+
             return;
         }
+        else{
+            System.out.println("삭제가 완료되었습니다.");
+            // 영화 삭제
+            Movie removedMovie = movies.remove(movieIndex);
 
-        Movie removedMovie = movieList.remove(movieIndex);
 
+            // 업데이트된 영화 목록 저장
+            FileManager.movieList = movies;
+            FileManager.saveMovie();
+        }
 
     }
 
