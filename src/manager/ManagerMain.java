@@ -200,7 +200,7 @@ public class ManagerMain {
         System.out.print("상영 시작 시간 입력(4자리 숫자로 입력): ");
 
         String start;
-        start = inputMoiveStartTime();
+        start = inputMovieStartTime();
 
         // 시작 시간으로부터 추가된 시간을 계산하여 종료 시간 설정
         LocalTime inputStart = LocalTime.parse(start, DateTimeFormatter.ofPattern("HHmm"));
@@ -311,20 +311,17 @@ public class ManagerMain {
         return time.format(outputFormatter);
     }
 
-    private String inputMoiveStartTime() {
+    private String inputMovieStartTime() {
         Scanner sc = new Scanner(System.in);
         String startTime = sc.nextLine().trim();
 
         if(!checkStartTime(startTime)){
-            System.out.println("실패실패");
             throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
         }
-        System.out.println("통과통과통과");
         return startTime;
     }
 
     private boolean checkStartTime(String startTime) {
-        System.out.println(startTime);
         return startTime.matches(RE.MOVIE_START_TIME.getValue());
     }
 
@@ -332,14 +329,14 @@ public class ManagerMain {
         Scanner sc = new Scanner(System.in);
         String movieNumber = sc.nextLine().trim();
 
-        if(!checkMoiveNumber(movieNumber)){
+        if(!checkMovieNumber(movieNumber)){
             throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
         }
 
         return movieNumber;
     }
 
-    private boolean checkMoiveNumber(String movieNumber) {
+    private boolean checkMovieNumber(String movieNumber) {
         if(movieNumber.isEmpty()) {
             return false;
         }
@@ -480,9 +477,9 @@ public class ManagerMain {
         System.out.print("러닝 타임 입력(분 단위로 숫자만 입력): ");
         Integer runningTime = inputRunningTime(); // 설계서에서 자료형 수정 Integer, String
 
-        Movie newMoive = new Movie(movieName, movieDescription, runningTime);
+        Movie newMovie = new Movie(movieName, movieDescription, runningTime);
 
-        movies.add(newMoive);
+        movies.add(newMovie);
 
         // 영화 정보 출력
         System.out.println("\n[영화 추가 완료]");
