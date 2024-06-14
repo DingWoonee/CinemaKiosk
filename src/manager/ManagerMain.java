@@ -432,6 +432,15 @@ public class ManagerMain {
 
         movies.add(newMoive);
 
+        // 영화 정보 출력
+        System.out.println("\n[영화 추가 완료]");
+        System.out.print("영화 제목:\t");
+        System.out.println(movieName);
+        System.out.print("영화 설명:\t");
+        System.out.println(movieDescription);
+        System.out.print("러닝 타임:\t");
+        System.out.println(runningTime + "분");
+
         // movieList에 넣기
         FileManager.movieList = movies;
         FileManager.saveMovie();
