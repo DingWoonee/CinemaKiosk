@@ -165,25 +165,8 @@ public class ManagerMain {
         System.out.println("- 상영 날짜: " + runningDate.substring(0, 4) + "년 " + runningDate.substring(4, 6) + "월 " + runningDate.substring(6, 8) + "일 ");
         System.out.println("- 상영관: " + screenHall + "관");
         System.out.println("- 해당 날짜 " + screenHall + "관 기존 상영 정보");
+        printRegisteredSchedules(movieDetailLists);
 
-        // 리스트 크기 확인
-        if(movieDetailLists != null) {
-            int size = movieDetailLists.size();
-
-            for (int i = 0; i < size; i++) {
-                MovieDetail detail = movieDetailLists.get(i);
-                System.out.print(detail.getMovieName() + ": ");
-                System.out.print(detail.getStartTime().substring(0, 2) + "시" + detail.getStartTime().substring(2, 4) + "분");
-                System.out.print(" ~ ");
-                System.out.print(detail.getEndTime().substring(0, 2) + "시" + detail.getEndTime().substring(2, 4) + "분");
-                if (i < size - 1) {
-                    System.out.print(" / ");
-                } else {
-                    System.out.println(); // 마지막 요소는 "/"를 붙이지 않음
-                }
-            }
-        }
-        System.out.println();
         int number = 1;
         System.out.println("영화번호\t영화 이름\t러닝 타임");
         for (Movie movieList : movieLists) {
@@ -219,50 +202,22 @@ public class ManagerMain {
         // 시작 시간으로부터 추가된 시간을 계산하여 종료 시간 설정
         LocalTime inputStart = LocalTime.parse(start, DateTimeFormatter.ofPattern("HHmm"));
         LocalTime inputEnd = inputStart.plusMinutes(selectedMovie.getRunningTime());
-
         String end;
         end = inputEnd.format(DateTimeFormatter.ofPattern("HHmm"));
 
-        if(movieDetailLists != null) {
-            for (MovieDetail detailList : movieDetailLists) {
-                String schedule = detailList.getSchedule();
-                if (isWithinSchedule(schedule, start, end)) {
-                    System.out.println(Prompt.BAD_INPUT.getPrompt());
-                    throw new GoHomePromptException(Prompt.BAD_INPUT.getPrompt());
-                }
-            }
-        }
-        
-
-        // 문자열을 시간으로 파싱
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
-        LocalTime startTime = LocalTime.parse(start, formatter);
-
-        // 더한 시간 계산
-        LocalTime endTime = startTime.plusMinutes(selectedMovie.getRunningTime());
-
-
-
+        checkOverlayedSchedule(movieDetailLists, start, end);
 
         System.out.println("[영화 스케줄 추가 완료]");
         System.out.println("- 영화 이름: " + addMovieName);
         System.out.println("- 상영 날짜: " + runningDate.substring(0, 4) + "년 " + runningDate.substring(4, 6) + "월 " + runningDate.substring(6, 8) + "일 ");
         System.out.println("- 상영관: " + screenHall + "관");
-        System.out.println("- 상영 시작 시간: " + formatTime(startTime));
-        System.out.println("- 상영 종료 시간: " + formatTime(endTime));
+        System.out.println("- 상영 시작 시간: " + formatTime(inputStart));
+        System.out.println("- 상영 종료 시간: " + formatTime(inputEnd));
 
-
-        int movieListSize;
-        if(movieDetailLists == null) {
-            movieListSize = 0;
-        }else {
-            movieListSize = movieDetailLists.size();
-        }
-
-        // 스케줄 String 만들기
-        StringBuilder scheduleBuild = new StringBuilder();
-        scheduleBuild.append(screenHall).append(start).append(endTime.format(formatter));
-        String schedule = new String(scheduleBuild);
+        
+        // 추가될 영화 리스트 번호 만들기
+        int movieListSize = makeMovieListNumber(movieDetailLists);
+        String schedule = makeSchedule(screenHall, start, end);
 
         // 상영관에 해당하는 좌석정보 가져오기
         List<Seat> seatList = FileManager.seatList;
@@ -272,7 +227,59 @@ public class ManagerMain {
             movieDetailLists = new ArrayList<>();
         }
         movieDetailLists.add(newMovieDetail);
+        movieDetailList = movieDetailLists;
         FileManager.saveMovieDetail2(runningDate, movieDetailLists);
+    }
+
+    private void checkOverlayedSchedule(List<MovieDetail> movieDetailLists, String start, String end) {
+        if(movieDetailLists != null) {
+            for (MovieDetail detailList : movieDetailLists) {
+                String schedule = detailList.getSchedule();
+                if (isWithinSchedule(schedule, start, end)) {
+                    System.out.println(Prompt.BAD_INPUT.getPrompt());
+                    throw new GoHomePromptException(Prompt.BAD_INPUT.getPrompt());
+                }
+            }
+        }
+    }
+
+    private static String makeSchedule(String screenHall, String start, String end) {
+        // 스케줄 String 만들기
+        StringBuilder scheduleBuild = new StringBuilder();
+        scheduleBuild.append(screenHall).append(start).append(end);
+        String schedule = new String(scheduleBuild);
+        return schedule;
+    }
+
+    private static int makeMovieListNumber(List<MovieDetail> movieDetailLists) {
+        int movieListSize;
+        if(movieDetailLists == null) {
+            movieListSize = 0;
+        }else {
+            movieListSize = movieDetailLists.size();
+        }
+        return movieListSize;
+    }
+
+    private static void printRegisteredSchedules(List<MovieDetail> movieDetailLists) {
+        // 리스트 크기 확인
+        if(movieDetailLists != null) {
+            int size = movieDetailLists.size();
+
+            for (int i = 0; i < size; i++) {
+                MovieDetail detail = movieDetailLists.get(i);
+                System.out.print(detail.getMovieName() + ": ");
+                System.out.print(detail.getStartTime().substring(0, 2) + "시" + detail.getStartTime().substring(2, 4) + "분");
+                System.out.print(" ~ ");
+                System.out.print(detail.getEndTime().substring(0, 2) + "시" + detail.getEndTime().substring(2, 4) + "분");
+                if (i < size - 1) {
+                    System.out.print(" / ");
+                } else {
+                    System.out.println(); // 마지막 요소는 "/"를 붙이지 않음
+                }
+            }
+        }
+        System.out.println();
     }
 
     private boolean isWithinSchedule(String schedule, String start, String end) {
@@ -285,11 +292,6 @@ public class ManagerMain {
         // 입력한 시작 시간
         LocalTime inputStart = LocalTime.parse(start, formatter);
         LocalTime inputEnd = LocalTime.parse(end, formatter);
-
-        System.out.println("inputStart = " + inputStart);
-        System.out.println("inputEnd = " + inputEnd);
-        System.out.println("scheduleStart = " + scheduleStart);
-        System.out.println("scheduleEnd = " + scheduleEnd);
 
         // 입력된 시간이 기존 스케줄과 겹치는지 확인
         return !((inputStart.isAfter(scheduleEnd.minusMinutes(1)) && inputEnd.isAfter(scheduleEnd)) ||
