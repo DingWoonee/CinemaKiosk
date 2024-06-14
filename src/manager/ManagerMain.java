@@ -459,7 +459,7 @@ public class ManagerMain {
 
         String movieDescription = sc.nextLine().trim();
         if (!checkDescription(movieDescription)) {
-            System.out.println(Prompt.NOT_LENGTH10.getPrompt());
+            System.out.println(Prompt.BAD_INPUT.getPrompt());
             return null;
         }
         return movieDescription;
