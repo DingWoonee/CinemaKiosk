@@ -64,10 +64,8 @@ public class Main {
                 }
             }
             catch (GoHomePromptException e){
-                Prompt.BAD_INPUT.getPrompt();
             }
             catch (Exception e){
-                Prompt.BAD_INPUT.getPrompt();
             }
         }
     }
