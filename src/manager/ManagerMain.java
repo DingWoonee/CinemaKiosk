@@ -148,15 +148,14 @@ public class ManagerMain {
 
     private void execAddMovieSchedule() {
         List<Movie> movieLists = movieList;
-        //List<MovieDetail> movieDetailLists = movieDetailList;
-
 
         // 상영 날짜 입력
         System.out.println("[영화 스케줄 추가]");
         System.out.print("상영 날짜 입력(8자리 숫자로 입력): ");
         String runningDate = inputRunningDate();
 
-        List<MovieDetail> movieDetailLists = FileCheck.getMovieDetail(runningDate);
+        List<MovieDetail> scheduleList;
+        scheduleList = FileCheck.getMovieDetail(runningDate);
 
         // 상영관 입력
         System.out.println("[영화 스케줄 추가]");
@@ -170,7 +169,7 @@ public class ManagerMain {
         System.out.println("- 상영 날짜: " + runningDate.substring(0, 4) + "년 " + runningDate.substring(4, 6) + "월 " + runningDate.substring(6, 8) + "일 ");
         System.out.println("- 상영관: " + screenHall + "관");
         System.out.println("- 해당 날짜 " + screenHall + "관 기존 상영 정보");
-        printRegisteredSchedules(movieDetailLists);
+        printRegisteredSchedules(scheduleList);
 
         int number = 1;
         System.out.println("영화번호\t영화 이름\t러닝 타임");
@@ -201,16 +200,16 @@ public class ManagerMain {
         System.out.println();
         System.out.print("상영 시작 시간 입력(4자리 숫자로 입력): ");
 
-        String start;
-        start = inputMovieStartTime();
+        String startTime;
+        startTime = inputMovieStartTime();
 
         // 시작 시간으로부터 추가된 시간을 계산하여 종료 시간 설정
-        LocalTime inputStart = LocalTime.parse(start, DateTimeFormatter.ofPattern("HHmm"));
+        LocalTime inputStart = LocalTime.parse(startTime, DateTimeFormatter.ofPattern("HHmm"));
         LocalTime inputEnd = inputStart.plusMinutes(selectedMovie.getRunningTime());
-        String end;
-        end = inputEnd.format(DateTimeFormatter.ofPattern("HHmm"));
+        String endTime;
+        endTime = inputEnd.format(DateTimeFormatter.ofPattern("HHmm"));
 
-        checkOverlayedSchedule(movieDetailLists, start, end);
+        checkOverlayedSchedule(scheduleList, startTime, endTime);
 
         System.out.println("[영화 스케줄 추가 완료]");
         System.out.println("- 영화 이름: " + addMovieName);
@@ -221,23 +220,23 @@ public class ManagerMain {
 
         
         // 추가될 영화 리스트 번호 만들기
-        int movieListSize = makeMovieListNumber(movieDetailLists);
-        String schedule = makeSchedule(screenHall, start, end);
+        int movieListSize = makeMovieListNumber(scheduleList);
+        String schedule = makeSchedule(screenHall, startTime, endTime);
 
         // 상영관에 해당하는 좌석정보 가져오기
         List<Seat> seatList = FileManager.seatList;
         Seat seat = seatList.get(Integer.parseInt(screenHall) - 1);
-        MovieDetail newMovieDetail = new MovieDetail(movieListSize, addMovieName, selectedMovie.getInfo(), schedule, selectedMovie.getRunningTime(), seat.getSeatArray());
-        if(movieDetailLists == null) {
-            movieDetailLists = new ArrayList<>();
+        MovieDetail newSchedule = new MovieDetail(movieListSize, addMovieName, selectedMovie.getInfo(), schedule, selectedMovie.getRunningTime(), seat.getSeatArray());
+        if(scheduleList == null) {
+            scheduleList = new ArrayList<>();
         }
-        movieDetailLists.add(newMovieDetail);
+        scheduleList.add(newSchedule);
 
         if(runningDate.equals(FileManager.todayDate)) {
-            FileManager.movieDetailList = movieDetailLists;
+            FileManager.movieDetailList = scheduleList;
         }
 
-        FileManager.saveMovieDetail2(runningDate, movieDetailLists);
+        FileManager.saveMovieDetail2(runningDate, scheduleList);
     }
 
     private void checkOverlayedSchedule(List<MovieDetail> movieDetailLists, String start, String end) {
