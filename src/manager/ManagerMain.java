@@ -330,7 +330,6 @@ public class ManagerMain {
         String movieNumber = sc.nextLine().trim();
 
         if(!checkMovieNumber(movieNumber)){
-            System.out.println(Prompt.BAD_INPUT.getPrompt());
             throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
         }
 
@@ -377,14 +376,15 @@ public class ManagerMain {
         Scanner sc = new Scanner(System.in);
         String runningDate = sc.nextLine().trim();
 
-        if (!checkRunningDate(runningDate)) {
-            throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
-        }
+//        if (!checkRunningDate(runningDate)) {
+//            throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
+//        }
+        checkRunningDate(runningDate);
 
         return runningDate;
     }
 
-    private boolean checkRunningDate(String runningDate) {
+    private void checkRunningDate(String runningDate) {
         Pattern pattern;
         Matcher matcher;
 
@@ -397,14 +397,13 @@ public class ManagerMain {
             }
             matcher = pattern.matcher(runningDate);
             if (matcher.matches()) {
-                return true;
+                return;
             } else {
                 throw new InvalidInputException(Prompt.BAD_INPUT.getPrompt());
             }
+        }else{
+            throw new InvalidInputException("");
         }
-
-
-        return false;
     }
 
     private void deleteMovie() {
